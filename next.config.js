@@ -1,6 +1,23 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-    reactStrictMode: true,
+const config = {
+  swcMinify: true,
+  reactStrictMode: false,
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
+    return config;
+  },
+  async redirects() {
+    return [
+      {
+        source: "/docs",
+        destination: "/docs/welcome",
+        permanent: true,
+      },
+    ];
+  },
 };
 
-export default nextConfig;
+module.exports = config;
