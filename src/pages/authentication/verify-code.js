@@ -76,7 +76,7 @@ const VerifyCode = () => {
                 mt: 3,
               }}
             >
-              {platform === "Amplify" && <AmplifyVerifyCode />}
+             <AmplifyVerifyCode />
             </Box>
             <Divider sx={{ my: 3 }} />
             {platform === "Amplify" && (
