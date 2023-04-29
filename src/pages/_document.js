@@ -1,9 +1,9 @@
 import { Children } from "react";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
-import { createEmotionCache } from "../utils/create-emotion-cache";
+import { createEmotionCache } from "utils/create-emotion-cache";
 
-class CustomDocument extends Document {
+class MyApp extends Document {
   render() {
     return (
       <Html lang="en">
@@ -47,7 +47,7 @@ class CustomDocument extends Document {
   }
 }
 
-CustomDocument.getInitialProps = async (ctx) => {
+MyApp.getInitialProps = async (ctx) => {
   const originalRenderPage = ctx.renderPage;
   const cache = createEmotionCache();
   const { extractCriticalToChunks } = createEmotionServer(cache);
@@ -74,4 +74,4 @@ CustomDocument.getInitialProps = async (ctx) => {
   };
 };
 
-export default CustomDocument;
+export default MyApp;

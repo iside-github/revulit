@@ -23,8 +23,6 @@ import { gtm } from "../lib/gtm";
 import { store, persistor } from "redux-store/store";
 import { createTheme } from "../theme";
 import { createEmotionCache } from "../utils/create-emotion-cache";
-import AlertContainer from "components/admin/Alerts";
-import "../i18n";
 
 Router.events.on("routeChangeStart", nProgress.start);
 Router.events.on("routeChangeError", nProgress.done);
@@ -49,7 +47,6 @@ const App = (props) => {
       </Head>
       <ReduxProvider store={store}>
         <PersistGate persistor={persistor}>
-          <AlertContainer />
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <AuthProvider>
               <SettingsProvider>

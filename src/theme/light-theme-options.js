@@ -29,9 +29,9 @@ const blue = {
 const divider = '#E6E8F0';
 
 const primary = {
-  main: '#5048E5',
-  light: '#828DF8',
-  dark: '#3832A0',
+  main: '#10B981',
+  light: '#3FC79A',
+  dark: '#0B815A',
   contrastText: '#FFFFFF'
 };
 
