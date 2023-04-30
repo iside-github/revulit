@@ -20,7 +20,8 @@ import { Logo } from "../logo";
 import { Scrollbar } from "../scrollbar";
 import { DashboardSidebarSection } from "./dashboard-sidebar-section";
 import { OrganizationPopover } from "./organization-popover";
-import { Cog as CogIcon } from '../../icons/cog';
+import { Cog as CogIcon } from "../../icons/cog";
+import { Users as UsersIcon } from "../../icons/users";
 
 const getSections = (t) => [
   {
@@ -38,18 +39,23 @@ const getSections = (t) => [
       },
       {
         title: t("Report"),
-        path: "/dashboard/finance",
+        path: "/dashboard/report",
         icon: <ChartPieIcon fontSize="small" />,
+      },
+      {
+        title: t("Users"),
+        path: "/dashboard/customers",
+        icon: <UsersIcon fontSize="small" />,
+      },
+      {
+        title: t("Settings"),
+        path: "/dashboard/settings",
+        icon: <CogIcon fontSize="small" />,
       },
       {
         title: t("Account"),
         path: "/dashboard/account",
         icon: <UserCircleIcon fontSize="small" />,
-      },
-      {
-        title: t("Settings"),
-        path: "/dashboard/account",
-        icon: <CogIcon fontSize="small" />,
       },
     ],
   },

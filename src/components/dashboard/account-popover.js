@@ -13,16 +13,14 @@ import {
   Typography
 } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useAuth } from '../../hooks/use-auth';
 import { Cog as CogIcon } from '../../icons/cog';
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle';
+import { signOut } from "next-auth/react";
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
-  const { logout } = useAuth();
-  // To get the user from the authContext, you can use
-  // `const { user } = useAuth();`
+
   const user = {
     avatar: '/static/mock-images/avatars/avatar-anika_visser.png',
     name: 'Anika Visser'
@@ -31,7 +29,7 @@ export const AccountPopover = (props) => {
   const handleLogout = async () => {
     try {
       onClose?.();
-      await logout();
+      await signOut();
       router.push('/').catch(console.error);
     } catch (err) {
       console.error(err);

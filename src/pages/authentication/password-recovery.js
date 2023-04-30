@@ -23,6 +23,7 @@ const PasswordRecovery = () => {
           backgroundColor: "background.default",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
           minHeight: "100vh",
         }}
       >
