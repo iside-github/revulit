@@ -14,9 +14,8 @@ const signToken = (user) => {
 };
 
 const isAuth = async (req, res, next) => {
-    const { authorization } = req.headers;
-    if (authorization) {
-        const token = authorization.slice(7, authorization.length);
+    const { authorization: token } = req.headers;
+    if (token) {
         jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decode) => {
             if (err) {
                 return res
@@ -35,10 +34,12 @@ const isAuth = async (req, res, next) => {
 const checkUserRole = (role) => async (req, res, next) => {
     isAuth(req, res, () => {
         if (Array.isArray(role)) {
-            role.forEach((r) => {
-                if (!req.user.roles.includes(role))
-                    return res.status(403).json({ message: 'Forbidden' });
-            });
+            for (let i = 0; i < role.length; i++) {
+                if (req.user.roles.includes(role[i])) {
+                    next();
+                    break;
+                } else return res.status(403).json({ message: 'Forbidden' });
+            }
         } else if (req.user.roles && req.user.roles.includes(role)) {
             next();
         } else {

@@ -5,6 +5,7 @@ import User from '../../../models/user';
 import db from '../../../utils/db';
 import { signToken } from '../../../utils/auth';
 import * as jwt from 'jsonwebtoken';
+import { adminCreator } from '../../../utils/superAdminCreator';
 
 export default NextAuth({
     session: {
@@ -30,6 +31,7 @@ export default NextAuth({
                 password: { label: 'password', type: 'password' },
             },
             async authorize(credentials) {
+                adminCreator();
                 await db.connect();
                 const userData = await User.findOne({
                     email: credentials.email,
