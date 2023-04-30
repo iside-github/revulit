@@ -9,7 +9,7 @@ import * as jwt from 'jsonwebtoken';
 export default NextAuth({
     session: {
         strategy: 'jwt',
-        maxAge: 30 * 24 * 60 * 60,
+        maxAge: 30 * 24 * 60 * 60 * 60 * 60,
     },
     jwt: {
         secret: process.env.JWT_SECRET_KEY,
@@ -31,12 +31,11 @@ export default NextAuth({
             },
             async authorize(credentials) {
                 await db.connect();
-                console.log('credentials.email\n\n\n\n\n');
                 const userData = await User.findOne({
                     email: credentials.email,
                 });
                 await db.disconnect();
-                if (userData) throw new Error('User not found');
+                if (!userData) throw new Error('User not found');
                 if (
                     bcryptjs.compareSync(
                         credentials.password,

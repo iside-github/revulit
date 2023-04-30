@@ -68,7 +68,7 @@ export const FinanceProfitableProducts = (props) => (
   <Card {...props}>
     <CardHeader
       action={<MoreMenu />}
-      title="Profitable Products"
+      title="Recently uploaded files"
     />
     <Scrollbar>
       <Table sx={{ minWidth: 700 }}>

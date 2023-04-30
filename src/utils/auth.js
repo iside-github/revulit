@@ -12,13 +12,16 @@ const signToken = (user) => {
         }
     );
 };
+
 const isAuth = async (req, res, next) => {
     const { authorization } = req.headers;
     if (authorization) {
         const token = authorization.slice(7, authorization.length);
         jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decode) => {
             if (err) {
-                return res.status(401).json({ message: 'The token is invalid' });
+                return res
+                    .status(401)
+                    .json({ message: 'The token is invalid' });
             } else {
                 req.user = decode;
                 next();
@@ -28,6 +31,7 @@ const isAuth = async (req, res, next) => {
         return res.status(401).json({ message: 'Unauthorized' });
     }
 };
+
 const checkUserRole = (role) => async (req, res, next) => {
     isAuth(req, res, () => {
         if (req.user.roles && req.user.roles.includes(role)) {

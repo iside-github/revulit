@@ -1,22 +1,33 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
-import { AuthGuard } from "components/authentication/auth-guard";
 import { DashboardLayout } from "components/dashboard/dashboard-layout";
 import { Download as DownloadIcon } from "icons/download";
 import { Reports as ReportsIcon } from "icons/reports";
 import { gtm } from "lib/gtm";
 import { FinanceOverview } from "components/dashboard/finance/finance-overview";
-import { FinanceSalesRevenue } from "components/dashboard/finance/finance-sales-revenue";
 import { FinanceCostBreakdown } from "components/dashboard/finance/finance-cost-breakdown";
-import { FinanceSalesByContinent } from "components/dashboard/finance/finance-sales-by-continent";
-import { FinanceIncrementalSales } from "components/dashboard/finance/finance-incremental-sales";
 import { FinanceProfitableProducts } from "components/dashboard/finance/finance-profitable-products";
-import { Cog as CogIcon } from 'icons/cog';
+import { Cog as CogIcon } from "icons/cog";
+import { FileDropzone } from "components/file-dropzone";
+import { getSession } from "next-auth/react";
 
 const Overview = () => {
   const [displayBanner, setDisplayBanner] = useState(true);
+  const [files, setFiles] = useState([]);
 
+  const handleDrop = (newFiles) => {
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+  };
+  const handleRemove = (file) => {
+    setFiles((prevFiles) =>
+      prevFiles.filter((_file) => _file.path !== file.path)
+    );
+  };
+
+  const handleRemoveAll = () => {
+    setFiles([]);
+  };
   useEffect(() => {
     gtm.push({ event: "page_view" });
   }, []);
@@ -48,11 +59,11 @@ const Overview = () => {
           py: 8,
         }}
       >
-        <Container maxWidth="xl">
+        <Container>
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Finance</Typography>
+                <Typography variant="h4">Dashboard</Typography>
               </Grid>
               <Grid
                 item
@@ -87,20 +98,22 @@ const Overview = () => {
             </Grid>
           </Box>
           <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <FinanceOverview />
-            </Grid>
-            <Grid item md={8} xs={12}>
-              <FinanceSalesRevenue />
-            </Grid>
-            <Grid item md={4} xs={12}>
+            <Grid item md={5} xs={12}>
               <FinanceCostBreakdown />
             </Grid>
-            <Grid item md={8} xs={12}>
-              <FinanceSalesByContinent />
+            <Grid item md={7} xs={12}>
+              <FileDropzone
+                accept={{
+                  "image/*": [],
+                }}
+                files={files}
+                onDrop={handleDrop}
+                onRemove={handleRemove}
+                onRemoveAll={handleRemoveAll}
+              />
             </Grid>
-            <Grid item md={4} xs={12}>
-              <FinanceIncrementalSales />
+            <Grid item xs={12}>
+              <FinanceOverview />
             </Grid>
             <Grid item xs={12}>
               <FinanceProfitableProducts />
@@ -112,10 +125,20 @@ const Overview = () => {
   );
 };
 
-Overview.getLayout = (page) => (
-  <AuthGuard>
-    <DashboardLayout>{page}</DashboardLayout>
-  </AuthGuard>
-);
+Overview.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Overview;
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/authentication/login?returnUrl=/dashboard",
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
+};

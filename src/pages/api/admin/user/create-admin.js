@@ -2,11 +2,11 @@ import nc from 'next-connect';
 import bcrypt from 'bcryptjs';
 import User from '../../../../models/user';
 import db from '../../../../utils/db';
-import { checkUserRole } from '../../../../utils/auth';
+import { checkUserRole, signToken } from '../../../../utils/auth';
 
 const handler = nc();
 
-handler.use(checkUserRole('superadmin'));
+// handler.use(checkUserRole('superadmin'));
 handler.post(async (req, res) => {
     try {
         await db.connect();
