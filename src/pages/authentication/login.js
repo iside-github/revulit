@@ -4,24 +4,12 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { Box, Card, Container, Divider, Link, Typography } from "@mui/material";
 import { GuestGuard } from "../../components/authentication/guest-guard";
-import { AmplifyLogin } from "../../components/authentication/amplify-login";
-import { Auth0Login } from "../../components/authentication/auth0-login";
-import { FirebaseLogin } from "../../components/authentication/firebase-login";
 import { JWTLogin } from "../../components/authentication/jwt-login";
 import { Logo } from "../../components/logo";
-import { useAuth } from "../../hooks/use-auth";
 import { gtm } from "../../lib/gtm";
-
-const platformIcons = {
-  Amplify: "/static/icons/amplify.svg",
-  Auth0: "/static/icons/auth0.svg",
-  Firebase: "/static/icons/firebase.svg",
-  JWT: "/static/icons/jwt.svg",
-};
 
 const Login = () => {
   const router = useRouter();
-  const { platform } = useAuth();
   const { disableGuard } = router.query;
 
   useEffect(() => {
@@ -37,8 +25,11 @@ const Login = () => {
         component="main"
         sx={{
           backgroundColor: "background.default",
+          backgroundImage: "url(/static/bg.svg)",
+          backgroundSize: "cover",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
           minHeight: "100vh",
         }}
       >

@@ -2,14 +2,12 @@ import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Box, Button, FormHelperText, TextField } from "@mui/material";
-import { useAuth } from "../../hooks/use-auth";
 import { useMounted } from "../../hooks/use-mounted";
-import { useSession, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 export const JWTLogin = (props) => {
   const isMounted = useMounted();
   const router = useRouter();
-  const { login } = useAuth();
   const formik = useFormik({
     initialValues: {
       email: "revliterature@gmail.com",

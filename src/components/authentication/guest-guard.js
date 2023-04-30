@@ -1,29 +1,31 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
-import { useAuth } from '../../hooks/use-auth';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import PropTypes from "prop-types";
+import { useSession } from "next-auth/react";
 
 export const GuestGuard = (props) => {
   const { children } = props;
-  const auth = useAuth();
+  const auth = useSession();
   const router = useRouter();
   const [checked, setChecked] = useState(false);
   const disableGuard = router.query.disableGuard;
 
-  useEffect(() => {
-      if (!router.isReady) {
+  useEffect(
+    () => {
+      if (!router.isReady || auth.status === "loading") {
         return;
       }
 
       // You should remove the "disableGuard" check, because it's meant to be used only in the demo.
-      if (auth.isAuthenticated && disableGuard !== 'true') {
-        router.push('/dashboard').catch(console.error);
+      if (auth.status==="authenticated" && disableGuard !== "true") {
+        router.push("/dashboard").catch(console.error);
       } else {
         setChecked(true);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.isReady]);
+    [router.isReady, auth.status]
+  );
 
   if (!checked) {
     return null;
@@ -36,5 +38,5 @@ export const GuestGuard = (props) => {
 };
 
 GuestGuard.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };

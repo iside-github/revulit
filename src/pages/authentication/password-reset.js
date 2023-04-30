@@ -58,14 +58,12 @@ const PasswordReset = () => {
               }}
             >
               <NextLink href="/" passHref>
-                <a>
                   <Logo
                     sx={{
                       height: 40,
                       width: 40,
                     }}
                   />
-                </a>
               </NextLink>
               <Typography variant="h4">Password Reset</Typography>
               <Typography color="textSecondary" sx={{ mt: 2 }} variant="body2">
@@ -78,7 +76,7 @@ const PasswordReset = () => {
                 mt: 3,
               }}
             >
-              {platform === "Amplify" && <AmplifyPasswordReset />}
+              <AmplifyPasswordReset />
             </Box>
             <Divider sx={{ my: 3 }} />
             {platform === "Amplify" && (
