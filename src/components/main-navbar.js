@@ -27,7 +27,6 @@ export const MainNavbar = (props) => {
             href="/"
             passHref
           >
-            <a>
               <Logo
                 sx={{
                   display: {
@@ -38,7 +37,6 @@ export const MainNavbar = (props) => {
                   width: 40
                 }}
               />
-            </a>
           </NextLink>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton

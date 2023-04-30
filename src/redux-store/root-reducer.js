@@ -2,6 +2,10 @@ import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { reducer as formReducer } from "redux-form";
+import { reducer as calendarReducer } from "slices/calendar";
+import { reducer as chatReducer } from "slices/chat";
+import { reducer as kanbanReducer } from "slices/kanban";
+import { reducer as mailReducer } from "slices/mail";
 
 const persistConfig = {
   key: "root",
@@ -11,6 +15,10 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   form: formReducer,
+  calendar: calendarReducer,
+  chat: chatReducer,
+  kanban: kanbanReducer,
+  mail: mailReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

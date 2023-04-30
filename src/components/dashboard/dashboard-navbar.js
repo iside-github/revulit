@@ -279,9 +279,7 @@ export const DashboardNavbar = (props) => {
             <MenuIcon fontSize="small" />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
-          <LanguageButton />
           <ContentSearchButton />
-          <ContactsButton />
           <NotificationsButton />
           <AccountButton />
         </Toolbar>

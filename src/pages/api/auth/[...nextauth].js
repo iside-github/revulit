@@ -31,6 +31,7 @@ export default NextAuth({
             },
             async authorize(credentials) {
                 await db.connect();
+                console.log('credentials.email\n\n\n\n\n');
                 const userData = await User.findOne({
                     email: credentials.email,
                 });
