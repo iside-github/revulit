@@ -2,11 +2,11 @@ import nc from 'next-connect';
 import bcrypt from 'bcryptjs';
 import User from '../../../../models/user';
 import db from '../../../../utils/db';
-import { checkUserRole, signToken } from '../../../../utils/auth';
+import { checkUserRole } from '../../../../utils/auth';
 
 const handler = nc();
 
-handler.use(checkUserRole('superadmin'));
+handler.use(checkUserRole('admin'));
 handler.post(async (req, res) => {
     try {
         await db.connect();
@@ -15,7 +15,7 @@ handler.post(async (req, res) => {
         const newUser = new User({
             email: req.body.email,
             password: req.body.password,
-            roles: ['user', 'admin'],
+            roles: ['user'],
         });
 
         await newUser.save();

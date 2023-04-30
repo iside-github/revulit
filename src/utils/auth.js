@@ -34,7 +34,12 @@ const isAuth = async (req, res, next) => {
 
 const checkUserRole = (role) => async (req, res, next) => {
     isAuth(req, res, () => {
-        if (req.user.roles && req.user.roles.includes(role)) {
+        if (Array.isArray(role)) {
+            role.forEach((r) => {
+                if (!req.user.roles.includes(role))
+                    return res.status(403).json({ message: 'Forbidden' });
+            });
+        } else if (req.user.roles && req.user.roles.includes(role)) {
             next();
         } else {
             return res.status(403).json({ message: 'Forbidden' });
