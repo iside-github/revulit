@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Alert, Box, Button, FormHelperText, TextField } from "@mui/material";
+import { Box, Button, FormHelperText, TextField } from "@mui/material";
 import { useAuth } from "../../hooks/use-auth";
 import { useMounted } from "../../hooks/use-mounted";
+import { useSession, signIn } from "next-auth/react";
 
 export const JWTLogin = (props) => {
   const isMounted = useMounted();
@@ -24,8 +25,11 @@ export const JWTLogin = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await login(values.email, values.password);
-
+        await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+          redirect: false,
+        });
         if (isMounted()) {
           const returnUrl = router.query.returnUrl || "/dashboard";
           router.push(returnUrl).catch(console.error);
