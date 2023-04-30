@@ -20,8 +20,8 @@ export const restoreSettings = () => {
         direction: 'ltr',
         responsiveFontSizes: true,
         theme: globalThis.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
+          ? 'light'
+          : 'dark'
       };
     }
   } catch (err) {

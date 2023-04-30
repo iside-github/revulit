@@ -20,17 +20,17 @@ const data = {
     {
       color: '#FFB547',
       data: 14859,
-      label: 'Strategy'
+      label: 'ICSR'
     },
     {
       color: '#7BC67E',
       data: 35690,
-      label: 'Outsourcing'
+      label: 'Composite'
     },
     {
       color: '#7783DB',
       data: 45120,
-      label: 'Marketing'
+      label: 'Drugs'
     },
     {
       color: '#9DA4DD',
@@ -74,7 +74,7 @@ export const FinanceCostBreakdown = (props) => {
 
   return (
     <Card {...props}>
-      <CardHeader title="Cost Breakdown" />
+      <CardHeader title="Total statistics" />
       <Divider />
       <CardContent>
         <Chart
@@ -88,10 +88,10 @@ export const FinanceCostBreakdown = (props) => {
         <TableHead>
           <TableRow>
             <TableCell>
-              Top Channels
+              Categories
             </TableCell>
             <TableCell align="right">
-              Value
+              Amount
             </TableCell>
           </TableRow>
         </TableHead>
@@ -126,7 +126,7 @@ export const FinanceCostBreakdown = (props) => {
                   color="textSecondary"
                   variant="body2"
                 >
-                  {numeral(item.data).format('$0,0.00')}
+                  20%
                 </Typography>
               </TableCell>
             </TableRow>

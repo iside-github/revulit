@@ -98,10 +98,7 @@ const Overview = () => {
             </Grid>
           </Box>
           <Grid container spacing={4}>
-            <Grid item md={5} xs={12}>
-              <FinanceCostBreakdown />
-            </Grid>
-            <Grid item md={7} xs={12}>
+            <Grid item xs={12}>
               <FileDropzone
                 accept={{
                   "image/*": [],
@@ -112,7 +109,10 @@ const Overview = () => {
                 onRemoveAll={handleRemoveAll}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item md={5} xs={12}>
+              <FinanceCostBreakdown />
+            </Grid>
+            <Grid item md={7} xs={12}>
               <FinanceOverview />
             </Grid>
             <Grid item xs={12}>

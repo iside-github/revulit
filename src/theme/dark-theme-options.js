@@ -30,9 +30,9 @@ const blue = {
 const divider = "#2D3748";
 
 const primary = {
-  main: "#7582EB",
-  light: "#909BEF",
-  dark: "#515BA4",
+  main: "#10B981",
+  light: "#3FC79A",
+  dark: "#0B815A",
   contrastText: neutral[900],
 };
 

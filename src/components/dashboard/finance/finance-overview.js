@@ -73,115 +73,46 @@ const data = {
 };
 
 export const FinanceOverview = (props) => (
-  <Card {...props}>
-    <Grid container>
-      <Grid
-        item
-        md={4}
-        xs={12}
-        sx={{
-          alignItems: "center",
-          borderRight: (theme) => ({
-            md: `1px solid ${theme.palette.divider}`,
-          }),
-          borderBottom: (theme) => ({
-            md: "none",
-            xs: `1px solid ${theme.palette.divider}`,
-          }),
-          display: "flex",
-          justifyContent: "space-between",
-          p: 3,
-        }}
-      >
-        <div>
-          <Typography color="textSecondary" variant="overline">
-            Category 1
-          </Typography>
-          <Typography variant="h5">120</Typography>
-          <Typography color="textSecondary" variant="body2">
-            Total articles
-          </Typography>
-        </div>
-        <Box
+  <Grid container spacing={1}>
+    {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+      <Grid item md={6} xs={12} key={item}>
+        <Card
+          {...props}
           sx={{
             alignItems: "center",
+            borderRight: (theme) => ({
+              md: `1px solid ${theme.palette.divider}`,
+            }),
+            borderBottom: (theme) => ({
+              md: "none",
+              xs: `1px solid ${theme.palette.divider}`,
+            }),
             display: "flex",
-            height: 54,
-            width: 177,
+            justifyContent: "space-between",
+            p: 3,
           }}
         >
-          <ChartLine />
-        </Box>
+          <div>
+            <Typography color="textSecondary" variant="overline">
+              Category 1
+            </Typography>
+            <Typography variant="h5">120</Typography>
+            <Typography color="textSecondary" variant="body2">
+              Total articles
+            </Typography>
+          </div>
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              height: 54,
+              width: 177,
+            }}
+          >
+            <ChartLine />
+          </Box>
+        </Card>
       </Grid>
-      <Grid
-        item
-        md={4}
-        xs={12}
-        sx={{
-          alignItems: "center",
-          borderRight: (theme) => ({
-            md: `1px solid ${theme.palette.divider}`,
-          }),
-          borderBottom: (theme) => ({
-            xs: `1px solid ${theme.palette.divider}`,
-            md: "none",
-          }),
-          display: "flex",
-          justifyContent: "space-between",
-          p: 3,
-        }}
-      >
-        <div>
-          <Typography color="textSecondary" variant="overline">
-            Category 2
-          </Typography>
-          <Typography variant="h5">120</Typography>
-          <Typography color="textSecondary" variant="body2">
-            Total articles
-          </Typography>
-        </div>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            height: 54,
-            width: 177,
-          }}
-        >
-          <ChartLine />
-        </Box>
-      </Grid>
-      <Grid
-        item
-        md={4}
-        xs={12}
-        sx={{
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "space-between",
-          p: 3,
-        }}
-      >
-        <div>
-          <Typography color="textSecondary" variant="overline">
-            Category 3
-          </Typography>
-          <Typography variant="h5">120</Typography>
-          <Typography color="textSecondary" variant="body2">
-            Total articles
-          </Typography>
-        </div>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            height: 54,
-            width: 177,
-          }}
-        >
-          <ChartLine />
-        </Box>
-      </Grid>
-    </Grid>
-  </Card>
+    ))}
+  </Grid>
 );
