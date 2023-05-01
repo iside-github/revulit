@@ -5,7 +5,11 @@ const userSchema = new mongoose.Schema(
         email: {
             type: String,
             required: true,
-            unique: true,
+            unique: [true, 'Email already in use'],
+        },
+        name: {
+            type: String,
+            required: true,
         },
         password: {
             type: String,
@@ -13,8 +17,9 @@ const userSchema = new mongoose.Schema(
             minlength: 4,
         },
         company: {
-            type: Number,
+            type: String,
             ref: 'companies',
+            required: [true, 'Company is required'],
         },
         roles: {
             type: Array,
@@ -23,6 +28,14 @@ const userSchema = new mongoose.Schema(
         isBlock: {
             type: Boolean,
             default: false,
+        },
+        security_update: {
+            type: Boolean,
+            default: true,
+        },
+        news_message: {
+            type: Boolean,
+            default: true,
         },
     },
     {

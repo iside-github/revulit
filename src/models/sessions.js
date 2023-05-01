@@ -1,18 +1,17 @@
 import mongoose from 'mongoose';
 
-const fileSchema = new mongoose.Schema(
+const sessionsSchema = new mongoose.Schema(
     {
-        src: {
+        ip_address: {
             type: String,
-            unique: true,
             required: true,
         },
-        name: {
+        device: {
             type: String,
             required: true,
         },
         user: {
-            type: Number,
+            type: String,
             ref: 'users',
         },
     },
@@ -21,5 +20,6 @@ const fileSchema = new mongoose.Schema(
     }
 );
 
-const Files = mongoose.models.files || mongoose.model('files', fileSchema);
-export default Files;
+const Session =
+    mongoose.models.sessions || mongoose.model('sessions', sessionsSchema);
+export default Session;

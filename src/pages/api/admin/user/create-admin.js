@@ -16,6 +16,8 @@ handler.post(async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             roles: ['user', 'admin'],
+            company: req.body.companyId,
+            name: req.body.name,
         });
 
         await newUser.save();
@@ -24,12 +26,12 @@ handler.post(async (req, res) => {
         newUser.password = hashPassword;
         const savedUser = await newUser.save();
         await db.disconnect();
-
-        const token = signToken(savedUser);
         res.status(200).send({
-            token,
+            user: savedUser,
         });
     } catch (error) {
+        if (error.message.includes('email_1 dup key'))
+            return res.status(400).json({ message: 'Email already in use' });
         res.status(400).json({ message: error.message });
     }
 });
