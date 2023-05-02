@@ -9,7 +9,7 @@ import multer from 'multer';
 const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, 'src/public/uploads/images/');
+            cb(null, 'public/static/uploads/images/');
         },
         filename: function (req, file, cb) {
             const uniqueSuffix =
@@ -53,6 +53,28 @@ handler.get(async (req, res) => {
 handler.use(uploadMiddleware);
 handler.put(async (req, res) => {
     try {
+        const maxSize = 5; // 10mb
+        const array_of_allowed_files = ['png', 'jpeg', 'jpg'];
+        const array_of_allowed_file_types = [
+            'image/png',
+            'image/jpeg',
+            'image/jpg',
+        ];
+        const file_extension = req.file.originalname.slice(
+            ((req.file.originalname.lastIndexOf('.') - 1) >>> 0) + 2
+        );
+
+        if (
+            (req.file && !array_of_allowed_files.includes(file_extension)) ||
+            !array_of_allowed_file_types.includes(req.file.mimetype)
+        )
+            return res.status(500).json({ message: 'Invalid file' });
+
+        if (req.file.size > 1024 * 1024 * maxSize)
+            return res.status(500).send({
+                message: 'File is too big',
+            });
+
         const { password, security_update, news_message, name } = req.body;
         await db.connect();
         const user = await User.findById(req.user._id);
