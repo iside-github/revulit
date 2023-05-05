@@ -44,9 +44,10 @@ export default NextAuth({
                     userData.password
                 );
                 if (!isValid) throw new Error('Incorrect password');
+                if (userData.isBlock)
+                    throw new Error('Your profile is blocked');
                 const token = signToken(userData);
                 const { ipAddress, deviceName } = getDeviceInfo(req);
-                console.log(ipAddress, deviceName);
                 const session = new Session({
                     ip_address: ipAddress,
                     device: deviceName,
