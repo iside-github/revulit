@@ -9,14 +9,15 @@ handler.use(checkUserRole('superadmin'));
 handler.post(async (req, res) => {
     try {
         await db.connect();
-
-        const newCompany = new Company({
+        const companies = await Company.find().sort({ createdAd: -1 });
+        const company = await Company.create({
             name: req.body.name,
+            uid: companies.length ? companies[companies.length - 1].uid + 1 : 1,
         });
 
-        const comapny = await newCompany.save();
+        await db.disconnect();
         res.status(200).send({
-            comapny,
+            company,
         });
     } catch (error) {
         res.status(400).json({ message: error.message });
