@@ -2,9 +2,12 @@ import NextAuth from 'next-auth';
 import bcryptjs from 'bcryptjs';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import User from '../../../models/user';
+import Session from '../../../models/sessions';
 import db from '../../../utils/db';
 import { signToken } from '../../../utils/auth';
 import * as jwt from 'jsonwebtoken';
+import { adminCreator } from '../../../utils/superAdminCreator';
+import { getDeviceInfo } from '../../../utils/getDeviceInfo';
 
 export default NextAuth({
     session: {
@@ -29,21 +32,29 @@ export default NextAuth({
                 email: { label: 'email', type: 'text' },
                 password: { label: 'password', type: 'password' },
             },
-            async authorize(credentials) {
+            async authorize(credentials, req) {
+                adminCreator();
                 await db.connect();
                 const userData = await User.findOne({
                     email: credentials.email,
                 });
-                await db.disconnect();
                 if (!userData) throw new Error('User not found');
-                if (
-                    bcryptjs.compareSync(
-                        credentials.password,
-                        userData.password
-                    )
-                )
-                    throw new Error('Incorrect password');
+                const isValid = bcryptjs.compareSync(
+                    credentials.password,
+                    userData.password
+                );
+                if (!isValid) throw new Error('Incorrect password');
+                if (userData.isBlock)
+                    throw new Error('Your profile is blocked');
                 const token = signToken(userData);
+                const { ipAddress, deviceName } = getDeviceInfo(req);
+                const session = new Session({
+                    ip_address: ipAddress,
+                    device: deviceName,
+                    user: userData._id,
+                });
+                await session.save();
+                await db.disconnect();
                 return { access_token: token };
             },
         }),

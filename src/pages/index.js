@@ -8,23 +8,23 @@ import { gtm } from "../lib/gtm";
 import { GuestGuard } from "components/authentication/guest-guard";
 
 const Home = () => {
-  useEffect(() => {
-    gtm.push({ event: "page_view" });
-  }, []);
+    useEffect(() => {
+        gtm.push({ event: 'page_view' });
+    }, []);
 
-  return (
-    <>
-      <Head>
-        <title>Revliterature</title>
-      </Head>
-      <main>
-        <HomeHero />
-        <Divider />
-        <HomeDevelopers />
-        <Divider />
-      </main>
-    </>
-  );
+    return (
+        <>
+            <Head>
+                <title>Revliterature</title>
+            </Head>
+            <main>
+                <HomeHero />
+                <Divider />
+                <HomeDevelopers />
+                <Divider />
+            </main>
+        </>
+    );
 };
 
 Home.getLayout = (page) => (

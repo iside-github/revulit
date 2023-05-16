@@ -5,18 +5,22 @@ import { checkUserRole } from '../../../../utils/auth';
 
 const handler = nc();
 
-handler.use(checkUserRole('superadmin'));
+handler.use(checkUserRole(['admin', 'superadmin']));
 handler.post(async (req, res) => {
     try {
         await db.connect();
+        const company = await Company.findById(req.query.id);
 
-        const newCompany = new Company({
-            name: req.body.name,
-        });
+        if (!company)
+            return res.status(404).send({
+                message: 'Company not found',
+            });
+        company.name = req.body.name;
+        const updatedCompany = await company.save();
 
-        const comapny = await newCompany.save();
+        await db.disconnect();
         res.status(200).send({
-            comapny,
+            company: updatedCompany,
         });
     } catch (error) {
         res.status(400).json({ message: error.message });
