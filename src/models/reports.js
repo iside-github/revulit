@@ -6,6 +6,10 @@ const reportSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        file_src: {
+            type: String,
+            required: true,
+        },
         html: {
             type: String,
             required: true,
