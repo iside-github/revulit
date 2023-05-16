@@ -44,3 +44,20 @@ export async function updateUserPassword({
     );
   }
 }
+
+export async function getUploadedFileResults(data) {
+  try {
+    const result = await axios({
+      method: "POST",
+      url: "/api/user/upload-file",
+      data: data,
+    });
+    return result.data;
+  } catch (error) {
+    toast.error(
+      error?.response?.data?.message
+        ? error?.response?.data?.message
+        : "Something went wrong! Please, try again later"
+    );
+  }
+}
