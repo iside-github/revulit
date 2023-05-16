@@ -61,3 +61,16 @@ export async function getUploadedFileResults(data) {
     );
   }
 }
+
+export async function getUserProfile() {
+  try {
+    const result = await axios.get("/api/user/profile", {
+      withCredentials: true,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function editUserProfile() {}

@@ -7,6 +7,7 @@ import { reducer as chatReducer } from "slices/chat";
 import { reducer as kanbanReducer } from "slices/kanban";
 import { reducer as mailReducer } from "slices/mail";
 import fileUploadReducer from "./file/upload";
+import userReducer from "./user/user.slice";
 
 import authReducer from "./user/auth.slice";
 
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   mail: mailReducer,
   auth: authReducer,
   file: fileUploadReducer,
+  user: userReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

@@ -11,14 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import { UserCircle as UserCircleIcon } from "../../../icons/user-circle";
+import { useSelector } from "store";
 
 export const AccountGeneralSettings = (props) => {
   // To get the user from the authContext, you can use
   // `const { user } = useAuth();`
-  const user = {
-    avatar: "/static/mock-images/avatars/avatar-anika_visser.png",
-    name: "Anika Visser",
-  };
+  const user = useSelector((state) => state.user.data?.user);
 
   return (
     <Box sx={{ mt: 4 }} {...props}>
@@ -36,7 +34,7 @@ export const AccountGeneralSettings = (props) => {
                 }}
               >
                 <Avatar
-                  src={user.avatar}
+                  src={"/static/avatar.png"}
                   sx={{
                     height: 64,
                     mr: 2,
@@ -45,7 +43,7 @@ export const AccountGeneralSettings = (props) => {
                 >
                   <UserCircleIcon fontSize="small" />
                 </Avatar>
-                <Button>Change</Button>
+                <Button disabled>Change</Button>
               </Box>
               <Box
                 sx={{
@@ -55,7 +53,7 @@ export const AccountGeneralSettings = (props) => {
                 }}
               >
                 <TextField
-                  defaultValue={user.name}
+                  defaultValue={user?.name}
                   label="Full Name"
                   size="small"
                   sx={{

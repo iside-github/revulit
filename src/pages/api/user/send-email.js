@@ -3,11 +3,11 @@ import User from '../../../models/user';
 import db from '../../../utils/db';
 import { createToken } from '../../../utils/password-token';
 import nodemailer from 'nodemailer';
-import { isAuth } from '../../../utils/auth';
+// import { isAuth } from '../../../utils/auth';
 
 const handler = nc();
 
-handler.use(isAuth);
+// handler.use(isAuth);
 handler.post(async (req, res) => {
     try {
         await db.connect();

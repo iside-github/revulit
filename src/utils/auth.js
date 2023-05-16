@@ -23,7 +23,7 @@ const isAuth = async (req, res, next) => {
                     .status(401)
                     .json({ message: 'The token is invalid' });
             } else {
-                req.user = decode;
+                req["user"] = decode;
                 next();
             }
         });

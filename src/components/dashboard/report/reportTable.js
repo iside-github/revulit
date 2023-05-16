@@ -23,7 +23,7 @@ import { getInitials } from "../../../utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
 
-export const CustomerListTable = (props) => {
+export const ReportsTable = (props) => {
   const {
     customers,
     customersCount,
@@ -84,7 +84,10 @@ export const CustomerListTable = (props) => {
           onChange={handleSelectAllCustomers}
         />
         <Button size="small" sx={{ ml: 2 }}>
-          Block
+          Delete
+        </Button>
+        <Button size="small" sx={{ ml: 2 }}>
+          Edit
         </Button>
       </Box>
       <Scrollbar>
@@ -93,18 +96,21 @@ export const CustomerListTable = (props) => {
             sx={{ visibility: enableBulkActions ? "collapse" : "visible" }}
           >
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox
                   checked={selectedAllCustomers}
                   indeterminate={selectedSomeCustomers}
                   onChange={handleSelectAllCustomers}
                 />
-              </TableCell>
+              </TableCell> */}
               <TableCell>User</TableCell>
-              <TableCell>Company</TableCell>
-              <TableCell>Uploaded files</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="right">Joined</TableCell>
+              <TableCell>Upload time</TableCell>
+              <TableCell>File name</TableCell>
+              <TableCell>Total articles</TableCell>
+              <TableCell align="right">None relevant</TableCell>
+              <TableCell align="right">ICSR</TableCell>
+              <TableCell align="right">Drug</TableCell>
+              <TableCell align="right">Title</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -115,7 +121,7 @@ export const CustomerListTable = (props) => {
 
               return (
                 <TableRow hover key={customer.id} selected={isCustomerSelected}>
-                  <TableCell padding="checkbox">
+                  {/* <TableCell padding="checkbox">
                     <Checkbox
                       checked={isCustomerSelected}
                       onChange={(event) =>
@@ -123,7 +129,7 @@ export const CustomerListTable = (props) => {
                       }
                       value={isCustomerSelected}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Box
                       sx={{
@@ -132,12 +138,14 @@ export const CustomerListTable = (props) => {
                       }}
                     >
                       <Avatar
-                        src={"/static/avatar.png"}
+                        src={customer.avatar}
                         sx={{
                           height: 42,
                           width: 42,
                         }}
-                      />
+                      >
+                        {getInitials(customer.name)}
+                      </Avatar>
                       <Box sx={{ ml: 1 }}>
                         <NextLink href="/dashboard/customers/1" passHref>
                           <Link color="inherit" variant="subtitle2">
@@ -150,16 +158,17 @@ export const CustomerListTable = (props) => {
                       </Box>
                     </Box>
                   </TableCell>
-                  <TableCell>Iside</TableCell>
-                  <TableCell>{customer.totalOrders}</TableCell>
+                  <TableCell>{format(new Date(), "dd-MMM, yyyy")}</TableCell>
+                  <TableCell>{"122333.xlsx"}</TableCell>
                   <TableCell>
                     <Typography color="success.main" variant="subtitle2">
-                      Active
+                      {300}
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">
-                    {format(new Date(), "dd-MMM, yyyy")}
-                  </TableCell>
+                  <TableCell align="center">{40}</TableCell>
+                  <TableCell align="right">{40}</TableCell>
+                  <TableCell align="right">{40}</TableCell>
+                  <TableCell align="right">{40}</TableCell>
                 </TableRow>
               );
             })}
@@ -179,7 +188,7 @@ export const CustomerListTable = (props) => {
   );
 };
 
-CustomerListTable.propTypes = {
+ReportsTable.propTypes = {
   customers: PropTypes.array.isRequired,
   customersCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,

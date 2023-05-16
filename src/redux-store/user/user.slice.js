@@ -3,8 +3,6 @@ import { editUserProfile, getUserProfile } from "api/requests";
 
 const initialState = {
   data: null,
-  token: null,
-  statistics: {},
   isLoading: false,
   isUpdateLoading: false,
 };
@@ -36,8 +34,7 @@ export const userProfileReducer = createSlice({
     },
     [getUser.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      state.data = payload?.user;
-      state.token = payload?.user?._id;
+      state.data = payload;
     },
     [getUser.rejected]: (state) => {
       state.isLoading = false;
