@@ -1,51 +1,34 @@
-import { useRouter } from 'next/router';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import { Box, Button, FormHelperText, TextField } from '@mui/material';
-import { useAuth } from '../../hooks/use-auth';
-import { useMounted } from '../../hooks/use-mounted';
+import { useRouter } from "next/router";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { Box, FormHelperText, TextField } from "@mui/material";
+import { sendRecoveryEmail } from "redux-store/user/auth.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { LoadingButton } from "@mui/lab";
 
 export const AmplifyPasswordRecovery = (props) => {
-  const isMounted = useMounted();
-  const { passwordRecovery } = useAuth();
+  const dispatch = useDispatch();
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: '',
-      submit: null
+      email: "",
+      submit: null,
     },
     validationSchema: Yup.object({
-      email: Yup
-        .string()
-        .email('Must be a valid email')
+      email: Yup.string()
+        .email("Must be a valid email")
         .max(255)
-        .required('Email is required')
+        .required("Email is required"),
     }),
     onSubmit: async (values, helpers) => {
-      try {
-        await passwordRecovery(values.email);
-
-        if (isMounted()) {
-          sessionStorage.setItem('username', values.email);
-          router.push('/authentication/password-reset').catch(console.error);
-        }
-      } catch (err) {
-        console.error(err);
-
-        if (isMounted()) {
-          helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.message });
-          helpers.setSubmitting(false);
-        }
-      }
-    }
+      dispatch(sendRecoveryEmail({ email: values.email, router, helpers }));
+    },
   });
 
+  const isLoading = useSelector((state) => state.auth.isRecoveryLoading);
+
   return (
-    <form
-      noValidate
-      onSubmit={formik.handleSubmit}
-      {...props}>
+    <form noValidate onSubmit={formik.handleSubmit} {...props}>
       <TextField
         autoFocus
         error={Boolean(formik.touched.email && formik.errors.email)}
@@ -59,23 +42,17 @@ export const AmplifyPasswordRecovery = (props) => {
         type="email"
         value={formik.values.email}
       />
-      {formik.errors.submit && (
-        <Box sx={{ mt: 3 }}>
-          <FormHelperText error>
-            {formik.errors.submit}
-          </FormHelperText>
-        </Box>
-      )}
       <Box sx={{ mt: 3 }}>
-        <Button
+        <LoadingButton
           disabled={formik.isSubmitting}
           fullWidth
           size="large"
           type="submit"
           variant="contained"
+          loading={isLoading}
         >
           Recover Password
-        </Button>
+        </LoadingButton>
       </Box>
     </form>
   );

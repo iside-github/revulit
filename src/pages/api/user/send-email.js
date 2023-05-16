@@ -28,7 +28,7 @@ handler.post(async (req, res) => {
             from: '"Company Name" <jamshidbekml@mail.ru>',
             to: user.email,
             subject: 'Change your password',
-            text: `Change your password: vipsavdo.uz/?auth=${token}`,
+            text: `Change your password: http://localhost:3000//authentication/password-reset?auth=${token}`,
         };
 
         // Xabarni yuborish

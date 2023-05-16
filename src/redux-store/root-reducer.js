@@ -7,6 +7,8 @@ import { reducer as chatReducer } from "slices/chat";
 import { reducer as kanbanReducer } from "slices/kanban";
 import { reducer as mailReducer } from "slices/mail";
 
+import authReducer from "./user/auth.slice";
+
 const persistConfig = {
   key: "root",
   storage,
@@ -19,6 +21,7 @@ const rootReducer = combineReducers({
   chat: chatReducer,
   kanban: kanbanReducer,
   mail: mailReducer,
+  auth: authReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

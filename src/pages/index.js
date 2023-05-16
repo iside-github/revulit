@@ -5,6 +5,7 @@ import { MainLayout } from "../components/main-layout";
 import { HomeHero } from "../components/home/home-hero";
 import { HomeDevelopers } from "../components/home/home-developers";
 import { gtm } from "../lib/gtm";
+import { GuestGuard } from "components/authentication/guest-guard";
 
 const Home = () => {
   useEffect(() => {
@@ -26,6 +27,10 @@ const Home = () => {
   );
 };
 
-Home.getLayout = (page) => <MainLayout>{page}</MainLayout>;
+Home.getLayout = (page) => (
+  <GuestGuard>
+    <MainLayout>{page}</MainLayout>
+  </GuestGuard>
+);
 
 export default Home;

@@ -1,200 +1,52 @@
-import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/router';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import { Box, Button, FormHelperText, TextField, Typography } from '@mui/material';
-import { useAuth } from '../../hooks/use-auth';
-import { useMounted } from '../../hooks/use-mounted';
+import { useEffect, useRef } from "react";
+import { useRouter } from "next/router";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { Box, FormHelperText, TextField } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { sendPasswordUpdate } from "redux-store/user/auth.slice";
+import { LoadingButton } from "@mui/lab";
 
 export const AmplifyPasswordReset = (props) => {
-  const isMounted = useMounted();
-  const { passwordReset } = useAuth();
   const router = useRouter();
   const itemsRef = useRef([]);
-  const [username, setUsername] = useState('');
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.auth.isPassUpdateLoading);
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      code: ['', '', '', '', '', ''],
-      email: username,
-      password: '',
-      passwordConfirm: '',
-      submit: null
+      password: "",
+      passwordConfirm: "",
+      submit: null,
     },
     validationSchema: Yup.object({
-      code: Yup
-        .array()
-        .of(Yup.string().required('Code is required')),
-      email: Yup
-        .string()
-        .email('Must be a valid email')
+      password: Yup.string()
+        .min(7, "Must be at least 7 characters")
         .max(255)
-        .required('Email is required'),
-      password: Yup
-        .string()
-        .min(7, 'Must be at least 7 characters')
-        .max(255)
-        .required('Required'),
-      passwordConfirm: Yup
-        .string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
-        .required('Required')
+        .required("Required"),
+      passwordConfirm: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Required"),
     }),
     onSubmit: async (values, helpers) => {
-      try {
-        await passwordReset(values.email, values.code.join(''), values.password);
-
-        if (isMounted()) {
-          router.push('/authentication/login').catch(console.error);
-        }
-      } catch (err) {
-        console.error(err);
-
-        if (isMounted()) {
-          helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.message });
-          helpers.setSubmitting(false);
-        }
-      }
-    }
+      dispatch(
+        sendPasswordUpdate({
+          router,
+          auth: router?.query?.auth,
+          new_password: values.password,
+          helpers,
+        })
+      );
+    },
   });
 
   useEffect(() => {
     itemsRef.current = itemsRef.current.slice(0, 6);
-
-    const storedUsername = sessionStorage.getItem('username');
-
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
   }, []);
 
-  const handleKeyDown = (event, index) => {
-    if (event.code === 'Enter') {
-      if (formik.values.code[index]) {
-        formik.setFieldValue(`code[${index}]`, '');
-        return;
-      }
-
-      if (index > 0) {
-        formik.setFieldValue(`code[${index}]`, '');
-        itemsRef.current[index - 1].focus();
-        return;
-      }
-    }
-
-    if (Number.isInteger(parseInt(event.key, 10))) {
-      formik.setFieldValue(`code[${index}]`, event.key);
-
-      if (index < 5) {
-        itemsRef.current[index + 1].focus();
-      }
-    }
-  };
-
-  const handlePaste = (event) => {
-    const paste = event.clipboardData.getData('text');
-    const pasteArray = paste.split('');
-
-    if (pasteArray.length !== 6) {
-      return;
-    }
-
-    let valid = true;
-
-    pasteArray.forEach((x) => {
-      if (!Number.isInteger(parseInt(x, 10))) {
-        valid = false;
-      }
-    });
-
-    if (valid) {
-      formik.setFieldValue('code', pasteArray);
-      itemsRef.current[5].focus();
-    }
-  };
-
   return (
-    <form
-      noValidate
-      onSubmit={formik.handleSubmit}
-      {...props}>
-      {!username
-        ? (
-          <TextField
-            autoFocus
-            error={Boolean(formik.touched.email && formik.errors.email)}
-            fullWidth
-            helperText={formik.touched.email && formik.errors.email}
-            label="Email Address"
-            margin="normal"
-            name="email"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            type="email"
-            value={formik.values.email}
-          />
-        )
-        : (
-          <TextField
-            disabled
-            fullWidth
-            margin="normal"
-            value={username}
-          />
-        )}
-      <Typography
-        color="textSecondary"
-        sx={{
-          mb: 2,
-          mt: 3
-        }}
-        variant="subtitle2"
-      >
-        Verification code
-      </Typography>
-      <Box
-        sx={{
-          columnGap: '16px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(7, 1fr)',
-          py: 1
-        }}
-      >
-        {[1, 2, 3, 4, 5, 6].map((ref, index) => (
-          <TextField
-            error={Boolean(Array.isArray(formik.touched.code)
-              && formik.touched.code.length === 6
-              && formik.errors.code)}
-            fullWidth
-            inputRef={(el) => itemsRef.current[index] = el}
-            // eslint-disable-next-line react/no-array-index-key
-            key={`code-${index}`}
-            name={`code[${index}]`}
-            onBlur={formik.handleBlur}
-            onKeyDown={(event) => handleKeyDown(event, index)}
-            onPaste={handlePaste}
-            value={formik.values.code[index]}
-            sx={{
-              display: 'inline-block',
-              textAlign: 'center',
-              '& .MuiInputBase-input': {
-                textAlign: 'center'
-              }
-            }}
-          />
-        ))}
-      </Box>
-      {Boolean(Array.isArray(formik.touched.code)
-        && formik.touched.code.length === 6
-        && formik.errors.code) && (
-        <FormHelperText
-          error
-          sx={{ mx: '14px' }}
-        >
-          {Array.isArray(formik.errors.code) && formik.errors.code.find((x) => x !== undefined)}
-        </FormHelperText>
-      )}
+    <form noValidate onSubmit={formik.handleSubmit} {...props}>
       <TextField
         error={Boolean(formik.touched.password && formik.errors.password)}
         fullWidth
@@ -208,9 +60,13 @@ export const AmplifyPasswordReset = (props) => {
         value={formik.values.password}
       />
       <TextField
-        error={Boolean(formik.touched.passwordConfirm && formik.errors.passwordConfirm)}
+        error={Boolean(
+          formik.touched.passwordConfirm && formik.errors.passwordConfirm
+        )}
         fullWidth
-        helperText={formik.touched.passwordConfirm && formik.errors.passwordConfirm}
+        helperText={
+          formik.touched.passwordConfirm && formik.errors.passwordConfirm
+        }
         label="Password Confirmation"
         margin="normal"
         name="passwordConfirm"
@@ -221,21 +77,20 @@ export const AmplifyPasswordReset = (props) => {
       />
       {formik.errors.submit && (
         <Box sx={{ mt: 3 }}>
-          <FormHelperText error>
-            {formik.errors.submit}
-          </FormHelperText>
+          <FormHelperText error>{formik.errors.submit}</FormHelperText>
         </Box>
       )}
       <Box sx={{ mt: 3 }}>
-        <Button
+        <LoadingButton
           disabled={formik.isSubmitting}
           fullWidth
           size="large"
           type="submit"
           variant="contained"
+          loading={isLoading}
         >
           Reset Password
-        </Button>
+        </LoadingButton>
       </Box>
     </form>
   );

@@ -33,11 +33,6 @@ const getSections = (t) => [
         icon: <HomeIcon fontSize="small" />,
       },
       {
-        title: t("Analytics"),
-        path: "/dashboard/analytics",
-        icon: <ChartBarIcon fontSize="small" />,
-      },
-      {
         title: t("Report"),
         path: "/dashboard/report",
         icon: <ChartPieIcon fontSize="small" />,
