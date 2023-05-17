@@ -16,6 +16,7 @@ import { Image as ImageIcon } from "../../../icons/image";
 import { CircularProgress } from "../../circular-progress";
 import { MoreMenu } from "../../more-menu";
 import { Scrollbar } from "../../scrollbar";
+import { format } from "date-fns";
 
 const products = [
   {
@@ -73,7 +74,7 @@ export const FinanceProfitableProducts = (props) => (
           <TableRow>
             <TableCell>Transaction</TableCell>
             <TableCell />
-            <TableCell align="right">Amount</TableCell>
+            <TableCell align="right">Uploaded time</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -137,14 +138,11 @@ export const FinanceProfitableProducts = (props) => (
                   }}
                 >
                   <Box sx={{ mr: 2 }}>
-                    <Typography align="right" variant="subtitle2">
-                      {product.conversionRate}%
-                    </Typography>
                     <Typography color="textSecondary" variant="body2">
-                      Conversion Rate
+                      {format(new Date(), "dd-MMMM, yyyy HH:mm")}
                     </Typography>
                   </Box>
-                  <CircularProgress value={product.conversionRate} />
+                  {/* <CircularProgress value={product.conversionRate} /> */}
                 </Box>
               </TableCell>
             </TableRow>

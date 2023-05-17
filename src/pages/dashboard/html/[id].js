@@ -6,12 +6,16 @@ import { useEffect } from "react";
 import { getCategoryHTML } from "redux-store/report/slice";
 import { useRouter } from "next/router";
 import ReactHtmlParser from "react-html-parser";
-import { Box, Container } from "@mui/system";
+import { Box, Container, Stack } from "@mui/system";
+import Lottie from "react-lottie";
+import * as animationData from "./loader.json";
+import { Card, Typography } from "@mui/material";
 
 const Page = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const category = useSelector((state) => state.report.category);
+  const isLoading = useSelector((state) => state.report.isCategoryLoading);
 
   useEffect(() => {
     if (router?.query?.id) {
@@ -23,6 +27,14 @@ const Page = () => {
       );
     }
   }, [router?.query?.id]);
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
   return (
     <>
       <Head>
@@ -36,7 +48,24 @@ const Page = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}> {ReactHtmlParser(category)}</Box>
+          {!isLoading ? (
+            <Box sx={{ mb: 4 }}> {ReactHtmlParser(category)}</Box>
+          ) : (
+            <Card
+              sx={{
+                minHeight: "75vh",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Lottie options={defaultOptions} height={400} width={400} />
+              <Stack>
+                <Typography variant="body1">Report is loading...</Typography>
+              </Stack>
+            </Card>
+          )}
         </Container>
       </Box>
     </>

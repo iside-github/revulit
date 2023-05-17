@@ -12,7 +12,7 @@ import authReducer from "./user/auth.slice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user", "report"],
+  whitelist: ["user", "report", "file"],
 };
 
 const rootReducer = combineReducers({
