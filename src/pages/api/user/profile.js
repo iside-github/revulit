@@ -34,7 +34,6 @@ handler.use(isAuth);
 handler.get(async (req, res) => {
     try {
         await db.connect();
-        console.log(req.user);
         const user = await User.findById(req.user.user.user._id);
 
         if (!user) return res.status(404).json({ message: 'User not found' });
