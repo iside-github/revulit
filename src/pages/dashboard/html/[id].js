@@ -1,14 +1,17 @@
 import { DashboardLayout } from "components/dashboard/dashboard-layout";
 import { getSession } from "next-auth/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Head from "next/head";
 import { useEffect } from "react";
 import { getCategoryHTML } from "redux-store/report/slice";
 import { useRouter } from "next/router";
+import ReactHtmlParser from "react-html-parser";
+import { Box, Container } from "@mui/system";
 
 const Page = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const category = useSelector((state) => state.report.category);
 
   useEffect(() => {
     if (router?.query?.id) {
@@ -21,9 +24,22 @@ const Page = () => {
     }
   }, [router?.query?.id]);
   return (
-    <div>
-      <p></p>
-    </div>
+    <>
+      <Head>
+        <title>Dashboard: Reports | Revliterature</title>
+      </Head>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8,
+        }}
+      >
+        <Container maxWidth="xl">
+          <Box sx={{ mb: 4 }}> {ReactHtmlParser(category)}</Box>
+        </Container>
+      </Box>
+    </>
   );
 };
 
