@@ -12,8 +12,8 @@ handler.get(async (req, res) => {
         const reports = await Reports.find({
             company: req.user.company,
         })
-            .select('-html')
-            .populate('user', 'email');
+            .populate('user', 'email name avatar')
+            .select('-html');
 
         await db.disconnect();
         res.status(200).send({
