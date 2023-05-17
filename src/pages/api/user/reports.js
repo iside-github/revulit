@@ -11,7 +11,6 @@ handler.get(async (req, res) => {
         await db.connect();
         const reports = await Reports.find({
             company: req.user.company,
-            user: { $ne: req.user._id },
         })
             .select('-html')
             .populate('user', 'email');

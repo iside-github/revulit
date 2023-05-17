@@ -34,7 +34,9 @@ handler.use(isAuth);
 handler.get(async (req, res) => {
     try {
         await db.connect();
-        const user = await User.findById(req.user.user.user._id);
+        const user = await User.findById(req.user.user.user._id).select(
+            '-roles -password'
+        );
 
         if (!user) return res.status(404).json({ message: 'User not found' });
         const sessions = await Session.find({
