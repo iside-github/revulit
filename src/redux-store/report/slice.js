@@ -5,6 +5,7 @@ const initialState = {
   list: [],
   category: "",
   isLoading: false,
+  isCategoryLoading: false,
 };
 
 export const getCompanyReports = createAsyncThunk(
@@ -33,14 +34,14 @@ export const reportsReducer = createSlice({
     },
     //category
     [getCategoryHTML.pending]: (state) => {
-      state.isLoading = true;
+      state.isCategoryLoading = true;
     },
     [getCategoryHTML.fulfilled]: (state, { payload }) => {
-      state.isLoading = false;
+      state.isCategoryLoading = false;
       state.category = payload;
     },
     [getCategoryHTML.rejected]: (state) => {
-      state.isLoading = false;
+      state.isCategoryLoading = false;
     },
   },
 });
