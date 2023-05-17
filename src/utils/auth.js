@@ -25,13 +25,13 @@ const isAuth = async (req, res, next) => {
                     .status(401)
                     .json({ message: 'The token is invalid' });
             } else {
-                await db.connect();
-                const user = await Users.findById(req.user.user.user._id);
-                await db.disconnect();
-                if (user.isBlock)
-                    return res
-                        .status(401)
-                        .json({ message: 'User profile is blocked' });
+                // await db.connect();
+                // const user = await Users.findById(req.user.user.user._id);
+                // await db.disconnect();
+                // if (user.isBlock)
+                //     return res
+                //         .status(401)
+                //         .json({ message: 'User profile is blocked' });
                 req['user'] = decode;
                 next();
             }
