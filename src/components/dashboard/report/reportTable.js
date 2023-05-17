@@ -145,16 +145,16 @@ export const ReportsTable = (props) => {
                           width: 42,
                         }}
                       >
-                        {getInitials(customer.name)}
+                        {customer?.user?.name}
                       </Avatar>
                       <Box sx={{ ml: 1 }}>
                         <NextLink href="/" passHref>
                           <Link color="inherit" variant="subtitle2">
-                            {customer.name}
+                            {customer?.user?.name}iside
                           </Link>
                         </NextLink>
                         <Typography color="textSecondary" variant="body2">
-                          {customer.email}
+                          {customer?.user?.email}
                         </Typography>
                       </Box>
                     </Box>
