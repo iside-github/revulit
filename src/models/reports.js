@@ -24,7 +24,7 @@ const reportSchema = new mongoose.Schema(
         },
         categories: {
             type: Object,
-            required,
+            required: true,
         },
     },
     {
