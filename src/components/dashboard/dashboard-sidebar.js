@@ -11,7 +11,6 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { ChartBar as ChartBarIcon } from "../../icons/chart-bar";
 import { ChartPie as ChartPieIcon } from "../../icons/chart-pie";
 import { Home as HomeIcon } from "../../icons/home";
 import { Selector as SelectorIcon } from "../../icons/selector";
@@ -20,7 +19,6 @@ import { Logo } from "../logo";
 import { Scrollbar } from "../scrollbar";
 import { DashboardSidebarSection } from "./dashboard-sidebar-section";
 import { OrganizationPopover } from "./organization-popover";
-import { Cog as CogIcon } from "../../icons/cog";
 import { Users as UsersIcon } from "../../icons/users";
 
 const getSections = (t) => [
@@ -41,11 +39,6 @@ const getSections = (t) => [
         title: t("Users"),
         path: "/dashboard/customers",
         icon: <UsersIcon fontSize="small" />,
-      },
-      {
-        title: t("Settings"),
-        path: "/dashboard/settings",
-        icon: <CogIcon fontSize="small" />,
       },
       {
         title: t("Account"),

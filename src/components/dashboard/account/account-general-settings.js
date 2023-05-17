@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { UserCircle as UserCircleIcon } from "../../../icons/user-circle";
-import { useSelector } from "store";
+import { useSelector } from "react-redux";
 
 export const AccountGeneralSettings = (props) => {
   // To get the user from the authContext, you can use

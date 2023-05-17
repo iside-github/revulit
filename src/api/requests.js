@@ -74,3 +74,25 @@ export async function getUserProfile() {
 }
 
 export async function editUserProfile() {}
+
+export async function getUsersPfofiles() {
+  try {
+    const result = await axios.get("/api/admin/user/all-users", {
+      withCredentials: true,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getAllCompanyReports() {
+  try {
+    const result = await axios.get("/api/admin/user/all-users", {
+      withCredentials: true,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

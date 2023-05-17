@@ -5,25 +5,21 @@ import {
   Button,
   Card,
   Container,
-  Divider,
   Grid,
   InputAdornment,
-  Tab,
-  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
 import { customerApi } from "../../../__fake-api__/customer-api";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
 import { CustomerListTable } from "../../../components/dashboard/customer/customer-list-table";
 import { useMounted } from "../../../hooks/use-mounted";
-import { Download as DownloadIcon } from "../../../icons/download";
 import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
-import { Upload as UploadIcon } from "../../../icons/upload";
 import { gtm } from "../../../lib/gtm";
 import { getSession } from "next-auth/react";
+import { useDispatch } from "react-redux";
+import { getUsersList } from "redux-store/users/user.slice";
 
 const sortOptions = [
   {
@@ -126,7 +122,10 @@ const CustomerList = () => {
     isReturning: undefined,
   });
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    dispatch(getUsersList());
     gtm.push({ event: "page_view" });
   }, []);
 

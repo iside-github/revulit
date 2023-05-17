@@ -138,7 +138,7 @@ export const ReportsTable = (props) => {
                       }}
                     >
                       <Avatar
-                        src={customer.avatar}
+                        src={"/static/avatar.png"}
                         sx={{
                           height: 42,
                           width: 42,
@@ -147,7 +147,7 @@ export const ReportsTable = (props) => {
                         {getInitials(customer.name)}
                       </Avatar>
                       <Box sx={{ ml: 1 }}>
-                        <NextLink href="/dashboard/customers/1" passHref>
+                        <NextLink href="/" passHref>
                           <Link color="inherit" variant="subtitle2">
                             {customer.name}
                           </Link>
