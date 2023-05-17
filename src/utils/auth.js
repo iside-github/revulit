@@ -19,12 +19,19 @@ const signToken = (user) => {
 const isAuth = async (req, res, next) => {
     const token = req?.cookies['next-auth.session-token'];
     if (token) {
-        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decode) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decode) => {
             if (err) {
                 return res
                     .status(401)
                     .json({ message: 'The token is invalid' });
             } else {
+                await db.connect();
+                const user = await Users.findById(req.user.user.user._id);
+                await db.disconnect();
+                if (user.isBlock)
+                    return res
+                        .status(401)
+                        .json({ message: 'User profile is blocked' });
                 req['user'] = decode;
                 next();
             }
