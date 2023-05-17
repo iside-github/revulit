@@ -73,7 +73,10 @@ handler.post(async (req, res) => {
         });
         await file.save();
 
-        const categories = htmlResolver(resText);
+        const categories = await new Promise((resolve) => {
+            htmlResolver(resText);
+            resolve('djfnde');
+        });
 
         const repo = new Reports({
             file_name: req.file.originalname,
