@@ -9,7 +9,6 @@ const handler = nc();
 handler.use(isAuth);
 handler.get(async (req, res) => {
     try {
-        console.log(req);
         const [id, category] = req.query.queries;
         await db.connect();
         const report = await Reports.findById(id).select('html');
