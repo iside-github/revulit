@@ -61,7 +61,6 @@ export const htmlFilter = (html, value) => {
                 const tdText = $(tdElement).text();
 
                 if (tdText.includes(value)) {
-                    result += 1;
                     shouldInclude = true;
                     return false;
                 }

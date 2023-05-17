@@ -63,30 +63,31 @@ handler.post(async (req, res) => {
             return res.status(500).send({
                 message: 'File is too big',
             });
-        // await db.connect();
+        await db.connect();
 
-        // const file = new Files({
-        //     src: req.file.filename,
-        //     name: req.file.originalname,
-        //     user: req.user._id,
-        // });
-        // await file.save();
+        const file = new Files({
+            src: req.file.filename,
+            name: req.file.originalname,
+            user: req.user._id,
+        });
+        await file.save();
 
-        // const repo = new Reports({
-        //     file_name: req.file.originalname,
-        //     html: resText,
-        //     user: req.user._id,
-        //     company: req.user.company,
-        // });
-        // await repo.save();
+        const repo = new Reports({
+            file_name: req.file.originalname,
+            file_src: req.file.filename,
+            html: resText,
+            user: req.user._id,
+            company: req.user.company,
+        });
+        await repo.save();
 
-        // await db.disconnect();
+        await db.disconnect();
 
         // const filteredTable = htmlFilter(resText, 'composite');
-        const response = htmlResolver(resText);
+        // const response = htmlResolver(resText);
 
-        // res.setHeader('Content-Type', 'text/html');
-        res.status(200).send(response);
+        res.setHeader('Content-Type', 'text/html');
+        res.status(200).send(resText);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
