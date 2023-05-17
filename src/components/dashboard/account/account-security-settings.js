@@ -15,9 +15,12 @@ import {
 } from "@mui/material";
 import { ArrowRight as ArrowRightIcon } from "../../../icons/arrow-right";
 import { Scrollbar } from "../../scrollbar";
+import { useSelector } from "react-redux";
+import { format } from "date-fns";
 
 export const AccountSecuritySettings = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const history = useSelector((state) => state.user.data?.sessions);
 
   const handleEdit = () => {
     setIsEditing(!isEditing);
@@ -79,26 +82,24 @@ export const AccountSecuritySettings = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>
-                  <Typography variant="subtitle2">Credentials login</Typography>
-                  <Typography variant="body2" color="body2">
-                    on 10:40 AM 2021/09/01
-                  </Typography>
-                </TableCell>
-                <TableCell>95.130.17.84</TableCell>
-                <TableCell>Chrome, Mac OS 10.15.7</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <Typography variant="subtitle2">Credentials login</Typography>
-                  <Typography color="body2" variant="body2">
-                    on 10:40 AM 2021/09/01
-                  </Typography>
-                </TableCell>
-                <TableCell>95.130.17.84</TableCell>
-                <TableCell>Chrome, Mac OS 10.15.7</TableCell>
-              </TableRow>
+              {history?.map((each) => (
+                <TableRow>
+                  <TableCell>
+                    <Typography variant="subtitle2">
+                      Credentials login
+                    </Typography>
+                    <Typography variant="body2" color="body2">
+                      On{" "}
+                      {format(
+                        each.createdAt ? new Date(each.createdAt) : new Date(),
+                        "HH:mm dd-MMM, yyyy"
+                      )}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>{each.ip_address}</TableCell>
+                  <TableCell>{each?.device}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </Scrollbar>

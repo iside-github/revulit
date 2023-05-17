@@ -4,14 +4,15 @@ import { useFormik } from "formik";
 import { Box, Button, FormHelperText, TextField } from "@mui/material";
 import { useMounted } from "../../hooks/use-mounted";
 import { signIn } from "next-auth/react";
+import { toast } from "react-hot-toast";
 
 export const JWTLogin = (props) => {
   const isMounted = useMounted();
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: "revliterature@gmail.com",
-      password: "Password123!",
+      email: "",
+      password: "",
       submit: null,
     },
     validationSchema: Yup.object({
@@ -22,24 +23,20 @@ export const JWTLogin = (props) => {
       password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
-      try {
-        await signIn("credentials", {
-          email: values.email,
-          password: values.password,
-          redirect: false,
-        });
-        if (isMounted()) {
-          const returnUrl = router.query.returnUrl || "/dashboard";
-          router.push(returnUrl).catch(console.error);
-        }
-      } catch (err) {
-        console.error(err);
+      const result = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
+      if (!result.error) {
+        const returnUrl = router.query.returnUrl || "/dashboard";
+        router.push(returnUrl).catch(console.error);
+      }
 
-        if (isMounted()) {
-          helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.message });
-          helpers.setSubmitting(false);
-        }
+      if (result.error) {
+        helpers.setStatus({ success: false });
+        toast.error(result.error);
+        helpers.setSubmitting(false);
       }
     },
   });

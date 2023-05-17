@@ -75,11 +75,10 @@ const data = {
 export const FinanceOverview = (props) => (
   <Grid container spacing={1}>
     {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-      <Grid item md={6} xs={12} key={item}>
+      <Grid item md={3} xs={12} key={item}>
         <Card
           {...props}
           sx={{
-            alignItems: "center",
             borderRight: (theme) => ({
               md: `1px solid ${theme.palette.divider}`,
             }),
@@ -87,30 +86,24 @@ export const FinanceOverview = (props) => (
               md: "none",
               xs: `1px solid ${theme.palette.divider}`,
             }),
-            display: "flex",
-            justifyContent: "space-between",
             p: 3,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
           }}
         >
           <div>
             <Typography color="textSecondary" variant="overline">
               Category 1
             </Typography>
-            <Typography variant="h5">120</Typography>
+            <Typography variant="h5" textAlign="center">
+              120
+            </Typography>
             <Typography color="textSecondary" variant="body2">
               Total articles
             </Typography>
           </div>
-          <Box
-            sx={{
-              alignItems: "center",
-              display: "flex",
-              height: 54,
-              width: 177,
-            }}
-          >
-            <ChartLine />
-          </Box>
         </Card>
       </Grid>
     ))}

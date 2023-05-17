@@ -5,61 +5,30 @@ import {
   Button,
   Card,
   Container,
-  Divider,
   Grid,
   InputAdornment,
-  Tab,
-  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
 import { customerApi } from "../../../__fake-api__/customer-api";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
 import { CustomerListTable } from "../../../components/dashboard/customer/customer-list-table";
 import { useMounted } from "../../../hooks/use-mounted";
-import { Download as DownloadIcon } from "../../../icons/download";
 import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
-import { Upload as UploadIcon } from "../../../icons/upload";
 import { gtm } from "../../../lib/gtm";
 import { getSession } from "next-auth/react";
-
-const tabs = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "Accepts Marketing",
-    value: "hasAcceptedMarketing",
-  },
-  {
-    label: "Prospect",
-    value: "isProspect",
-  },
-  {
-    label: "Returning",
-    value: "isReturning",
-  },
-];
+import { useDispatch } from "react-redux";
+import { getUsersList } from "redux-store/users/user.slice";
 
 const sortOptions = [
   {
-    label: "Last update (newest)",
+    label: "A-Z",
     value: "updatedAt|desc",
   },
   {
-    label: "Last update (oldest)",
+    label: "Z-A",
     value: "updatedAt|asc",
-  },
-  {
-    label: "Total orders (highest)",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "Total orders (lowest)",
-    value: "totalOrders|asc",
   },
 ];
 
@@ -153,7 +122,10 @@ const CustomerList = () => {
     isReturning: undefined,
   });
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    dispatch(getUsersList());
     gtm.push({ event: "page_view" });
   }, []);
 
@@ -225,7 +197,7 @@ const CustomerList = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Customer List | Revliterature</title>
+        <title>Dashboard: Users List | Revliterature</title>
       </Head>
       <Box
         component="main"
@@ -238,7 +210,7 @@ const CustomerList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Customers</Typography>
+                <Typography variant="h4">Users list</Typography>
               </Grid>
               <Grid item>
                 <Button
@@ -249,38 +221,8 @@ const CustomerList = () => {
                 </Button>
               </Grid>
             </Grid>
-            <Box
-              sx={{
-                m: -1,
-                mt: 3,
-              }}
-            >
-              <Button startIcon={<UploadIcon fontSize="small" />} sx={{ m: 1 }}>
-                Import
-              </Button>
-              <Button
-                startIcon={<DownloadIcon fontSize="small" />}
-                sx={{ m: 1 }}
-              >
-                Export
-              </Button>
-            </Box>
           </Box>
           <Card>
-            <Tabs
-              indicatorColor="primary"
-              onChange={handleTabsChange}
-              scrollButtons="auto"
-              sx={{ px: 3 }}
-              textColor="primary"
-              value={currentTab}
-              variant="scrollable"
-            >
-              {tabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
-              ))}
-            </Tabs>
-            <Divider />
             <Box
               sx={{
                 alignItems: "center",
@@ -309,7 +251,7 @@ const CustomerList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search customers"
+                  placeholder="Search users by name or email"
                 />
               </Box>
               <TextField

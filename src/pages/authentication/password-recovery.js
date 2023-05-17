@@ -21,6 +21,8 @@ const PasswordRecovery = () => {
         component="main"
         sx={{
           backgroundColor: "background.default",
+          backgroundImage: "url(/static/bg.svg)",
+          backgroundSize: "cover",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",

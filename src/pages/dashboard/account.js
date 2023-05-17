@@ -4,14 +4,12 @@ import { Box, Container, Divider, Tab, Tabs, Typography } from "@mui/material";
 import { DashboardLayout } from "../../components/dashboard/dashboard-layout";
 import { AccountGeneralSettings } from "../../components/dashboard/account/account-general-settings";
 import { AccountNotificationsSettings } from "../../components/dashboard/account/account-notifications-settings";
-import { AccountTeamSettings } from "../../components/dashboard/account/account-team-settings";
 import { AccountSecuritySettings } from "../../components/dashboard/account/account-security-settings";
 import { gtm } from "../../lib/gtm";
 import { getSession } from "next-auth/react";
 
 const tabs = [
   { label: "General", value: "general" },
-  { label: "Team", value: "team" },
   { label: "Notifications", value: "notifications" },
   { label: "Security", value: "security" },
 ];
@@ -56,7 +54,6 @@ const Account = () => {
           </Tabs>
           <Divider sx={{ mb: 3 }} />
           {currentTab === "general" && <AccountGeneralSettings />}
-          {currentTab === "team" && <AccountTeamSettings />}
           {currentTab === "notifications" && <AccountNotificationsSettings />}
           {currentTab === "security" && <AccountSecuritySettings />}
         </Container>

@@ -15,7 +15,7 @@ const signToken = (user) => {
 };
 
 const isAuth = async (req, res, next) => {
-    const { authorization: token } = req.headers;
+    const token = req?.cookies["next-auth.session-token"];
     if (token) {
         jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decode) => {
             if (err) {
@@ -23,7 +23,7 @@ const isAuth = async (req, res, next) => {
                     .status(401)
                     .json({ message: 'The token is invalid' });
             } else {
-                req.user = decode;
+                req["user"] = decode;
                 next();
             }
         });

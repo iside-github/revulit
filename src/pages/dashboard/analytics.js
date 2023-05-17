@@ -95,7 +95,11 @@ const Analytics = () => {
   );
 };
 
-Analytics.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+Analytics.getLayout = (page) => (
+  <AuthGuard>
+    <DashboardLayout>{page}</DashboardLayout>
+  </AuthGuard>
+);
 
 export default Analytics;
 

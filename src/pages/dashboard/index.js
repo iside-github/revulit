@@ -11,13 +11,15 @@ import { FinanceProfitableProducts } from "components/dashboard/finance/finance-
 import { Cog as CogIcon } from "icons/cog";
 import { FileDropzone } from "components/file-dropzone";
 import { getSession } from "next-auth/react";
+import { uploadFile } from "redux-store/file/upload";
+import { useDispatch } from "react-redux";
 
 const Overview = () => {
-  const [displayBanner, setDisplayBanner] = useState(true);
+  const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
 
   const handleDrop = (newFiles) => {
-    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    setFiles((prevFiles) => [...newFiles]);
   };
   const handleRemove = (file) => {
     setFiles((prevFiles) =>
@@ -41,10 +43,10 @@ const Overview = () => {
     }
   }, []);
 
-  const handleDismissBanner = () => {
-    // Update the persistent state
-    // globalThis.sessionStorage.setItem('dismiss-banner', 'true');
-    setDisplayBanner(false);
+  const handleUploadFile = () => {
+    const data = new FormData();
+    data.append("file", files[0]);
+    dispatch(uploadFile(files[0]));
   };
 
   return (
@@ -107,12 +109,14 @@ const Overview = () => {
                 onDrop={handleDrop}
                 onRemove={handleRemove}
                 onRemoveAll={handleRemoveAll}
+                maxFiles={1}
+                onUpload={handleUploadFile}
               />
             </Grid>
-            <Grid item md={5} xs={12}>
+            <Grid item xs={12}>
               <FinanceCostBreakdown />
             </Grid>
-            <Grid item md={7} xs={12}>
+            <Grid item xs={12}>
               <FinanceOverview />
             </Grid>
             <Grid item xs={12}>

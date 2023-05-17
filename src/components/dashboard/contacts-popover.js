@@ -12,17 +12,16 @@ import {
   Popover,
   Typography
 } from '@mui/material';
-import { useDispatch, useSelector } from '../../store';
-import { getContacts } from '../../thunks/chat';
+import { useDispatch, useSelector } from 'react-redux';
 import { StatusIndicator } from '../status-indicator';
 
 export const ContactsPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
   const dispatch = useDispatch();
-  const { contacts } = useSelector((state) => state.chat);
+  const contacts = [];
 
   useEffect(() => {
-      dispatch(getContacts());
+   
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);

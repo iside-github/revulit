@@ -34,7 +34,10 @@ const PasswordReset = () => {
         component="main"
         sx={{
           backgroundColor: "background.default",
+          backgroundImage: "url(/static/bg.svg)",
+          backgroundSize: "cover",
           display: "flex",
+          justifyContent: "center",
           flexDirection: "column",
           minHeight: "100vh",
         }}
@@ -58,12 +61,12 @@ const PasswordReset = () => {
               }}
             >
               <NextLink href="/" passHref>
-                  <Logo
-                    sx={{
-                      height: 40,
-                      width: 40,
-                    }}
-                  />
+                <Logo
+                  sx={{
+                    height: 40,
+                    width: 40,
+                  }}
+                />
               </NextLink>
               <Typography variant="h4">Password Reset</Typography>
               <Typography color="textSecondary" sx={{ mt: 2 }} variant="body2">

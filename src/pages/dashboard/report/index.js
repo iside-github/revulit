@@ -5,59 +5,35 @@ import {
   Button,
   Card,
   Container,
-  Divider,
   Grid,
   InputAdornment,
-  Tab,
-  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
 import { customerApi } from "../../../__fake-api__/customer-api";
-import { AuthGuard } from "../../../components/authentication/auth-guard";
 import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { CustomerListTable } from "../../../components/dashboard/customer/customer-list-table";
+import { ReportsTable } from "components/dashboard/report/reportTable";
 import { useMounted } from "../../../hooks/use-mounted";
 import { Download as DownloadIcon } from "../../../icons/download";
-import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
-import { Upload as UploadIcon } from "../../../icons/upload";
 import { gtm } from "../../../lib/gtm";
-
-const tabs = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "Accepts Marketing",
-    value: "hasAcceptedMarketing",
-  },
-  {
-    label: "Prospect",
-    value: "isProspect",
-  },
-  {
-    label: "Returning",
-    value: "isReturning",
-  },
-];
+import { getSession } from "next-auth/react";
 
 const sortOptions = [
   {
-    label: "Last update (newest)",
+    label: "A-Z",
     value: "updatedAt|desc",
   },
   {
-    label: "Last update (oldest)",
+    label: "Z-A",
     value: "updatedAt|asc",
   },
   {
-    label: "Total orders (highest)",
+    label: "Old to new",
     value: "totalOrders|desc",
   },
   {
-    label: "Total orders (lowest)",
+    label: "New to old",
     value: "totalOrders|asc",
   },
 ];
@@ -137,7 +113,7 @@ const applySort = (customers, sort) => {
 const applyPagination = (customers, page, rowsPerPage) =>
   customers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-const CustomerList = () => {
+const ReportsPage = () => {
   const isMounted = useMounted();
   const queryRef = useRef(null);
   const [customers, setCustomers] = useState([]);
@@ -176,22 +152,6 @@ const CustomerList = () => {
     []
   );
 
-  const handleTabsChange = (event, value) => {
-    const updatedFilters = {
-      ...filters,
-      hasAcceptedMarketing: undefined,
-      isProspect: undefined,
-      isReturning: undefined,
-    };
-
-    if (value !== "all") {
-      updatedFilters[value] = true;
-    }
-
-    setFilters(updatedFilters);
-    setCurrentTab(value);
-  };
-
   const handleQueryChange = (event) => {
     event.preventDefault();
     setFilters((prevState) => ({
@@ -224,7 +184,7 @@ const CustomerList = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Customer List | Revliterature</title>
+        <title>Dashboard: Reports | Revliterature</title>
       </Head>
       <Box
         component="main"
@@ -237,49 +197,20 @@ const CustomerList = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
-                <Typography variant="h4">Customers</Typography>
+                <Typography variant="h4">Reports</Typography>
               </Grid>
               <Grid item>
                 <Button
-                  startIcon={<PlusIcon fontSize="small" />}
+                  startIcon={<DownloadIcon fontSize="small" />}
+                  sx={{ m: 1 }}
                   variant="contained"
                 >
-                  Add
+                  Export
                 </Button>
               </Grid>
             </Grid>
-            <Box
-              sx={{
-                m: -1,
-                mt: 3,
-              }}
-            >
-              <Button startIcon={<UploadIcon fontSize="small" />} sx={{ m: 1 }}>
-                Import
-              </Button>
-              <Button
-                startIcon={<DownloadIcon fontSize="small" />}
-                sx={{ m: 1 }}
-              >
-                Export
-              </Button>
-            </Box>
           </Box>
           <Card>
-            <Tabs
-              indicatorColor="primary"
-              onChange={handleTabsChange}
-              scrollButtons="auto"
-              sx={{ px: 3 }}
-              textColor="primary"
-              value={currentTab}
-              variant="scrollable"
-            >
-              {tabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
-              ))}
-            </Tabs>
-            <Divider />
             <Box
               sx={{
                 alignItems: "center",
@@ -308,7 +239,7 @@ const CustomerList = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder="Search customers"
+                  placeholder="Search reoports by email"
                 />
               </Box>
               <TextField
@@ -327,7 +258,7 @@ const CustomerList = () => {
                 ))}
               </TextField>
             </Box>
-            <CustomerListTable
+            <ReportsTable
               customers={paginatedCustomers}
               customersCount={filteredCustomers.length}
               onPageChange={handlePageChange}
@@ -342,10 +273,20 @@ const CustomerList = () => {
   );
 };
 
-CustomerList.getLayout = (page) => (
-  <AuthGuard>
-    <DashboardLayout>{page}</DashboardLayout>
-  </AuthGuard>
-);
+ReportsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default CustomerList;
+export default ReportsPage;
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/authentication/login?returnUrl=/dashboard",
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
+};
