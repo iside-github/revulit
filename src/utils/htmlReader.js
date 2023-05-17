@@ -21,19 +21,19 @@ export const htmlResolver = (html) => {
         tds.forEach((td) => {
             const tdText = $(td).text().trim();
             switch (true) {
-                case tdText.includes('manual_review'):
+                case tdText == 'manual_review':
                     result.manual_review += 1;
                     break;
-                case tdText.includes('non_relevant'):
+                case tdText == 'non_relevant':
                     result.non_relevant += 1;
                     break;
-                case tdText.includes('safety'):
+                case tdText == 'safety':
                     result.safety += 1;
                     break;
-                case tdText.includes('composite'):
+                case tdText == 'composite':
                     result.composite += 1;
                     break;
-                case tdText.includes('ICSR'):
+                case tdText == 'ICSR':
                     result.ICSR += 1;
                     break;
             }
@@ -60,7 +60,7 @@ export const htmlFilter = (html, value) => {
             .each((tdIndex, tdElement) => {
                 const tdText = $(tdElement).text();
 
-                if (tdText.includes(value)) {
+                if (tdText == value) {
                     shouldInclude = true;
                     return false;
                 }
