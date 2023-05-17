@@ -72,9 +72,9 @@ handler.post(async (req, res) => {
             user: req.user._id,
         });
         await file.save();
-
-        const categories = await new Promise((resolve) => {
-            htmlResolver(resText);
+        let categories = {};
+         await new Promise((resolve) => {
+            categories =  htmlResolver(resText);
             resolve('djfnde');
         });
 
