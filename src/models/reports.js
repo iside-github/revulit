@@ -22,6 +22,10 @@ const reportSchema = new mongoose.Schema(
             type: String,
             ref: 'companies',
         },
+        categories: {
+            type: Object,
+            required,
+        },
     },
     {
         timestamps: true,
