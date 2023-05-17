@@ -9,12 +9,19 @@ const handler = nc();
 handler.use(isAuth);
 handler.get(async (req, res) => {
     try {
-        const [id, category] = req.query.queries;
+        const [id] = req.query.queries;
+        const category = req.query.category;
         await db.connect();
         const report = await Reports.findById(id).select('html');
         await db.disconnect();
 
-        const data = htmlFilter(report.html, category);
+        var data =
+            category !== 'total'
+                ? await new Promise((resolve) => {
+                      let html = htmlFilter(report.html, category);
+                      resolve(html);
+                  })
+                : report.html;
 
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(data);
