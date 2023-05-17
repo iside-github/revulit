@@ -15,12 +15,14 @@ const reportSchema = new mongoose.Schema(
             required: true,
         },
         user: {
-            type: String,
+            type: mongoose.Types.ObjectId,
             ref: 'users',
+            required: true,
         },
         company: {
-            type: String,
+            type: mongoose.Types.ObjectId,
             ref: 'companies',
+            required: true,
         },
         categories: {
             type: Object,

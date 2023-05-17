@@ -2,9 +2,10 @@ import nc from 'next-connect';
 import db from '../../../utils/db';
 import Files from '../../../models/files';
 import Reports from '../../../models/reports';
+import User from '../../../models/user';
 import { isAuth } from '../../../utils/auth';
 import { resText } from '../../../components/res';
-import { htmlFilter, htmlResolver } from '../../../utils/htmlReader';
+import { htmlResolver } from '../../../utils/htmlReader';
 import multer from 'multer';
 
 const upload = multer({
@@ -66,15 +67,16 @@ handler.post(async (req, res) => {
             });
         await db.connect();
 
+        const user = await User.findById(req.user.user.user._id);
         const file = new Files({
             src: req.file.filename,
             name: req.file.originalname,
-            user: req.user._id,
+            user: user._id,
         });
         await file.save();
         let categories = {};
-         await new Promise((resolve) => {
-            categories =  htmlResolver(resText);
+        await new Promise((resolve) => {
+            categories = htmlResolver(resText);
             resolve('djfnde');
         });
 
@@ -82,15 +84,15 @@ handler.post(async (req, res) => {
             file_name: req.file.originalname,
             file_src: req.file.filename,
             html: resText,
-            user: req.user._id,
-            company: req.user.company,
+            user: user._id,
+            company: user.company,
             categories,
         });
         await repo.save();
 
         await db.disconnect();
 
-        res.status(200).send(categories);
+        res.status(200).send({ ...categories, id: repo._id });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

@@ -10,7 +10,7 @@ handler.use(checkUserRole('admin'));
 handler.post(async (req, res) => {
     try {
         await db.connect();
-        const admin = await User.findById(req.user._id);
+        const admin = await User.findById(req.user.user.user._id);
         const salt = bcrypt.genSaltSync(10);
 
         const newUser = new User({
