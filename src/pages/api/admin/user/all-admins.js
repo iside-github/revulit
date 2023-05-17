@@ -21,8 +21,10 @@ handler.get(async (req, res) => {
             {
                 $project: {
                     email: 1,
+                    name: 1,
+                    isBlock: 1,
+                    avatar: 1,
                     createdAt: 1,
-                    updatedAt: 1,
                 },
             },
         ]);
