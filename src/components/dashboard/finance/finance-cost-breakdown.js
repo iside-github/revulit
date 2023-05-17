@@ -78,7 +78,7 @@ export const FinanceCostBreakdown = (props) => {
       <Divider />
       <CardContent>
         <Chart
-          height={240}
+          height={440}
           options={chartOptions}
           series={chartSeries}
           type="pie"
