@@ -20,7 +20,7 @@ export const reportsReducer = createSlice({
     },
     [getCompanyReports.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      state.list = payload;
+      state.list = payload?.reports;
     },
     [getCompanyReports.rejected]: (state) => {
       state.isLoading = false;

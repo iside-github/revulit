@@ -5,13 +5,14 @@ import { reducer as formReducer } from "redux-form";
 import fileUploadReducer from "./file/upload";
 import userReducer from "./user/user.slice";
 import systemUsersReducer from "./users/user.slice";
+import reportsReducer from "./report/slice";
 
 import authReducer from "./user/auth.slice";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user"],    
+  whitelist: ["user"],
 };
 
 const rootReducer = combineReducers({
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   file: fileUploadReducer,
   user: userReducer,
   users: systemUsersReducer,
+  report: reportsReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

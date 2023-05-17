@@ -109,8 +109,9 @@ export const ReportsTable = (props) => {
               <TableCell>Total articles</TableCell>
               <TableCell align="right">None relevant</TableCell>
               <TableCell align="right">ICSR</TableCell>
-              <TableCell align="right">Drug</TableCell>
-              <TableCell align="right">Title</TableCell>
+              <TableCell align="right">Composite</TableCell>
+              <TableCell align="right">Manual Review</TableCell>
+              <TableCell align="right">Safety</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -158,17 +159,35 @@ export const ReportsTable = (props) => {
                       </Box>
                     </Box>
                   </TableCell>
-                  <TableCell>{format(new Date(), "dd-MMM, yyyy")}</TableCell>
-                  <TableCell>{"122333.xlsx"}</TableCell>
+                  <TableCell>
+                    {customer?.createdAt
+                      ? format(
+                          new Date(customer?.createdAt),
+                          "dd-MMM, yyyy HH:mm"
+                        )
+                      : ""}
+                  </TableCell>
+                  <TableCell>{customer?.file_name}</TableCell>
                   <TableCell>
                     <Typography color="success.main" variant="subtitle2">
-                      {300}
+                      {customer?.categories?.total}
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">{40}</TableCell>
-                  <TableCell align="right">{40}</TableCell>
-                  <TableCell align="right">{40}</TableCell>
-                  <TableCell align="right">{40}</TableCell>
+                  <TableCell align="center">
+                    {customer?.categories?.non_relevant}
+                  </TableCell>
+                  <TableCell align="right">
+                    {customer?.categories?.ICSR}
+                  </TableCell>
+                  <TableCell align="right">
+                    {customer?.categories?.composite}
+                  </TableCell>
+                  <TableCell align="right">
+                    {customer?.categories?.manual_review}
+                  </TableCell>
+                  <TableCell align="right">
+                    {customer?.categories?.safety}
+                  </TableCell>
                 </TableRow>
               );
             })}

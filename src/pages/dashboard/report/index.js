@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import {
   Box,
@@ -10,14 +10,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { customerApi } from "../../../__fake-api__/customer-api";
 import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
 import { ReportsTable } from "components/dashboard/report/reportTable";
-import { useMounted } from "../../../hooks/use-mounted";
 import { Download as DownloadIcon } from "../../../icons/download";
 import { Search as SearchIcon } from "../../../icons/search";
 import { gtm } from "../../../lib/gtm";
 import { getSession } from "next-auth/react";
+import { getCompanyReports } from "redux-store/report/slice";
+import { useDispatch, useSelector } from "react-redux";
 
 const sortOptions = [
   {
@@ -114,10 +114,9 @@ const applyPagination = (customers, page, rowsPerPage) =>
   customers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
 const ReportsPage = () => {
-  const isMounted = useMounted();
+  const reports = useSelector((state) => state.report.list);
   const queryRef = useRef(null);
   const [customers, setCustomers] = useState([]);
-  const [currentTab, setCurrentTab] = useState("all");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sort, setSort] = useState(sortOptions[0].value);
@@ -132,21 +131,11 @@ const ReportsPage = () => {
     gtm.push({ event: "page_view" });
   }, []);
 
-  const getCustomers = useCallback(async () => {
-    try {
-      const data = await customerApi.getCustomers();
-
-      if (isMounted()) {
-        setCustomers(data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
+  const dispatch = useDispatch();
 
   useEffect(
     () => {
-      getCustomers();
+      dispatch(getCompanyReports());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -173,7 +162,7 @@ const ReportsPage = () => {
   };
 
   // Usually query is done on backend with indexing solutions
-  const filteredCustomers = applyFilters(customers, filters);
+  const filteredCustomers = applyFilters(reports, filters);
   const sortedCustomers = applySort(filteredCustomers, sort);
   const paginatedCustomers = applyPagination(
     sortedCustomers,

@@ -1,7 +1,7 @@
-import nc from 'next-connect';
-import Reports from '../../../models/reports';
-import db from '../../../utils/db';
-import { isAuth } from '../../../utils/auth';
+import nc from "next-connect";
+import Reports from "../../../models/reports";
+import db from "../../../utils/db";
+import { isAuth } from "../../../utils/auth";
 
 const handler = nc();
 
@@ -15,13 +15,13 @@ handler.get(async (req, res) => {
             .populate('user', 'email name avatar')
             .select('-html');
 
-        await db.disconnect();
-        res.status(200).send({
-            reports,
-        });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+    await db.disconnect();
+    res.status(200).send({
+      reports,
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
 
 export default handler;
