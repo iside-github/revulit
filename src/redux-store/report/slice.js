@@ -1,14 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAllCompanyReports } from "api/requests";
+import { getAllCompanyReports, getCategoryData } from "api/requests";
 
 const initialState = {
   list: [],
+  category: "",
   isLoading: false,
 };
 
 export const getCompanyReports = createAsyncThunk(
   "get/allreports",
   getAllCompanyReports
+);
+
+export const getCategoryHTML = createAsyncThunk(
+  "get/categoryHTML",
+  getCategoryData
 );
 
 export const reportsReducer = createSlice({
@@ -23,6 +29,17 @@ export const reportsReducer = createSlice({
       state.list = payload?.reports;
     },
     [getCompanyReports.rejected]: (state) => {
+      state.isLoading = false;
+    },
+    //category
+    [getCategoryHTML.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getCategoryHTML.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.category = payload;
+    },
+    [getCategoryHTML.rejected]: (state) => {
       state.isLoading = false;
     },
   },
