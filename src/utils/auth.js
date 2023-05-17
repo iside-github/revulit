@@ -37,7 +37,7 @@ const isAuth = async (req, res, next) => {
 const checkUserRole = (role) => async (req, res, next) => {
     isAuth(req, res, async () => {
         await db.connect();
-        const user = await Users.findById(req.user._id);
+        const user = await Users.findById(req.user.user.user._id);
         await db.disconnect();
         if (Array.isArray(role)) {
             for (let i = 0; i < role.length; i++) {

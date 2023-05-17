@@ -13,7 +13,7 @@ handler.post(async (req, res) => {
     try {
         const pwd = 'custom-password';
         await db.connect();
-        const admin = await User.findById(req.user._id);
+        const admin = await User.findById(req.user.user.user._id);
         const salt = bcrypt.genSaltSync(10);
 
         const newUser = new User({
