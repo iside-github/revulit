@@ -92,7 +92,7 @@ handler.post(async (req, res) => {
 
         await db.disconnect();
 
-        res.status(200).send(categories);
+        res.status(200).send({ ...categories, id: repo._id });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
