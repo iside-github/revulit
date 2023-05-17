@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken';
+import Users from '../models/user';
+import db from './db';
 
 const signToken = (user) => {
     return jwt.sign(
@@ -15,7 +17,7 @@ const signToken = (user) => {
 };
 
 const isAuth = async (req, res, next) => {
-    const token = req?.cookies["next-auth.session-token"];
+    const token = req?.cookies['next-auth.session-token'];
     if (token) {
         jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decode) => {
             if (err) {
@@ -23,7 +25,7 @@ const isAuth = async (req, res, next) => {
                     .status(401)
                     .json({ message: 'The token is invalid' });
             } else {
-                req["user"] = decode;
+                req['user'] = decode;
                 next();
             }
         });
@@ -33,15 +35,18 @@ const isAuth = async (req, res, next) => {
 };
 
 const checkUserRole = (role) => async (req, res, next) => {
-    isAuth(req, res, () => {
+    isAuth(req, res, async () => {
+        await db.connect();
+        const user = await Users.findById(req.user._id);
+        await db.disconnect();
         if (Array.isArray(role)) {
             for (let i = 0; i < role.length; i++) {
-                if (req.user.roles.includes(role[i])) {
+                if (user.roles.includes(role[i])) {
                     next();
                     break;
                 } else return res.status(403).json({ message: 'Forbidden' });
             }
-        } else if (req.user.roles && req.user.roles.includes(role)) {
+        } else if (user.roles && user.roles.includes(role)) {
             next();
         } else {
             return res.status(403).json({ message: 'Forbidden' });
