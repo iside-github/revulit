@@ -18,6 +18,8 @@ import { Download as DownloadIcon } from "../../../icons/download";
 import { Search as SearchIcon } from "../../../icons/search";
 import { gtm } from "../../../lib/gtm";
 import { getSession } from "next-auth/react";
+import { getCompanyReports } from "redux-store/report/slice";
+import { useDispatch } from "react-redux";
 
 const sortOptions = [
   {
@@ -144,8 +146,11 @@ const ReportsPage = () => {
     }
   }, [isMounted]);
 
+  const dispatch = useDispatch();
+
   useEffect(
     () => {
+      dispatch(getCompanyReports());
       getCustomers();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

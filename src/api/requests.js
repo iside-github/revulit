@@ -88,7 +88,7 @@ export async function getUsersPfofiles() {
 
 export async function getAllCompanyReports() {
   try {
-    const result = await axios.get("/api/admin/user/all-users", {
+    const result = await axios.get("/api/user/reports", {
       withCredentials: true,
     });
     return result.data;
