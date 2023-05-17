@@ -10,7 +10,7 @@ handler.use(checkUserRole('admin'));
 handler.get(async (req, res) => {
     try {
         await db.connect();
-        const admin = await User.findById(req.user.user.user_id);
+        const admin = await User.findById(req.user.user.user._id);
         const users = await User.aggregate([
             {
                 $match: {
@@ -25,8 +25,10 @@ handler.get(async (req, res) => {
             {
                 $project: {
                     email: 1,
+                    name: 1,
+                    isBlock: 1,
+                    avatar: 1,
                     createdAt: 1,
-                    updatedAt: 1,
                 },
             },
         ]);
