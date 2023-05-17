@@ -30,7 +30,8 @@ handler.post(async (req, res) => {
             from: '"Company Name" <jamshidbekml@mail.ru>',
             to: user.email,
             subject: 'Change your password',
-            text: `Change your password: http://localhost:3000//authentication/password-reset?auth=${token}`,
+            text: `Change your password:`,
+            html: `<a href="http://localhost:3000//authentication/password-reset?auth=${token}">click here</a>`,
         };
 
         // Xabarni yuborish

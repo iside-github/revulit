@@ -52,6 +52,7 @@ handler.post(async (req, res) => {
             'pdf',
             'doc',
             'docx',
+            'jpg',
         ];
         const file_extension = req.file.originalname.slice(
             ((req.file.originalname.lastIndexOf('.') - 1) >>> 0) + 2
@@ -72,22 +73,21 @@ handler.post(async (req, res) => {
         });
         await file.save();
 
+        const categories = htmlResolver(resText);
+
         const repo = new Reports({
             file_name: req.file.originalname,
             file_src: req.file.filename,
             html: resText,
             user: req.user._id,
             company: req.user.company,
+            categories,
         });
         await repo.save();
 
         await db.disconnect();
 
-        // const filteredTable = htmlFilter(resText, 'composite');
-        // const response = htmlResolver(resText);
-
-        res.setHeader('Content-Type', 'text/html');
-        res.status(200).send(resText);
+        res.status(200).send(categories);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
