@@ -12,7 +12,12 @@ const Page = () => {
 
   useEffect(() => {
     if (router?.query?.id) {
-      dispatch(getCategoryHTML({category: router?.query?.id, }));
+      dispatch(
+        getCategoryHTML({
+          category: router?.query?.id,
+          id: router?.query?.report,
+        })
+      );
     }
   }, [router?.query?.id]);
   return (
