@@ -10,7 +10,7 @@ handler.use(checkUserRole('admin'));
 handler.get(async (req, res) => {
     try {
         await db.connect();
-        const admin = await User.findById(req.user.user.user_id);
+        const admin = await User.findById(req.user.user.user._id);
         const users = await User.aggregate([
             {
                 $match: {
