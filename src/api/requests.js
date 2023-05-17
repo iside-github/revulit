@@ -96,3 +96,17 @@ export async function getAllCompanyReports() {
     console.log(error);
   }
 }
+
+export async function getCategoryData({ id, category }) {
+  try {
+    const result = await axios.get(
+      `/api/user/filtered-reports?id=${id}&&category=${category}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

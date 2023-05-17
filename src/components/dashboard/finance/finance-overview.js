@@ -1,7 +1,9 @@
 import { Card, Grid, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
 export const FinanceOverview = (props) => {
+  const router = useRouter();
   const fileData = useSelector((state) => state.file.data);
   const result = [
     {
@@ -44,7 +46,17 @@ export const FinanceOverview = (props) => {
   return (
     <Grid container spacing={1}>
       {result.map((item) => (
-        <Grid item md={3} xs={12} key={item.id}>
+        <Grid
+          item
+          md={3}
+          xs={12}
+          key={item.id}
+          onClick={
+            item?.value > 0
+              ? () => router.push(`/dashboard/html/${item?.category}?report=${item?._id}`)
+              : null
+          }
+        >
           <Card
             {...props}
             sx={{
