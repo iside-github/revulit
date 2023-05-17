@@ -99,14 +99,12 @@ export async function getAllCompanyReports() {
 
 export async function getCategoryData({ id, category }) {
   try {
-    const result = await axios({
-      url: "/api/user/filtered-reports",
-      method: "GET",
-      params: {
-        id,
-        category,
-      },
-    });
+    const result = await axios.get(
+      `/api/user/filtered-reports/${id}?category=${category}`,
+      {
+        withCredentials: true,
+      }
+    );
     return result.data;
   } catch (error) {
     console.log(error);
