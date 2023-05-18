@@ -13,7 +13,6 @@ handler.get(async (req, res) => {
             path: 'company',
             select: 'name',
         });
-        console.log(admin);
         const users = await User.aggregate([
             {
                 $match: {
