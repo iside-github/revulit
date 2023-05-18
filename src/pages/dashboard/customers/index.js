@@ -10,16 +10,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { customerApi } from "../../../__fake-api__/customer-api";
 import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
 import { CustomerListTable } from "../../../components/dashboard/customer/customer-list-table";
-import { useMounted } from "../../../hooks/use-mounted";
-import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
 import { gtm } from "../../../lib/gtm";
 import { getSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersList } from "redux-store/users/user.slice";
+import ShareIcon from "@mui/icons-material/Share";
+import InviteModal from "components/dashboard/customer/inviteModal";
 
 const sortOptions = [
   {
@@ -108,11 +107,9 @@ const applyPagination = (customers, page, rowsPerPage) =>
   customers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
 const CustomerList = () => {
+  const [modal, setModal] = useState(false);
   const usersList = useSelector((state) => state.users.list);
-  const isMounted = useMounted();
   const queryRef = useRef(null);
-  const [customers, setCustomers] = useState([]);
-  const [currentTab, setCurrentTab] = useState("all");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sort, setSort] = useState(sortOptions[0].value);
@@ -129,42 +126,6 @@ const CustomerList = () => {
     dispatch(getUsersList());
     gtm.push({ event: "page_view" });
   }, []);
-
-  const getCustomers = useCallback(async () => {
-    try {
-      const data = await customerApi.getCustomers();
-
-      if (isMounted()) {
-        setCustomers(data);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
-  useEffect(
-    () => {
-      getCustomers();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  const handleTabsChange = (event, value) => {
-    const updatedFilters = {
-      ...filters,
-      hasAcceptedMarketing: undefined,
-      isProspect: undefined,
-      isReturning: undefined,
-    };
-
-    if (value !== "all") {
-      updatedFilters[value] = true;
-    }
-
-    setFilters(updatedFilters);
-    setCurrentTab(value);
-  };
 
   const handleQueryChange = (event) => {
     event.preventDefault();
@@ -208,6 +169,7 @@ const CustomerList = () => {
         }}
       >
         <Container maxWidth="xl">
+          <InviteModal open={modal} setOpen={setModal} />
           <Box sx={{ mb: 2 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
@@ -215,10 +177,11 @@ const CustomerList = () => {
               </Grid>
               <Grid item>
                 <Button
-                  startIcon={<PlusIcon fontSize="small" />}
+                  onClick={() => setModal(true)}
+                  startIcon={<ShareIcon fontSize="small" />}
                   variant="contained"
                 >
-                  Add
+                  Invite user
                 </Button>
               </Grid>
             </Grid>

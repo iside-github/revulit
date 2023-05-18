@@ -151,16 +151,19 @@ export const CustomerListTable = (props) => {
                   <TableCell>{customer.totalOrders}</TableCell>
                   <TableCell>
                     <Typography
-                      color={
-                        customer?.isBlock ? "error.main" : "success.main"
-                      }
+                      color={customer?.isBlock ? "error.main" : "success.main"}
                       variant="subtitle2"
                     >
                       {customer?.isBlock ? "Blocked" : "Active"}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
-                    {format(new Date(), "dd-MMM, yyyy")}
+                    {customer?.createdAt
+                      ? format(
+                          new Date(customer?.createdAt),
+                          "dd-MMM, yyyy HH:mm"
+                        )
+                      : ""}
                   </TableCell>
                 </TableRow>
               );

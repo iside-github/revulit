@@ -110,3 +110,49 @@ export async function getCategoryData({ id, category }) {
     console.log(error);
   }
 }
+
+export async function inviteCompanyUser({ data, handleClose, resetForm }) {
+  try {
+    const res = await axios({
+      url: "/api/user/add-user",
+      method: "POST",
+      data,
+    });
+    toast.success(res.data?.message);
+    handleClose();
+  } catch (error) {
+    handleClose();
+    toast.error(
+      error?.response?.data?.message
+        ? error?.response?.data?.message
+        : "Something went wrong! Please, try again later"
+    );
+  }
+}
+
+export async function confirmAccount({
+  new_password,
+  router,
+  helpers,
+  auth,
+}) {
+  try {
+    await axios({
+      method: "POST",
+      url: "/api/user/confirmation",
+      headers: { auth },
+      data: { password: new_password },
+    });
+
+    router.push("/authentication/conformation-success");
+  } catch (error) {
+    helpers.setStatus({ success: false });
+    helpers.setErrors({ submit: error.message });
+    helpers.setSubmitting(false);
+    toast.error(
+      error?.response?.data?.message
+        ? error?.response?.data?.message
+        : "Something went wrong! Please, try again later"
+    );
+  }
+}
