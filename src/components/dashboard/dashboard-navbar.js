@@ -230,7 +230,7 @@ const AccountButton = () => {
             height: 40,
             width: 40
           }}
-          src={user.avatar}
+          src={"/static/avatar.png"}
         >
           <UserCircleIcon fontSize="small" />
         </Avatar>

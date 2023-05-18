@@ -48,7 +48,7 @@ handler.post(async (req, res) => {
             from: '"Company Name" <jamshidbekml@mail.ru>',
             to: savedUser.email,
             subject: 'Confirm your email',
-            html: `<a href="vipsavdo.uz/?auth=${token}">Confirm my account</a>`,
+            html: `<a href="http://localhost:3000/authentication/conformation?auth=${token}">Confirm my account</a>`,
         };
 
         // Xabarni yuborish
@@ -61,7 +61,7 @@ handler.post(async (req, res) => {
         });
 
         res.status(200).send({
-            message: 'Confirmation sent successfully',
+            message: 'Invite sent successfully',
         });
     } catch (error) {
         if (error.message.includes('email_1 dup key'))
