@@ -84,7 +84,7 @@ export const AccountGeneralSettings = (props) => {
                     },
                   }}
                 />
-                <Button>Edit</Button>
+                <Button disabled>Edit</Button>
               </Box>
             </Grid>
           </Grid>
