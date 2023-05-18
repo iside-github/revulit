@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
             minlength: 4,
         },
         company: {
-            type: String,
+            type: mongoose.Types.ObjectId,
             ref: 'companies',
             required: [true, 'Company is required'],
         },
