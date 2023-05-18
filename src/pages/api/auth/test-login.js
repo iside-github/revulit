@@ -5,7 +5,6 @@ import db from '../../../utils/db';
 import { signToken } from '../../../utils/auth';
 
 const handler = nc();
-
 handler.post(async (req, res) => {
     try {
         await db.connect();
