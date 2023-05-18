@@ -18,7 +18,7 @@ import { Plus as PlusIcon } from "../../../icons/plus";
 import { Search as SearchIcon } from "../../../icons/search";
 import { gtm } from "../../../lib/gtm";
 import { getSession } from "next-auth/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUsersList } from "redux-store/users/user.slice";
 
 const sortOptions = [
@@ -33,7 +33,7 @@ const sortOptions = [
 ];
 
 const applyFilters = (customers, filters) =>
-  customers.filter((customer) => {
+  customers?.filter((customer) => {
     if (filters.query) {
       let queryMatched = false;
       const properties = ["email", "name"];
@@ -108,6 +108,7 @@ const applyPagination = (customers, page, rowsPerPage) =>
   customers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
 const CustomerList = () => {
+  const usersList = useSelector((state) => state.users.list);
   const isMounted = useMounted();
   const queryRef = useRef(null);
   const [customers, setCustomers] = useState([]);
@@ -186,7 +187,7 @@ const CustomerList = () => {
   };
 
   // Usually query is done on backend with indexing solutions
-  const filteredCustomers = applyFilters(customers, filters);
+  const filteredCustomers = applyFilters(usersList, filters);
   const sortedCustomers = applySort(filteredCustomers, sort);
   const paginatedCustomers = applyPagination(
     sortedCustomers,
@@ -203,11 +204,11 @@ const CustomerList = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 4,
         }}
       >
         <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
+          <Box sx={{ mb: 2 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
                 <Typography variant="h4">Users list</Typography>

@@ -150,8 +150,13 @@ export const CustomerListTable = (props) => {
                   <TableCell>Iside</TableCell>
                   <TableCell>{customer.totalOrders}</TableCell>
                   <TableCell>
-                    <Typography color="success.main" variant="subtitle2">
-                      Active
+                    <Typography
+                      color={
+                        customer?.isBlock ? "error.main" : "success.main"
+                      }
+                      variant="subtitle2"
+                    >
+                      {customer?.isBlock ? "Blocked" : "Active"}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">

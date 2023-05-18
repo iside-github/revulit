@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getUsersPfofiles } from "api/requests";
 
 const initialState = {
-  list: null,
+  list: [],
   isLoading: false,
   isUpdateLoading: false,
 };
@@ -21,7 +21,7 @@ export const systemUsersReducer = createSlice({
     },
     [getUsersList.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      state.list = payload;
+      state.list = payload?.users;
     },
     [getUsersList.rejected]: (state) => {
       state.isLoading = false;

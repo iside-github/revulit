@@ -150,7 +150,7 @@ export const ReportsTable = (props) => {
                       <Box sx={{ ml: 1 }}>
                         <NextLink href="/" passHref>
                           <Link color="inherit" variant="subtitle2">
-                            {customer?.user?.name}iside
+                            {customer?.user?.name}
                           </Link>
                         </NextLink>
                         <Typography color="textSecondary" variant="body2">
