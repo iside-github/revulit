@@ -31,18 +31,9 @@ handler.get(async (req, res) => {
                 },
             },
             {
-                $lookup: {
-                    from: 'companies',
-                    localField: 'company',
-                    foreignField: '_id',
-                    as: 'company',
-                },
-            },
-            {
                 $project: {
                     email: 1,
                     name: 1,
-                    company: '$company.name',
                     isBlock: 1,
                     avatar: 1,
                     createdAt: 1,
