@@ -12,7 +12,7 @@ const fileSchema = new mongoose.Schema(
             required: true,
         },
         user: {
-            type: String,
+            type: mongoose.Types.ObjectId,
             ref: 'users',
         },
     },
