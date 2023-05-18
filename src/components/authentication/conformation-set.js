@@ -4,14 +4,14 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Box, FormHelperText, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { sendPasswordUpdate } from "redux-store/user/auth.slice";
+import { confirmEmailAddress } from "redux-store/users/user.slice";
 import { LoadingButton } from "@mui/lab";
 
-export const AmplifyPasswordReset = (props) => {
+const SetConformation = (props) => {
   const router = useRouter();
   const itemsRef = useRef([]);
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.auth.isPassUpdateLoading);
+  const isLoading = useSelector((state) => state.users.isConfirmLoading);
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -31,7 +31,7 @@ export const AmplifyPasswordReset = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       dispatch(
-        sendPasswordUpdate({
+        confirmEmailAddress({
           router,
           auth: router?.query?.auth,
           new_password: values.password,
@@ -84,9 +84,11 @@ export const AmplifyPasswordReset = (props) => {
           variant="contained"
           loading={isLoading}
         >
-          Reset Password
+          Accept invite
         </LoadingButton>
       </Box>
     </form>
   );
 };
+
+export default SetConformation;
