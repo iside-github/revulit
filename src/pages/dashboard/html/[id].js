@@ -2,7 +2,7 @@ import { DashboardLayout } from "components/dashboard/dashboard-layout";
 import { getSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getCategoryHTML } from "redux-store/report/slice";
 import { useRouter } from "next/router";
 import ReactHtmlParser from "react-html-parser";
@@ -10,12 +10,16 @@ import { Box, Container, Stack } from "@mui/system";
 import Lottie from "react-lottie";
 import * as animationData from "./loader.json";
 import { Card, Typography } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import LaunchIcon from "@mui/icons-material/Launch";
+import download_table_as_csv from "utils/exporter";
 
 const Page = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const category = useSelector((state) => state.report.category);
   const isLoading = useSelector((state) => state.report.isCategoryLoading);
+  const [count, setCount] = useState();
 
   useEffect(() => {
     if (router?.query?.id) {
@@ -27,6 +31,16 @@ const Page = () => {
       );
     }
   }, [router?.query?.id]);
+
+  useEffect(() => {
+    if (category && category?.length > 1) {
+      const tableBody = document.querySelector("tbody");
+      setCount(tableBody.childNodes.length);
+      tableBody.childNodes.forEach((node, indx) => {
+        node.childNodes[0].innerText = indx + 1;
+      });
+    }
+  }, [category]);
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -44,12 +58,40 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          pb: 8,
+          pt: 4,
         }}
       >
         <Container maxWidth="xl">
           {!isLoading ? (
-            <Box sx={{ mb: 4 }}> {ReactHtmlParser(category)}</Box>
+            <Box sx={{ mb: 4 }}>
+              <Stack
+                mb={3}
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography variant="h4">
+                  Result - {router?.query?.categoryName}
+                </Typography>
+                <LoadingButton
+                  onClick={() =>
+                    download_table_as_csv(
+                      "dataframe",
+                      ",",
+                      "2121212",
+                      "34343",
+                      "all"
+                    )
+                  }
+                  variant="contained"
+                  startIcon={<LaunchIcon />}
+                >
+                  Export to csv
+                </LoadingButton>
+              </Stack>
+              <Stack>{ReactHtmlParser(category)}</Stack>
+            </Box>
           ) : (
             <Card
               sx={{
@@ -58,6 +100,8 @@ const Page = () => {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
+                background: "none",
+                boxShadow: "none",
               }}
             >
               <Lottie options={defaultOptions} height={400} width={400} />

@@ -18,6 +18,7 @@ import { gtm } from "../../../lib/gtm";
 import { getSession } from "next-auth/react";
 import { getCompanyReports } from "redux-store/report/slice";
 import { useDispatch, useSelector } from "react-redux";
+import download_table_as_csv from "utils/exporter";
 
 const sortOptions = [
   {
@@ -179,11 +180,11 @@ const ReportsPage = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 4,
         }}
       >
         <Container maxWidth="xl">
-          <Box sx={{ mb: 4 }}>
+          <Box sx={{ mb: 2 }}>
             <Grid container justifyContent="space-between" spacing={3}>
               <Grid item>
                 <Typography variant="h4">Reports</Typography>

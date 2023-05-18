@@ -53,7 +53,10 @@ export const FinanceOverview = (props) => {
           key={item.id}
           onClick={
             item?.value > 0
-              ? () => router.push(`/dashboard/html/${item?.category}?report=${fileData?.id}`)
+              ? () =>
+                  router.push(
+                    `/dashboard/html/${item?.category}?report=${fileData?.id}&&categoryName=${item?.title}`
+                  )
               : null
           }
         >
