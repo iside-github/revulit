@@ -16,6 +16,8 @@ handler.post(async (req, res) => {
                 message: 'Company not found',
             });
         company.name = req.body.name;
+        company.isBlock =
+            req.body.isBlock !== undefined ? req.body.isBlock : company.isBlock;
         const updatedCompany = await company.save();
 
         await db.disconnect();
