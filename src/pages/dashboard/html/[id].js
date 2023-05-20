@@ -12,7 +12,6 @@ import * as animationData from "./loader.json";
 import { Card, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import LaunchIcon from "@mui/icons-material/Launch";
-import download_table_as_csv from "utils/exporter";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -75,17 +74,11 @@ const Page = () => {
                   Result - {router?.query?.categoryName}
                 </Typography>
                 <LoadingButton
-                  onClick={() =>
-                    download_table_as_csv(
-                      "dataframe",
-                      ",",
-                      "2121212",
-                      "34343",
-                      "all"
-                    )
-                  }
                   variant="contained"
                   startIcon={<LaunchIcon />}
+                  component="a"
+                  href={`/api/user/download-reports/${router?.query?.report}?category=${router?.query?.id}`}
+                  download
                 >
                   Export to csv
                 </LoadingButton>

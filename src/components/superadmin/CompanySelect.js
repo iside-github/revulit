@@ -3,8 +3,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import PropTypes from "prop-types";
-import { regions } from "utils/regions";
 import { InputLabel } from "@mui/material";
+import { useSelector } from "react-redux";
 
 export default function CompanySelectInout({
   label,
@@ -13,6 +13,7 @@ export default function CompanySelectInout({
   meta,
   ...custom
 }) {
+  const companiesList = useSelector((state) => state.company.list);
   return (
     <FormControl fullWidth>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
@@ -27,9 +28,9 @@ export default function CompanySelectInout({
         {...input}
         {...custom}
       >
-        {regions.map((reg) => (
-          <MenuItem key={reg.id} value={reg.id}>
-            {reg.label}
+        {companiesList.map((com) => (
+          <MenuItem key={com.uid} value={com._id}>
+            {com.name}
           </MenuItem>
         ))}
       </Select>

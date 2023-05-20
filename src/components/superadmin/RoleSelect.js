@@ -1,10 +1,38 @@
 import * as React from "react";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
 import PropTypes from "prop-types";
-import { regions } from "utils/regions";
-import { InputLabel } from "@mui/material";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const roles = [
+  {
+    role: "user",
+    title: "Company user",
+  },
+  {
+    role: "admin",
+    title: "Company owner",
+  },
+  {
+    role: "superadmin",
+    title: "Sowtware owner",
+  },
+];
 
 export default function RoleSelectInput({
   label,
@@ -13,23 +41,31 @@ export default function RoleSelectInput({
   meta,
   ...custom
 }) {
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    input.onChange(typeof value === "string" ? value.split(",") : value);
+  };
   return (
-    <FormControl fullWidth>
-      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+    <FormControl sx={{ width: "100%" }}>
+      <InputLabel id="demo-multiple-checkbox-label">
+        Select user roles
+      </InputLabel>
       <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        error={meta.touched ? meta.invalid : null}
-        fullWidth
-        helperText={meta.touched ? meta.error : null}
-        label={label}
-        placeholder={label}
-        {...input}
-        {...custom}
+        labelId="demo-multiple-checkbox-label"
+        id="demo-multiple-checkbox"
+        multiple
+        value={input.value ? input.value : []}
+        onChange={handleChange}
+        input={<OutlinedInput label="Tag" />}
+        renderValue={(selected) => selected.join(", ")}
+        MenuProps={MenuProps}
       >
-        {regions.map((reg) => (
-          <MenuItem key={reg.id} value={reg.id}>
-            {reg.label}
+        {roles.map((role) => (
+          <MenuItem key={role.role} value={role.role}>
+            <Checkbox checked={input.value.includes(role.role)} />
+            <ListItemText primary={role.title} />
           </MenuItem>
         ))}
       </Select>

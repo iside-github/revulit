@@ -6,13 +6,14 @@ import fileUploadReducer from "./file/upload";
 import userReducer from "./user/user.slice";
 import systemUsersReducer from "./users/user.slice";
 import reportsReducer from "./report/slice";
+import companyReducer from "./company/index.slice";
 
 import authReducer from "./user/auth.slice";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user", "report", "file"],
+  whitelist: ["user", "report", "file", "users", "company"],
 };
 
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   users: systemUsersReducer,
   report: reportsReducer,
+  company: companyReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

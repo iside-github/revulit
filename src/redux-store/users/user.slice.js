@@ -3,6 +3,7 @@ import {
   getUsersPfofiles,
   inviteCompanyUser,
   confirmAccount,
+  adminCreateUser,
 } from "api/requests";
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   isUpdateLoading: false,
   isInviteLoading: false,
   isConfirmLoading: false,
+  isCreateLoading: false,
 };
 
 export const getUsersList = createAsyncThunk(
@@ -26,6 +28,11 @@ export const confirmEmailAddress = createAsyncThunk(
 export const inviteUser = createAsyncThunk(
   "user/inviteUser",
   inviteCompanyUser
+);
+
+export const createUser = createAsyncThunk(
+  "user/createUserBySuperAdmin",
+  adminCreateUser
 );
 
 export const systemUsersReducer = createSlice({
@@ -61,6 +68,16 @@ export const systemUsersReducer = createSlice({
     },
     [confirmEmailAddress.rejected]: (state) => {
       state.isConfirmLoading = false;
+    },
+    //create user
+    [createUser.pending]: (state) => {
+      state.isCreateLoading = true;
+    },
+    [createUser.fulfilled]: (state, { payload }) => {
+      state.isCreateLoading = false;
+    },
+    [createUser.rejected]: (state) => {
+      state.isCreateLoading = false;
     },
   },
 });

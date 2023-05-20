@@ -1,10 +1,25 @@
 import { Grid } from "@mui/material";
 import { Stack } from "@mui/system";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, reset } from "redux-form";
 import TextInput from "components/dashboard/customer/TextField";
 import { LoadingButton } from "@mui/lab";
+import { useDispatch, useSelector } from "react-redux";
+import { createCompany } from "redux-store/company/index.slice";
+import { getCompaniesList } from "redux-store/company/index.slice";
 
-const CreateCompany = () => {
+const CreateCompany = ({ handleSubmit }) => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.company.isCreateLoading);
+
+  const update = () => {
+    dispatch(reset("create_company"));
+    dispatch(getCompaniesList());
+  };
+
+  const handleCompanyCreate = (values) => {
+    dispatch(createCompany({ data: values, update }));
+  };
+
   return (
     <Stack my={2}>
       <Grid container spacing={2}>
@@ -27,7 +42,13 @@ const CreateCompany = () => {
           </Grid>
           <Grid item xs={12}>
             <Stack alignItems="center" mt={2}>
-              <LoadingButton variant="contained">Create company</LoadingButton>
+              <LoadingButton
+                onClick={handleSubmit(handleCompanyCreate)}
+                loading={isLoading}
+                variant="contained"
+              >
+                Create company
+              </LoadingButton>
             </Stack>
           </Grid>
         </Grid>
@@ -52,6 +73,6 @@ function validate(values) {
 }
 
 export default reduxForm({
-  form: "invite_user",
+  form: "create_company",
   validate,
 })(CreateCompany);

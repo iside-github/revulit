@@ -1,7 +1,7 @@
 import nc from 'next-connect';
-import Company from '../../../../models/companies';
-import db from '../../../../utils/db';
-import { checkUserRole } from '../../../../utils/auth';
+import Company from '../../../../../models/companies';
+import db from '../../../../../utils/db';
+import { checkUserRole } from '../../../../../utils/auth';
 
 const handler = nc();
 

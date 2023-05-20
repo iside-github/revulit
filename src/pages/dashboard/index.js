@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { DashboardLayout } from "components/dashboard/dashboard-layout";
 import { Download as DownloadIcon } from "icons/download";
 import { Reports as ReportsIcon } from "icons/reports";
@@ -8,13 +15,13 @@ import { gtm } from "lib/gtm";
 import { FinanceOverview } from "components/dashboard/finance/finance-overview";
 import { FinanceCostBreakdown } from "components/dashboard/finance/finance-cost-breakdown";
 import { FinanceProfitableProducts } from "components/dashboard/finance/finance-profitable-products";
-import { Cog as CogIcon } from "icons/cog";
 import { FileDropzone } from "components/file-dropzone";
 import { getSession } from "next-auth/react";
 import { uploadFile } from "redux-store/file/upload";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Overview = () => {
+  const fileData = useSelector((state) => state.file.data);
   const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
 
@@ -79,23 +86,24 @@ const Overview = () => {
                   startIcon={<ReportsIcon fontSize="small" />}
                   sx={{ m: 1 }}
                   variant="outlined"
+                  component="a"
+                  href="/dashboard/report"
                 >
                   Reports
                 </Button>
-                <Button
-                  startIcon={<CogIcon fontSize="small" />}
-                  sx={{ m: 1 }}
-                  variant="outlined"
-                >
-                  Settings
-                </Button>
-                <Button
-                  startIcon={<DownloadIcon fontSize="small" />}
-                  sx={{ m: 1 }}
-                  variant="contained"
-                >
-                  Export
-                </Button>
+                <Tooltip title="It takes up to 10 seconds to download the report as csv">
+                  <Button
+                    startIcon={<DownloadIcon fontSize="small" />}
+                    sx={{ m: 1 }}
+                    variant="contained"
+                    disabled={!fileData?.total}
+                    component="a"
+                    href={`/api/user/download-reports/${fileData?.id}?category=total`}
+                    download
+                  >
+                    Export
+                  </Button>
+                </Tooltip>
               </Grid>
             </Grid>
           </Box>
