@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import nc from 'next-connect';
 import Reports from '../../../../models/reports';
 import db from '../../../../utils/db';
@@ -29,21 +30,43 @@ handler.get(async (req, res) => {
         const $ = cheerio.load(html);
 
         const header = [
-            { id: 'Title', title: 'Title', quotedString: true },
-            { id: 'Abstract', title: 'Abstract', quotedString: true },
-            { id: 'Author', title: 'Author', quotedString: true },
-            { id: 'Drug', title: 'Drug', quotedString: true },
-            { id: 'Effect', title: 'Effect', quotedString: true },
-            { id: 'Patient', title: 'Patient', quotedString: true },
+            { id: 'Title', title: 'Title', quotedString: true, wrapText: true },
+            {
+                id: 'Abstract',
+                title: 'Abstract',
+                quotedString: true,
+                wrapText: true,
+            },
+            {
+                id: 'Author',
+                title: 'Author',
+                quotedString: true,
+                wrapText: true,
+            },
+            { id: 'Drug', title: 'Drug', quotedString: true, wrapText: true },
+            {
+                id: 'Effect',
+                title: 'Effect',
+                quotedString: true,
+                wrapText: true,
+            },
+            {
+                id: 'Patient',
+                title: 'Patient',
+                quotedString: true,
+                wrapText: true,
+            },
             {
                 id: 'Primary Safety Classification',
                 title: 'Primary Safety Classification',
                 quotedString: true,
+                wrapText: true,
             },
             {
                 id: 'Safety Classification sub category',
                 title: 'Safety Classification sub category',
                 quotedString: true,
+                wrapText: true,
             },
         ];
 
@@ -54,6 +77,8 @@ handler.get(async (req, res) => {
                 .find('td')
                 .each((i, td) => {
                     var text = $(td).text().trim();
+                    if (text.startsWith('['))
+                        text = text.slice(1, text.length - 1);
                     rowData.push(text);
                 });
             data.push(rowData);
@@ -61,9 +86,9 @@ handler.get(async (req, res) => {
 
         const fileName =
             Date.now() + '-' + Math.round(Math.random() * 1e9) + '.csv';
-        const path = `public/static/uploads/outputs/${fileName}`;
+        const file_path = `public/static/uploads/outputs/${fileName}`;
         const csvWriter = createCsvWriter({
-            path: path,
+            path: file_path,
             header,
         });
 
@@ -75,19 +100,18 @@ handler.get(async (req, res) => {
             return record;
         });
 
+        const filePath = path.join(process.cwd(), file_path);
         csvWriter
             .writeRecords(records)
             .then(() => {
-                res.download(path, fileName, (error) => {
-                    if (error) {
-                        console.error(
-                            'Error sending CSV file as download:',
-                            error
-                        );
-                    } else {
-                        console.log('CSV file sent as download');
-                    }
-                });
+                res.setHeader('Content-Type', 'application/octet-stream');
+                res.setHeader(
+                    'Content-Disposition',
+                    `attachment; filename="${fileName}"`
+                );
+
+                const fileStream = fs.createReadStream(filePath);
+                fileStream.pipe(res);
             })
             .catch((err) => {
                 console.error('Error writing CSV file:', err);

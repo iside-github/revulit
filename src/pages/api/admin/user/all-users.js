@@ -1,5 +1,4 @@
 import nc from 'next-connect';
-import bcrypt from 'bcryptjs';
 import User from '../../../../models/user';
 import db from '../../../../utils/db';
 import { checkUserRole } from '../../../../utils/auth';
@@ -10,16 +9,24 @@ handler.use(checkUserRole('admin'));
 handler.get(async (req, res) => {
     try {
         await db.connect();
-        const admin = await User.findById(req.user.user.user._id);
+        const admin = await User.findById(req.user.user.user._id).populate({
+            path: 'company',
+            select: 'name',
+        });
         const users = await User.aggregate([
             {
                 $match: {
-                    company: admin.company,
+                    company: admin.company._id.toString(),
                     roles: {
                         $not: {
                             $elemMatch: { $regex: 'admin', $options: 'i' },
                         },
                     },
+                },
+            },
+            {
+                $addFields: {
+                    company: admin.company.name,
                 },
             },
             {
@@ -31,22 +38,14 @@ handler.get(async (req, res) => {
                 },
             },
             {
-                $lookup: {
-                    from: 'companies',
-                    localField: 'company',
-                    foreignField: '_id',
-                    as: 'company',
-                },
-            },
-            {
                 $project: {
                     email: 1,
                     name: 1,
-                    company: '$company.name',
                     isBlock: 1,
                     avatar: 1,
                     createdAt: 1,
                     reportCount: { $size: '$reportsCount' },
+                    company: 1,
                 },
             },
         ]);

@@ -11,6 +11,7 @@ handler.post(async (req, res) => {
         await db.connect();
         const companies = await Company.find().sort({ createdAd: -1 });
         const company = await Company.create({
+            email: req.body.email,
             name: req.body.name,
             uid: companies.length ? companies[companies.length - 1].uid + 1 : 1,
         });

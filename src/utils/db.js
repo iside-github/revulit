@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+require('../models/companies');
+require('../models/user');
 
 const connection = {};
 
