@@ -27,12 +27,18 @@ const isAuth = async (req, res, next) => {
             } else {
                 req['user'] = decode;
                 await db.connect();
-                const user = await Users.findById(decode.user.user._id);
+                const user = await Users.findById(
+                    decode.user.user._id
+                ).populate({ path: 'company', select: 'isBlock' });
                 await db.disconnect();
                 if (user.isBlock)
                     return res
                         .status(401)
-                        .json({ message: 'User profile is blocked' });
+                        .json({ message: 'User profile was blocked' });
+                if (user.company.isBlock)
+                    return res
+                        .status(401)
+                        .json({ message: 'Company was blocked' });
                 next();
             }
         });
