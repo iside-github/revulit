@@ -1,12 +1,28 @@
 import { Grid } from "@mui/material";
 import { Stack } from "@mui/system";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, reset } from "redux-form";
 import TextInput from "components/dashboard/customer/TextField";
 import RoleSelectInput from "./RoleSelect";
 import CompanySelectInout from "./CompanySelect";
 import { LoadingButton } from "@mui/lab";
+import { useSelector, useDispatch } from "react-redux";
+import { createUser } from "redux-store/users/user.slice";
+import { getCompaniesList } from "redux-store/company/index.slice";
 
-const CreateUser = () => {
+const CreateUser = ({ handleSubmit }) => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.users.isCreateLoading);
+
+  const update = () => {
+    dispatch(reset("create_user"));
+    dispatch(getCompaniesList());
+  };
+
+  const handleUserCreate = (values) => {
+    values["password"] = "NoPasswordAdded";
+    dispatch(createUser({ data: values, update }));
+  };
+
   return (
     <Stack my={2}>
       <Grid container spacing={2}>
@@ -29,23 +45,29 @@ const CreateUser = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <Field
-              component={CompanySelectInout}
+              component={RoleSelectInput}
               label="Select role"
               placeholder="Select role"
-              name="role"
+              name="roles"
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <Field
-              component={RoleSelectInput}
+              component={CompanySelectInout}
               label="Select company"
               placeholder="Select company"
-              name="company"
+              name="companyId"
             />
           </Grid>
           <Grid item xs={12}>
             <Stack alignItems="center" mt={2}>
-              <LoadingButton variant="contained">Create user</LoadingButton>
+              <LoadingButton
+                loading={isLoading}
+                onClick={handleSubmit(handleUserCreate)}
+                variant="contained"
+              >
+                Create user
+              </LoadingButton>
             </Stack>
           </Grid>
         </Grid>
@@ -56,7 +78,7 @@ const CreateUser = () => {
 
 function validate(values) {
   let errors = {};
-  const requiredFields = ["name", "email"];
+  const requiredFields = ["name", "email", "roles", "companyId"];
   requiredFields.forEach((field) => {
     if (!values[field]) {
       errors[field] = "Field is required!";
@@ -70,6 +92,6 @@ function validate(values) {
 }
 
 export default reduxForm({
-  form: "invite_user",
+  form: "create_user",
   validate,
 })(CreateUser);

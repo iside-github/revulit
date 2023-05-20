@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import NextLink from "next/link";
-import numeral from "numeral";
 import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
   Button,
   Checkbox,
-  IconButton,
   Link,
   Table,
   TableBody,
@@ -147,8 +145,8 @@ export const CustomerListTable = (props) => {
                       </Box>
                     </Box>
                   </TableCell>
-                  <TableCell>Iside</TableCell>
-                  <TableCell>{customer.totalOrders}</TableCell>
+                  <TableCell>{customer?.company}</TableCell>
+                  <TableCell>{customer?.reportCount}</TableCell>
                   <TableCell>
                     <Typography
                       color={customer?.isBlock ? "error.main" : "success.main"}

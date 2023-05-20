@@ -13,13 +13,13 @@ import {
 } from "@mui/material";
 import { ChartPie as ChartPieIcon } from "../../icons/chart-pie";
 import { Home as HomeIcon } from "../../icons/home";
-import { Selector as SelectorIcon } from "../../icons/selector";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
 import { Logo } from "../logo";
 import { Scrollbar } from "../scrollbar";
 import { DashboardSidebarSection } from "./dashboard-sidebar-section";
 import { OrganizationPopover } from "./organization-popover";
 import { Users as UsersIcon } from "../../icons/users";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 const getSections = (t) => [
   {
@@ -44,6 +44,11 @@ const getSections = (t) => [
         title: t("Account"),
         path: "/dashboard/account",
         icon: <UserCircleIcon fontSize="small" />,
+      },
+      {
+        title: t("Adminstrator"),
+        path: "/dashboard/superadmin",
+        icon: <AdminPanelSettingsIcon fontSize="medium" />,
       },
     ],
   },
@@ -76,10 +81,6 @@ export const DashboardSidebar = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router.isReady, router.asPath]
   );
-
-  const handleOpenOrganizationsPopover = () => {
-    setOpenOrganizationsPopover(true);
-  };
 
   const handleCloseOrganizationsPopover = () => {
     setOpenOrganizationsPopover(false);

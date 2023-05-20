@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
-import NextLink from "next/link";
-import numeral from "numeral";
 import PropTypes from "prop-types";
 import {
-  Avatar,
-  Box,
-  Button,
-  Checkbox,
   IconButton,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -20,6 +13,10 @@ import {
 import { Scrollbar } from "components/scrollbar";
 import { format } from "date-fns";
 import { Stack } from "@mui/system";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 export const CompanyListTable = (props) => {
   const {
@@ -44,26 +41,15 @@ export const CompanyListTable = (props) => {
     [customers]
   );
 
-  const handleSelectAllCustomers = (event) => {
-    setSelectedCustomers(
-      event.target.checked ? customers.map((customer) => customer.id) : []
-    );
-  };
-
-  const handleSelectOneCustomer = (event, customerId) => {
-    if (!selectedCustomers.includes(customerId)) {
-      setSelectedCustomers((prevSelected) => [...prevSelected, customerId]);
-    } else {
-      setSelectedCustomers((prevSelected) =>
-        prevSelected.filter((id) => id !== customerId)
-      );
-    }
-  };
-
   const enableBulkActions = selectedCustomers.length > 0;
-  const selectedSomeCustomers =
-    selectedCustomers.length > 0 && selectedCustomers.length < customers.length;
-  const selectedAllCustomers = selectedCustomers.length === customers.length;
+
+  const handleBlockUnblock = (company, status) => {
+    toast.promise(async () => {}, {
+      loading: "Loading...",
+      success: "Company blocked",
+      error: "Unexpected error",
+    });
+  };
 
   return (
     <Stack my={2}>
@@ -78,49 +64,28 @@ export const CompanyListTable = (props) => {
                 <TableCell>Company</TableCell>
                 <TableCell>Users count</TableCell>
                 <TableCell>Uploaded files</TableCell>
+                <TableCell>Status</TableCell>
                 <TableCell align="right">Company created</TableCell>
+                <TableCell align="right">Block/unblock</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {customers.map((customer) => {
-                const isCustomerSelected = selectedCustomers.includes(
-                  customer.id
-                );
-
                 return (
-                  <TableRow
-                    hover
-                    key={customer.id}
-                    selected={isCustomerSelected}
-                  >
+                  <TableRow hover key={customer.id}>
+                    <TableCell>#{customer?.uid}</TableCell>
                     <TableCell>
-                      <Box
-                        sx={{
-                          alignItems: "center",
-                          display: "flex",
-                        }}
-                      >
-                        <Avatar
-                          src={"/static/avatar.png"}
-                          sx={{
-                            height: 42,
-                            width: 42,
-                          }}
-                        />
-                        <Box sx={{ ml: 1 }}>
-                          <NextLink href="/dashboard/customers/1" passHref>
-                            <Link color="inherit" variant="subtitle2">
-                              {customer.name}
-                            </Link>
-                          </NextLink>
-                          <Typography color="textSecondary" variant="body2">
-                            {customer.email}
-                          </Typography>
-                        </Box>
-                      </Box>
+                      <Stack>
+                        <Typography variant="body2">
+                          {customer?.name}
+                        </Typography>
+                        <Typography variant="caption">
+                          {customer?.email}
+                        </Typography>
+                      </Stack>
                     </TableCell>
-                    <TableCell>Iside</TableCell>
-                    <TableCell>{customer.totalOrders}</TableCell>
+                    <TableCell>{customer?.userCount}</TableCell>
+                    <TableCell>{customer?.repoCount}</TableCell>
                     <TableCell>
                       <Typography
                         color={
@@ -138,6 +103,18 @@ export const CompanyListTable = (props) => {
                             "dd-MMM, yyyy HH:mm"
                           )
                         : ""}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={handleBlockUnblock}
+                        sx={{ borderRadius: "50%" }}
+                      >
+                        {customer?.isBlock ? (
+                          <LockOutlinedIcon />
+                        ) : (
+                          <LockOpenOutlinedIcon />
+                        )}
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 );
