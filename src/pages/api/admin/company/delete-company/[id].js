@@ -5,7 +5,7 @@ import { checkUserRole } from '../../../../utils/auth';
 
 const handler = nc();
 
-handler.use(checkUserRole(['admin', 'superadmin']));
+handler.use(checkUserRole('superadmin'));
 handler.post(async (req, res) => {
     try {
         await db.connect();
@@ -15,14 +15,11 @@ handler.post(async (req, res) => {
             return res.status(404).send({
                 message: 'Company not found',
             });
-        company.name = req.body.name;
-        company.isBlock =
-            req.body.isBlock !== undefined ? req.body.isBlock : company.isBlock;
-        const updatedCompany = await company.save();
+        await Company.finByIdAndDelete(req.query.id);
 
         await db.disconnect();
         res.status(200).send({
-            company: updatedCompany,
+            message: 'Company was successfully deleted',
         });
     } catch (error) {
         res.status(400).json({ message: error.message });

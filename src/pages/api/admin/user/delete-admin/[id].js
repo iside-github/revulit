@@ -8,14 +8,13 @@ const handler = nc();
 handler.use(checkUserRole('superadmin'));
 handler.put(async (req, res) => {
     try {
-        const { isBlock } = req.body;
         await db.connect();
         const user = await User.findById(req.query.id);
         if (!user)
             return res.status(404).send({
                 message: 'User not found',
             });
-        await User.findByIdAndDelete(user._id, { isBlock });
+        await User.findByIdAndDelete(user._id);
 
         await db.disconnect();
 
