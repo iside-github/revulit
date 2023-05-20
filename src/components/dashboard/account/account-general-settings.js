@@ -71,7 +71,7 @@ export const AccountGeneralSettings = (props) => {
                 }}
               >
                 <TextField
-                  defaultValue="dummy.account@gmail.com"
+                  defaultValue={user?.email}
                   disabled
                   label="Email Address"
                   required
