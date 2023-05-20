@@ -6,7 +6,7 @@ import { checkUserRole, signToken } from '../../../../utils/auth';
 
 const handler = nc();
 
-handler.use(checkUserRole('superadmin'));
+handler.use(checkUserRole(['superadmin', 'admin']));
 handler.post(async (req, res) => {
     try {
         await db.connect();
@@ -15,7 +15,7 @@ handler.post(async (req, res) => {
         const newUser = new User({
             email: req.body.email,
             password: req.body.password,
-            roles: ['user', 'admin'],
+            roles: req.body.roles,
             company: req.body.companyId,
             name: req.body.name,
         });
