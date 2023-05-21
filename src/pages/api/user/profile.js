@@ -79,17 +79,14 @@ handler.put(async (req, res) => {
                 message: 'File is too big',
             });
 
-        const { password, security_update, news_message, name } = req.body;
+        const { security_update, news_message, name } = req.body;
         await db.connect();
-        const user = await User.findById(req.user.user.user._id);
+        const user = await User.findById(req.user.user.user._id).select(
+            '-password -roles'
+        );
 
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        const salt = bcrypt.genSaltSync(10);
-
-        user.password = password
-            ? bcrypt.hashSync(password, salt)
-            : user.password;
         user.security_update = security_update
             ? security_update
             : user.security_update;
@@ -110,6 +107,6 @@ export default handler;
 
 export const config = {
     api: {
-        bodyParser: false, // Disallow body parsing, consume as stream
+        bodyParser: false,
     },
 };

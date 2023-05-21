@@ -6,6 +6,7 @@ import User from '../../../models/user';
 import { isAuth } from '../../../utils/auth';
 import { resText } from '../../../components/res';
 import { htmlResolver } from '../../../utils/htmlReader';
+import { categoryCreator } from '../../../utils/categoryCreator';
 import multer from 'multer';
 
 const upload = multer({
@@ -74,12 +75,10 @@ handler.post(async (req, res) => {
             user: user._id,
         });
         await file.save();
-        let categories = {};
-        await new Promise((resolve) => {
-            categories = htmlResolver(resText);
-            resolve('djfnde');
-        });
 
+        const ct = await htmlResolver(resText);
+
+        const categories = categoryCreator(ct);
         const repo = new Reports({
             file_name: req.file.originalname,
             file_src: req.file.filename,
