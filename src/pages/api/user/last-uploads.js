@@ -25,7 +25,7 @@ handler.get(async (req, res) => {
             },
             {
                 $project: {
-                    html: -1,
+                    html: 0,
                 },
             },
         ]);
