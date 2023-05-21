@@ -36,7 +36,7 @@ handler.get(async (req, res) => {
         await db.connect();
         const user = await User.findById(req.user.user.user._id)
             .select('-password -roles')
-            .populate({ path: 'company', select: 'name' });
+            .populate({ path: 'company', select: 'name avatar' });
 
         if (!user) return res.status(404).json({ message: 'User not found' });
         const sessions = await Session.find({
@@ -110,6 +110,6 @@ export default handler;
 
 export const config = {
     api: {
-        bodyParser: false, // Disallow body parsing, consume as stream
+        bodyParser: false,
     },
 };

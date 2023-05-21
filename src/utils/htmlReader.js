@@ -1,14 +1,29 @@
+import Category from '../models/categories';
+import { categoryTitleCreator } from './categoryCreator';
+import db from './db';
 const cheerio = require('cheerio');
 
-export const htmlResolver = (html) => {
-    const result = {
-        non_relevant: 0,
-        safety: 0,
-        manual_review: 0,
-        composite: 0,
-        ICSR: 0,
-        total: 0,
-    };
+export const htmlResolver = async (html) => {
+    const categories = categoryFinder(html);
+    await db.connect();
+
+    const savedCategories = await Category.find().select('category_id');
+    const busyCategories = savedCategories.map((e) => e.category_id);
+
+    categories.forEach(async (category) => {
+        if (!busyCategories.includes(category)) {
+            const ctName = categoryTitleCreator(category);
+            const newCategory = new Category({
+                category_id: category,
+                category_title: ctName,
+            });
+
+            await newCategory.save();
+        }
+    });
+    await db.disconnect();
+
+    const result = {};
     const $ = cheerio.load(html);
 
     const rows = $('tr').toArray();
@@ -20,32 +35,15 @@ export const htmlResolver = (html) => {
 
         tds.forEach((td) => {
             const tdText = $(td).text().trim();
-            switch (true) {
-                case tdText == 'manual_review':
-                    result.manual_review += 1;
-                    break;
-                case tdText == 'non_relevant':
-                    result.non_relevant += 1;
-                    break;
-                case tdText == 'safety':
-                    result.safety += 1;
-                    break;
-                case tdText == 'composite':
-                    result.composite += 1;
-                    break;
-                case tdText == 'ICSR':
-                    result.ICSR += 1;
-                    break;
+            if (categories.includes(tdText)) {
+                result[tdText] = result[tdText] ? result[tdText] + 1 : 1;
             }
         });
     });
 
-    result.total =
-        result.manual_review +
-        result.non_relevant +
-        result.safety +
-        result.composite +
-        result.ICSR;
+    for (let [key, value] of Object.entries(result)) {
+        result.total = result.total ? result.total + value : value;
+    }
 
     return result;
 };
@@ -71,4 +69,24 @@ export const htmlFilter = (html, value) => {
     $('tbody').empty().append(filteredTrElements);
 
     return $.html();
+};
+
+export const categoryFinder = (html) => {
+    const $ = cheerio.load(html);
+
+    const thIndex = $(
+        'thead th:contains("Primary Safety Classification")'
+    ).index();
+    const categories = [];
+
+    $('tbody tr').each((index, element) => {
+        const tdValue = $(element)
+            .find('td')
+            .eq(thIndex - 1)
+            .text()
+            .trim();
+        if (!categories.includes(tdValue)) categories.push(tdValue);
+    });
+
+    return categories;
 };
