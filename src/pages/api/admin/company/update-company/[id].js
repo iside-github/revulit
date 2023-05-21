@@ -45,7 +45,7 @@ handler.post(async (req, res) => {
 
         if (
             (req?.file && !array_of_allowed_files.includes(file_extension)) ||
-            !array_of_allowed_file_types.includes(req.file.mimetype)
+            !array_of_allowed_file_types.includes(req?.file?.mimetype)
         )
             return res.status(500).json({ message: 'Invalid file' });
 
