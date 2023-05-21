@@ -16,6 +16,7 @@ handler.post(async (req, res) => {
                 message: 'Company not found',
             });
         company.name = req.body.name ? req.body.name : company.name;
+        company.email = req.body.email ? req.body.email : company.email;
         company.isBlock =
             req.body.isBlock !== undefined ? req.body.isBlock : company.isBlock;
         const updatedCompany = await company.save();

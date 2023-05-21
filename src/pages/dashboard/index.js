@@ -19,6 +19,7 @@ import { FileDropzone } from "components/file-dropzone";
 import { getSession } from "next-auth/react";
 import { uploadFile } from "redux-store/file/upload";
 import { useDispatch, useSelector } from "react-redux";
+import { getRecentlyUploadedReports } from "redux-store/report/slice";
 
 const Overview = () => {
   const fileData = useSelector((state) => state.file.data);
@@ -42,12 +43,7 @@ const Overview = () => {
   }, []);
 
   useEffect(() => {
-    // Restore the persistent state from local/session storage
-    const value = globalThis.sessionStorage.getItem("dismiss-banner");
-
-    if (value === "true") {
-      // setDisplayBanner(false);
-    }
+    dispatch(getRecentlyUploadedReports());
   }, []);
 
   const handleUploadFile = () => {

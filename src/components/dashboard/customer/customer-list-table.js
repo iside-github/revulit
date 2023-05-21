@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import NextLink from "next/link";
 import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
   Button,
   Checkbox,
-  Link,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -17,6 +16,8 @@ import {
 } from "@mui/material";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 export const CustomerListTable = (props) => {
   const {
@@ -64,42 +65,18 @@ export const CustomerListTable = (props) => {
 
   return (
     <div {...other}>
-      <Box
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
-          display: enableBulkActions ? "block" : "none",
-          px: 2,
-          py: 0.5,
-        }}
-      >
-        <Checkbox
-          checked={selectedAllCustomers}
-          indeterminate={selectedSomeCustomers}
-          onChange={handleSelectAllCustomers}
-        />
-        <Button size="small" sx={{ ml: 2 }}>
-          Block
-        </Button>
-      </Box>
       <Scrollbar>
         <Table sx={{ minWidth: 700 }}>
           <TableHead
             sx={{ visibility: enableBulkActions ? "collapse" : "visible" }}
           >
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAllCustomers}
-                  indeterminate={selectedSomeCustomers}
-                  onChange={handleSelectAllCustomers}
-                />
-              </TableCell>
               <TableCell>User</TableCell>
               <TableCell>Company</TableCell>
               <TableCell>Uploaded files</TableCell>
               <TableCell>Status</TableCell>
               <TableCell align="right">Joined</TableCell>
+              <TableCell align="right">Block/Unblock</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -110,15 +87,6 @@ export const CustomerListTable = (props) => {
 
               return (
                 <TableRow hover key={customer.id} selected={isCustomerSelected}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isCustomerSelected}
-                      onChange={(event) =>
-                        handleSelectOneCustomer(event, customer.id)
-                      }
-                      value={isCustomerSelected}
-                    />
-                  </TableCell>
                   <TableCell>
                     <Box
                       sx={{
@@ -134,11 +102,9 @@ export const CustomerListTable = (props) => {
                         }}
                       />
                       <Box sx={{ ml: 1 }}>
-                        <NextLink href="/dashboard/customers/1" passHref>
-                          <Link color="inherit" variant="subtitle2">
-                            {customer.name}
-                          </Link>
-                        </NextLink>
+                        <Typography color="textSecondary" variant="subtitle1">
+                          {customer.name}
+                        </Typography>
                         <Typography color="textSecondary" variant="body2">
                           {customer.email}
                         </Typography>
@@ -162,6 +128,20 @@ export const CustomerListTable = (props) => {
                           "dd-MMM, yyyy HH:mm"
                         )
                       : ""}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      // onClick={() =>
+                      //   handleBlockUnblock(customer?.isBlock, customer?._id)
+                      // }
+                      sx={{ borderRadius: "50%" }}
+                    >
+                      {customer?.isBlock ? (
+                        <LockOutlinedIcon />
+                      ) : (
+                        <LockOpenOutlinedIcon />
+                      )}
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               );

@@ -106,7 +106,7 @@ export const CompanyListTable = (props) => {
                     <TableCell>
                       <Typography
                         color={
-                          customer?.isBlock ? "error.main" : "success.main"
+                          customer?.isBlock ? "error.main" : "primary.main"
                         }
                         variant="subtitle2"
                       >

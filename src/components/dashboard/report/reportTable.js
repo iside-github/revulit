@@ -138,21 +138,19 @@ export const ReportsTable = (props) => {
                         display: "flex",
                       }}
                     >
-                      <Avatar
+                      <Box
+                        component="img"
+                        alt="Profile image"
                         src={"/static/avatar.png"}
                         sx={{
                           height: 42,
                           width: 42,
                         }}
-                      >
-                        {customer?.user?.name}
-                      </Avatar>
+                      />
                       <Box sx={{ ml: 1 }}>
-                        <NextLink href="/" passHref>
-                          <Link color="inherit" variant="subtitle2">
-                            {customer?.user?.name}
-                          </Link>
-                        </NextLink>
+                        <Typography color="textSecondary" variant="subtitle1">
+                          {customer?.user?.name}
+                        </Typography>
                         <Typography color="textSecondary" variant="body2">
                           {customer?.user?.email}
                         </Typography>
@@ -169,7 +167,7 @@ export const ReportsTable = (props) => {
                   </TableCell>
                   <TableCell>{customer?.file_name}</TableCell>
                   <TableCell>
-                    <Typography color="success.main" variant="subtitle2">
+                    <Typography color="primary.main" variant="subtitle2">
                       {customer?.categories?.total}
                     </Typography>
                   </TableCell>

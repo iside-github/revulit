@@ -1,10 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { editUserProfile, getUserProfile } from "api/requests";
+import {
+  editUserProfile,
+  getUserProfile,
+  updateUserOldPassword,
+} from "api/requests";
 
 const initialState = {
   data: null,
   isLoading: false,
   isUpdateLoading: false,
+  isPasswordLoading: false,
 };
 
 export const getUser = createAsyncThunk(
@@ -17,17 +22,14 @@ export const editUser = createAsyncThunk(
   editUserProfile
 );
 
+export const updatePassword = createAsyncThunk(
+  "user/updatePassword",
+  updateUserOldPassword
+);
+
 export const userProfileReducer = createSlice({
   name: "user/getUserData",
   initialState,
-  reducers: {
-    removeUserData(state, { payload }) {
-      state.token = null;
-      state.data = {};
-      state.statistics = {};
-      state.isLoading = false;
-    },
-  },
   extraReducers: {
     [getUser.pending]: (state) => {
       state.isLoading = true;
@@ -48,9 +50,17 @@ export const userProfileReducer = createSlice({
     [editUser.rejected]: (state, { payload }) => {
       state.isUpdateLoading = false;
     },
+    // update user password
+    [updatePassword.pending]: (state) => {
+      state.isPasswordLoading = true;
+    },
+    [updatePassword.fulfilled]: (state, { payload }) => {
+      state.isPasswordLoading = false;
+    },
+    [updatePassword.rejected]: (state, { payload }) => {
+      state.isPasswordLoading = false;
+    },
   },
 });
-
-export const { removeUserData } = userProfileReducer.actions;
 
 export default userProfileReducer.reducer;

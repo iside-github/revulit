@@ -35,7 +35,7 @@ handler.get(async (req, res) => {
     try {
         await db.connect();
         const user = await User.findById(req.user.user.user._id)
-            .select('-password -roles')
+            .select('-password')
             .populate({ path: 'company', select: 'name' });
 
         if (!user) return res.status(404).json({ message: 'User not found' });

@@ -199,3 +199,31 @@ export async function adminCreateUser({ data, update }) {
     );
   }
 }
+
+export async function getRecentUploads() {
+  try {
+    const result = await axios.get("/api/user/last-uploads", {
+      withCredentials: true,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateUserOldPassword(data) {
+  try {
+    const res = await axios({
+      url: "/api/user/update-password",
+      method: "POST",
+      data,
+    });
+    toast.success(res.data?.message ? res.data?.message : "User created");
+  } catch (error) {
+    toast.error(
+      error?.response?.data?.message
+        ? error?.response?.data?.message
+        : "Something went wrong! Please, try again later"
+    );
+  }
+}

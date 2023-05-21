@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 
 const reportSchema = new mongoose.Schema(
     {
-        file_name: {
+        file_name: {//excel file name
             type: String,
             required: true,
         },
-        file_src: {
+        file_src: {// excel file saved directory
             type: String,
             required: true,
         },
