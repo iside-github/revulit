@@ -4,7 +4,7 @@ import { Box, Container, Divider, Tab, Tabs, Typography } from "@mui/material";
 import { DashboardLayout } from "../../components/dashboard/dashboard-layout";
 import { AccountGeneralSettings } from "../../components/dashboard/account/account-general-settings";
 import { AccountNotificationsSettings } from "../../components/dashboard/account/account-notifications-settings";
-import { AccountSecuritySettings } from "../../components/dashboard/account/account-security-settings";
+import AccountSecuritySettings from "../../components/dashboard/account/account-security-settings";
 import { gtm } from "../../lib/gtm";
 import { getSession } from "next-auth/react";
 
@@ -34,7 +34,7 @@ const Account = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 4,
         }}
       >
         <Container maxWidth="md">

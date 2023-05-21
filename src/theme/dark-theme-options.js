@@ -4,13 +4,13 @@ const neutral = {
   main: "rgba(86, 106, 127, 0.1)",
   100: "#F3F4F6",
   200: "#E5E7EB",
-  300: "#D1D5DB",
+  300: "#ffffff",
   400: "#9CA3AF",
   500: "#6B7280",
   600: "#4B5563",
   700: "#374151",
   800: "#1F2937",
-  900: "#111827",
+  900: "#181f38",
 };
 
 const background = {
@@ -30,17 +30,17 @@ const blue = {
 const divider = "#2D3748";
 
 const primary = {
-  main: "#10B981",
+  main: "#08cf65",
   light: "#3FC79A",
   dark: "#0B815A",
-  contrastText: neutral[900],
+  contrastText: "#FFFFFF",
 };
 
 const secondary = {
-  main: "#10B981",
+  main: "#08cf65",
   light: "#3FC79A",
   dark: "#0B815A",
-  contrastText: neutral[900],
+  contrastText: "#FFFFFF",
   lightGrey: "#7b90a1",
   200: "#ECEFF1",
   900: "#7E92A2",
@@ -237,7 +237,7 @@ export const darkThemeOptions = {
     text,
     warning,
     disabled,
-    blue
+    blue,
   },
   shadows: [
     "none",

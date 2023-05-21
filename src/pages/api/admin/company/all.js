@@ -49,6 +49,7 @@ handler.get(async (req, res) => {
                     uid: 1,
                     email: 1,
                     name: 1,
+                    isBlock: 1,
                     createdAt: 1,
                     userCount: 1,
                     repoCount: 1,

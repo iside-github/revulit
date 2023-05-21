@@ -36,7 +36,7 @@ class MyApp extends Document {
             sizes="16x16"
             href="/favicon-16x16.png"
           />
-          <meta name="theme-color" content="#111827" />
+          <meta name="theme-color" content="#181f38" />
         </Head>
         <body>
           <Main />
