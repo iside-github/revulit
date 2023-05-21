@@ -160,6 +160,10 @@ function validate(values) {
       "Confirm password doesn't match with new password";
   }
 
+  if (values["new_password"] && values["new_password"].length < 8) {
+    errors["new_password"] = "Password should ne at least 8 length long";
+  }
+
   return errors;
 }
 

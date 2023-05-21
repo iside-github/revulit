@@ -21,6 +21,7 @@ import { uploadFile } from "redux-store/file/upload";
 import { useDispatch, useSelector } from "react-redux";
 import { getRecentlyUploadedReports } from "redux-store/report/slice";
 
+
 const Overview = () => {
   const fileData = useSelector((state) => state.file.data);
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const Overview = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 4,
         }}
       >
         <Container>

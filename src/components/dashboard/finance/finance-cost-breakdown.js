@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Chart } from "../../chart";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Stack } from "@mui/system";
 
 const data = {
   series: [
@@ -74,7 +76,15 @@ export const FinanceCostBreakdown = (props) => {
 
   return (
     <Card {...props}>
-      <CardHeader title="Total statistics" />
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        pr={2}
+      >
+        <CardHeader title="Total statistics" />
+        <DatePicker />
+      </Stack>
       <Divider />
       <CardContent>
         <Chart

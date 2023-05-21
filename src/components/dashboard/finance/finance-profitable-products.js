@@ -12,138 +12,129 @@ import {
 } from "@mui/material";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
 
-const products = [
-  {
-    id: "5eff2512c6f8737d08325676",
-    conversionRate: 93,
-    currency: "$",
-    image: "/static/mock-images/products/product_1.png",
-    name: "Healthcare Erbology",
-    profit: 53500,
-    sales: 13153,
-  },
-  {
-    id: "5eff2516247f9a6fcca9f151",
-    conversionRate: 76,
-    currency: "$",
-    image: "/static/mock-images/products/product_2.png",
-    name: "Makeup Lancome Rouge",
-    profit: 45763,
-    sales: 10300,
-  },
-  {
-    id: "5eff251a3bb9ab7290640f18",
-    conversionRate: 60,
-    currency: "$",
-    name: "Lounge Puff Fabric Slipper",
-    profit: 28700,
-    sales: 5300,
-  },
-  {
-    id: "5eff251e297fd17f0dc18a8b",
-    conversionRate: 46,
-    currency: "$",
-    image: "/static/mock-images/products/product_4.png",
-    name: "Skincare Necessaire",
-    profit: 20400,
-    sales: 1203,
-  },
-  {
-    id: "5eff2524ef813f061b3ea39f",
-    conversionRate: 41,
-    currency: "$",
-    image: "/static/mock-images/products/product_5.png",
-    name: "Skincare Soja CO",
-    profit: 15200,
-    sales: 254,
-  },
-];
+export const FinanceProfitableProducts = (props) => {
+  const reports = useSelector((state) => state?.report?.recentList);
+  function selectArrayWithLargestIndex(arrays) {
+    let largestIndex = -1;
+    let selectedArray = null;
 
-export const FinanceProfitableProducts = (props) => (
-  <Card {...props}>
-    <CardHeader title="Recently uploaded files" />
-    <Scrollbar>
-      <Table sx={{ minWidth: 700 }}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Transaction</TableCell>
-            <TableCell />
-            <TableCell align="right">Uploaded time</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {products.map((product) => (
-            <TableRow hover key={product.id}>
-              <TableCell>
-                <Box
-                  sx={{
-                    alignItems: "center",
-                    display: "flex",
-                    "& > img": {
-                      flexShrink: 0,
-                      height: 56,
-                      width: 56,
-                    },
-                  }}
-                >
+    for (let i = 0; i < arrays.length; i++) {
+      const currentArray = arrays[i];
+      const lastIndex = currentArray.length - 1;
+
+      if (lastIndex > largestIndex) {
+        largestIndex = lastIndex;
+        selectedArray = currentArray;
+      }
+    }
+
+    return selectedArray;
+  }
+  const categories = reports.map((categ) => {
+    if (categ?.categories) {
+      return categ?.categories?.filter((item) => item.category_id !== "total");
+    } else {
+      return [];
+    }
+  });
+  const selectedReport = selectArrayWithLargestIndex(categories);
+  console.log(selectedReport, "product");
+  return (
+    <Card {...props}>
+      <CardHeader title="Recently uploaded files" />
+      <Scrollbar>
+        <Table sx={{ minWidth: 700 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Transaction</TableCell>
+              {selectedReport?.map((rep) => {
+                return <TableCell>{rep?.category_title}</TableCell>;
+              })}
+              <TableCell align="right">Time</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {reports?.map((product) => (
+              <TableRow hover key={product.id}>
+                <TableCell>
                   <Box
                     sx={{
                       alignItems: "center",
-                      backgroundColor: "background.default",
-                      backgroundImage: `url(/static/undraw_add_file2_gvbb.svg)`,
-                      backgroundPosition: "center",
-                      backgroundSize: "cover",
-                      borderRadius: 1,
                       display: "flex",
-                      height: 80,
-                      justifyContent: "center",
-                      overflow: "hidden",
-                      width: 80,
+                      "& > img": {
+                        flexShrink: 0,
+                        height: 56,
+                        width: 56,
+                      },
                     }}
-                  />
+                  >
+                    <Box
+                      sx={{
+                        alignItems: "center",
+                        backgroundColor: "background.default",
+                        backgroundImage: `url(/static/undraw_add_file2_gvbb.svg)`,
+                        backgroundPosition: "center",
+                        backgroundSize: "cover",
+                        borderRadius: 1,
+                        display: "flex",
+                        height: 80,
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        width: 80,
+                      }}
+                    />
 
-                  <Box sx={{ ml: 2 }}>
-                    <Typography variant="subtitle2">{product.name}</Typography>
-                    <Typography color="textSecondary" noWrap variant="body2">
+                    <Box sx={{ ml: 2 }}>
+                      <Typography variant="subtitle2">
+                        {product?.file_name}
+                      </Typography>
+                      <Typography color="textSecondary" noWrap variant="body2">
+                        <Typography
+                          color="success.main"
+                          variant="subtitle2"
+                          component="a"
+                          href={`/dashboard/html/total?report=${product?._id}&&categoryName=Total`}
+                          sx={{ textDecoration: "underline" }}
+                        >
+                          {
+                            product?.categories?.find(
+                              (item) => item?.category_id === "total"
+                            )?.category_count
+                          }
+                        </Typography>{" "}
+                        articles
+                      </Typography>
+                    </Box>
+                  </Box>
+                </TableCell>
+                {selectedReport?.map((rep) => {
+                  return (
+                    <TableCell>
                       <Typography
-                        color="success.main"
-                        component="span"
-                        variant="subtitle2"
+                        component="a"
+                        href={`/dashboard/html/${rep?.category_id}?report=${product?._id}&&categoryName=${rep?.category_title}`}
+                        sx={{ textDecoration: "underline" }}
                       >
-                        {numeral(product.sales).format("0,0")}
-                      </Typography>{" "}
-                      articles
-                    </Typography>
-                  </Box>
-                </Box>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle2">Total</Typography>
-                <Typography color="textSecondary" noWrap variant="body2">
-                  {product.profit?.toLocaleString()} articles
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Box
-                  sx={{
-                    alignItems: "center",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <Box sx={{ mr: 2 }}>
-                    <Typography color="textSecondary" variant="body2">
-                      {format(new Date(), "dd-MMMM, yyyy HH:mm")}
-                    </Typography>
-                  </Box>
-                  {/* <CircularProgress value={product.conversionRate} /> */}
-                </Box>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Scrollbar>
-  </Card>
-);
+                        {rep?.category_count ? rep?.category_count : 0}
+                      </Typography>
+                    </TableCell>
+                  );
+                })}
+                <TableCell align="right">
+                  {product?.createdAt
+                    ? format(
+                        new Date(product?.createdAt),
+                        "dd-MMMM, yyyy HH:mm"
+                      )
+                    : ""}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Scrollbar>
+    </Card>
+  );
+};
