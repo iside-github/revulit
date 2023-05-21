@@ -76,7 +76,7 @@ export const FinanceOverview = (props) => {
               justifyContent: "center",
               cursor: "pointer",
               background:
-                item.category === "total" ? "#10B981" : "paper.backround",
+                item.category === "total" ? "#08cf65" : "paper.backround",
             }}
           >
             <div>

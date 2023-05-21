@@ -13,17 +13,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ArrowRight as ArrowRightIcon } from "../../../icons/arrow-right";
 import { Scrollbar } from "../../scrollbar";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { format } from "date-fns";
+import { Field, reduxForm } from "redux-form";
+import TextInput from "components/dashboard/customer/TextField";
+import { Stack } from "@mui/system";
+import { LoadingButton } from "@mui/lab";
+import { updatePassword } from "redux-store/user/user.slice";
+import PasswordInputField from "./PasswordInput";
 
-export const AccountSecuritySettings = () => {
-  const [isEditing, setIsEditing] = useState(false);
+const AccountSecuritySettings = ({ handleSubmit }) => {
   const history = useSelector((state) => state.user.data?.sessions);
+  const dispatch = useDispatch();
 
-  const handleEdit = () => {
-    setIsEditing(!isEditing);
+  const handleEdit = (values) => {
+    dispatch(updatePassword(values));
   };
 
   return (
@@ -35,32 +40,65 @@ export const AccountSecuritySettings = () => {
               <Typography variant="h6">Change password</Typography>
             </Grid>
             <Grid item md={8} sm={12} xs={12}>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <TextField
-                  disabled={!isEditing}
-                  label="Password"
+              <Stack width="100%">
+                <Field
+                  component={PasswordInputField}
+                  name="old_password"
+                  label="Old password"
+                  placeholder="Old password"
                   type="password"
-                  defaultValue="Thebestpasswordever123#"
                   size="small"
                   sx={{
                     flexGrow: 1,
                     mr: 3,
-                    ...(!isEditing && {
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderStyle: "dotted",
+                    },
+                  }}
+                />
+                <Stack width="100%" mt={2}>
+                  <Field
+                    component={PasswordInputField}
+                    label="New password"
+                    placeholder="New password"
+                    type="password"
+                    name="new_password"
+                    size="small"
+                    sx={{
+                      flexGrow: 1,
+                      mr: 3,
                       "& .MuiOutlinedInput-notchedOutline": {
                         borderStyle: "dotted",
                       },
-                    }),
-                  }}
-                />
-                <Button onClick={handleEdit}>
-                  {isEditing ? "Save" : "Edit"}
-                </Button>
-              </Box>
+                    }}
+                  />
+                </Stack>
+                <Stack width="100%" mt={2}>
+                  <Field
+                    component={PasswordInputField}
+                    label="Confirm password"
+                    placeholder="Confirm password"
+                    type="password"
+                    name="confirm_password"
+                    size="small"
+                    sx={{
+                      flexGrow: 1,
+                      mr: 3,
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderStyle: "dotted",
+                      },
+                    }}
+                  />
+                </Stack>
+              </Stack>
+              <Stack mt={3} alignItems="center">
+                <LoadingButton
+                  variant="contained"
+                  onClick={handleSubmit(handleEdit)}
+                >
+                  Save new password
+                </LoadingButton>
+              </Stack>
             </Grid>
           </Grid>
         </CardContent>
@@ -107,3 +145,25 @@ export const AccountSecuritySettings = () => {
     </>
   );
 };
+
+function validate(values) {
+  let errors = {};
+  const requiredFields = ["old_password", "new_password", "confirm_password"];
+  requiredFields.forEach((field) => {
+    if (!values[field]) {
+      errors[field] = "Field is required!";
+    }
+  });
+
+  if (values["confirm_password"] !== values["new_password"]) {
+    errors["confirm_password"] =
+      "Confirm password doesn't match with new password";
+  }
+
+  return errors;
+}
+
+export default reduxForm({
+  form: "create_user",
+  validate,
+})(AccountSecuritySettings);

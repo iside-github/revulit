@@ -83,9 +83,9 @@ const getComparator = (sortDir, sortBy) =>
 const applySort = (customers, sort) => {
   const [sortBy, sortDir] = sort.split("|");
   const comparator = getComparator(sortDir, sortBy);
-  const stabilizedThis = customers.map((el, index) => [el, index]);
+  const stabilizedThis = customers?.map((el, index) => [el, index]);
 
-  stabilizedThis.sort((a, b) => {
+  stabilizedThis?.sort((a, b) => {
     const newOrder = comparator(a[0], b[0]);
 
     if (newOrder !== 0) {
@@ -95,7 +95,7 @@ const applySort = (customers, sort) => {
     return a[1] - b[1];
   });
 
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis?.map((el) => el[0]) ? stabilizedThis?.map((el) => el[0]) : [];
 };
 
 const applyPagination = (customers, page, rowsPerPage) =>
@@ -205,7 +205,7 @@ const Page = () => {
             <Card sx={{ px: 2, py: 1 }}>
               <CompanyListTable
                 customers={paginatedCustomers}
-                customersCount={filteredCustomers.length}
+                customersCount={filteredCustomers?.length}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={rowsPerPage}

@@ -30,7 +30,7 @@ const roles = [
   },
   {
     role: "superadmin",
-    title: "Sowtware owner",
+    title: "Software owner",
   },
 ];
 

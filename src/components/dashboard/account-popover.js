@@ -72,7 +72,7 @@ export const AccountPopover = (props) => {
         >
           <Typography variant="body1">{user?.name}</Typography>
           <Typography color="textSecondary" variant="body2">
-            Acme Inc
+            {user?.company?.name}
           </Typography>
         </Box>
       </Box>

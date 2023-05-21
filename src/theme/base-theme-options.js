@@ -102,6 +102,7 @@ export const baseThemeOptions = {
         },
         a: {
           textDecoration: "none",
+          color: "#08cf65",
         },
         html: {
           MozOsxFontSmoothing: "grayscale",

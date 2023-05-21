@@ -20,33 +20,83 @@ import { DashboardSidebarSection } from "./dashboard-sidebar-section";
 import { OrganizationPopover } from "./organization-popover";
 import { Users as UsersIcon } from "../../icons/users";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import { useSelector } from "react-redux";
 
 const getSections = (t) => [
   {
     title: t("General"),
     items: [
       {
-        title: t("Dashboard"),
+        title: "Dashboard",
         path: "/dashboard",
         icon: <HomeIcon fontSize="small" />,
       },
       {
-        title: t("Report"),
+        title: "Report",
         path: "/dashboard/report",
         icon: <ChartPieIcon fontSize="small" />,
       },
       {
-        title: t("Users"),
+        title: "Account",
+        path: "/dashboard/account",
+        icon: <UserCircleIcon fontSize="small" />,
+      },
+    ],
+  },
+];
+const getSections1 = (t) => [
+  {
+    title: t("General"),
+    items: [
+      {
+        title: "Dashboard",
+        path: "/dashboard",
+        icon: <HomeIcon fontSize="small" />,
+      },
+      {
+        title: "Report",
+        path: "/dashboard/report",
+        icon: <ChartPieIcon fontSize="small" />,
+      },
+      {
+        title: "Users",
         path: "/dashboard/customers",
         icon: <UsersIcon fontSize="small" />,
       },
       {
-        title: t("Account"),
+        title: "Account",
+        path: "/dashboard/account",
+        icon: <UserCircleIcon fontSize="small" />,
+      },
+    ],
+  },
+];
+const getSections2 = (t) => [
+  {
+    title: t("General"),
+    items: [
+      {
+        title: "Dashboard",
+        path: "/dashboard",
+        icon: <HomeIcon fontSize="small" />,
+      },
+      {
+        title: "Report",
+        path: "/dashboard/report",
+        icon: <ChartPieIcon fontSize="small" />,
+      },
+      {
+        title: "Users",
+        path: "/dashboard/customers",
+        icon: <UsersIcon fontSize="small" />,
+      },
+      {
+        title: "Account",
         path: "/dashboard/account",
         icon: <UserCircleIcon fontSize="small" />,
       },
       {
-        title: t("Adminstrator"),
+        title: "Adminstrator",
         path: "/dashboard/superadmin",
         icon: <AdminPanelSettingsIcon fontSize="medium" />,
       },
@@ -55,6 +105,7 @@ const getSections = (t) => [
 ];
 
 export const DashboardSidebar = (props) => {
+  const user = useSelector((state) => state.user?.data?.user);
   const { onClose, open } = props;
   const router = useRouter();
   const { t } = useTranslation();
@@ -62,6 +113,8 @@ export const DashboardSidebar = (props) => {
     noSsr: true,
   });
   const sections = useMemo(() => getSections(t), [t]);
+  const sections1 = useMemo(() => getSections1(t), [t]);
+  const sections2 = useMemo(() => getSections2(t), [t]);
   const organizationsRef = useRef(null);
   const [openOrganizationsPopover, setOpenOrganizationsPopover] =
     useState(false);
@@ -129,7 +182,7 @@ export const DashboardSidebar = (props) => {
               >
                 <div>
                   <Typography color="inherit" variant="subtitle1">
-                    Acme Inc
+                    {user?.company?.name}
                   </Typography>
                   <Typography color="neutral.400" variant="body2">
                     {t("Your tier")} : Premium
@@ -145,19 +198,47 @@ export const DashboardSidebar = (props) => {
             }}
           />
           <Box sx={{ flexGrow: 1 }}>
-            {sections.map((section) => (
-              <DashboardSidebarSection
-                key={section.title}
-                path={router.asPath}
-                sx={{
-                  mt: 2,
-                  "& + &": {
-                    mt: 2,
-                  },
-                }}
-                {...section}
-              />
-            ))}
+            {user?.roles?.includes("superadmin")
+              ? sections2.map((section) => (
+                  <DashboardSidebarSection
+                    key={section.title}
+                    path={router.asPath}
+                    sx={{
+                      mt: 2,
+                      "& + &": {
+                        mt: 2,
+                      },
+                    }}
+                    {...section}
+                  />
+                ))
+              : user?.roles?.includes("admin")
+              ? sections1.map((section) => (
+                  <DashboardSidebarSection
+                    key={section.title}
+                    path={router.asPath}
+                    sx={{
+                      mt: 2,
+                      "& + &": {
+                        mt: 2,
+                      },
+                    }}
+                    {...section}
+                  />
+                ))
+              : sections.map((section) => (
+                  <DashboardSidebarSection
+                    key={section.title}
+                    path={router.asPath}
+                    sx={{
+                      mt: 2,
+                      "& + &": {
+                        mt: 2,
+                      },
+                    }}
+                    {...section}
+                  />
+                ))}
           </Box>
           <Divider
             sx={{

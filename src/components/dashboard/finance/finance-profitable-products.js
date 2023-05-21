@@ -1,7 +1,6 @@
 import numeral from "numeral";
 import {
   Box,
-  Button,
   Card,
   CardHeader,
   Table,
@@ -11,10 +10,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { ArrowRight as ArrowRightIcon } from "../../../icons/arrow-right";
-import { Image as ImageIcon } from "../../../icons/image";
-import { CircularProgress } from "../../circular-progress";
-import { MoreMenu } from "../../more-menu";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
 
@@ -67,7 +62,7 @@ const products = [
 
 export const FinanceProfitableProducts = (props) => (
   <Card {...props}>
-    <CardHeader action={<MoreMenu />} title="Recently uploaded files" />
+    <CardHeader title="Recently uploaded files" />
     <Scrollbar>
       <Table sx={{ minWidth: 700 }}>
         <TableHead>
@@ -150,20 +145,5 @@ export const FinanceProfitableProducts = (props) => (
         </TableBody>
       </Table>
     </Scrollbar>
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "flex-end",
-        p: 2,
-      }}
-    >
-      <Button
-        endIcon={<ArrowRightIcon fontSize="small" />}
-        size="small"
-        sx={{ cursor: "pointer" }}
-      >
-        See All
-      </Button>
-    </Box>
   </Card>
 );
