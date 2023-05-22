@@ -1,16 +1,16 @@
 import nc from 'next-connect';
-import User from '../../../models/user';
-import Category from '../../../models/categories';
-import Reports from '../../../models/reports';
-import db from '../../../utils/db';
-import { isAuth } from '../../../utils/auth';
+import User from '../../../../../models/user';
+import Category from '../../../../../models/categories';
+import Reports from '../../../../../models/reports';
+import db from '../../../../../utils/db';
+import { isAuth } from '../../../../../utils/auth';
 
 const handler = nc();
 
 handler.use(isAuth);
 handler.get(async (req, res) => {
     try {
-        const { filter } = req.body;
+        const { filter } = req.query;
         await db.connect();
         const admin = await User.findById(req.user.user.user._id).populate({
             path: 'company',
