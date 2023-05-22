@@ -68,7 +68,11 @@ handler.post(async (req, res) => {
             req.body?.isBlock !== undefined
                 ? req.body.isBlock
                 : company.isBlock;
-        company.avatar = req.file ? req.file?.filename : company.avatar;
+        company.avatar = req.file
+            ? req.file?.filename
+            : company.avatar
+            ? company.avatar
+            : 'logo.png';
         const updatedCompany = await company.save();
 
         await db.disconnect();
