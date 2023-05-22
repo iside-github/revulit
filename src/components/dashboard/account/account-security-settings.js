@@ -1,7 +1,4 @@
-import { useState } from "react";
 import {
-  Box,
-  Button,
   Card,
   CardContent,
   Grid,
@@ -10,14 +7,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import { Scrollbar } from "../../scrollbar";
 import { useSelector, useDispatch } from "react-redux";
 import { format } from "date-fns";
 import { Field, reduxForm } from "redux-form";
-import TextInput from "components/dashboard/customer/TextField";
 import { Stack } from "@mui/system";
 import { LoadingButton } from "@mui/lab";
 import { updatePassword } from "redux-store/user/user.slice";
@@ -43,7 +38,7 @@ const AccountSecuritySettings = ({ handleSubmit }) => {
               <Stack width="100%">
                 <Field
                   component={PasswordInputField}
-                  name="old_password"
+                  name="oldPassword"
                   label="Old password"
                   placeholder="Old password"
                   type="password"
@@ -62,7 +57,7 @@ const AccountSecuritySettings = ({ handleSubmit }) => {
                     label="New password"
                     placeholder="New password"
                     type="password"
-                    name="new_password"
+                    name="password"
                     size="small"
                     sx={{
                       flexGrow: 1,
@@ -148,20 +143,20 @@ const AccountSecuritySettings = ({ handleSubmit }) => {
 
 function validate(values) {
   let errors = {};
-  const requiredFields = ["old_password", "new_password", "confirm_password"];
+  const requiredFields = ["oldPassword", "password", "confirm_password"];
   requiredFields.forEach((field) => {
     if (!values[field]) {
       errors[field] = "Field is required!";
     }
   });
 
-  if (values["confirm_password"] !== values["new_password"]) {
+  if (values["confirm_password"] !== values["password"]) {
     errors["confirm_password"] =
       "Confirm password doesn't match with new password";
   }
 
-  if (values["new_password"] && values["new_password"].length < 8) {
-    errors["new_password"] = "Password should ne at least 8 length long";
+  if (values["password"] && values["password"].length < 8) {
+    errors["password"] = "Password should ne at least 8 length long";
   }
 
   return errors;

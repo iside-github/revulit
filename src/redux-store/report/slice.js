@@ -3,11 +3,14 @@ import {
   getAllCompanyReports,
   getCategoryData,
   getRecentUploads,
+  getTotalStats,
 } from "api/requests";
 
 const initialState = {
   list: [],
   recentList: [],
+  statistics: [],
+  isStatsLoading: false,
   isRecentLoading: false,
   category: "",
   isLoading: false,
@@ -27,6 +30,11 @@ export const getCategoryHTML = createAsyncThunk(
 export const getRecentlyUploadedReports = createAsyncThunk(
   "get/recentReports",
   getRecentUploads
+);
+
+export const getTotalStatistics = createAsyncThunk(
+  "get/totalStatistics",
+  getTotalStats
 );
 
 export const reportsReducer = createSlice({
@@ -64,6 +72,17 @@ export const reportsReducer = createSlice({
     },
     [getRecentlyUploadedReports.rejected]: (state) => {
       state.isRecentLoading = false;
+    },
+    //total statistics
+    [getTotalStatistics.pending]: (state) => {
+      state.isStatsLoading = true;
+    },
+    [getTotalStatistics.fulfilled]: (state, { payload }) => {
+      state.isStatsLoading = false;
+      state.statistics = payload;
+    },
+    [getTotalStatistics.rejected]: (state) => {
+      state.isStatsLoading = false;
     },
   },
 });

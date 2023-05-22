@@ -177,7 +177,16 @@ export const ReportsTable = (props) => {
                         )
                       : ""}
                   </TableCell>
-                  <TableCell>{customer?.file_name}</TableCell>
+                  <TableCell>
+                    <Typography
+                      component="a"
+                      href={`/static/uploads/files/${customer?.file_src}`}
+                      target="_blank"
+                      sx={{ textDecoration: "underline" }}
+                    >
+                      {customer?.file_name}
+                    </Typography>
+                  </TableCell>
                   {customer?.categories?.map((cat) => {
                     return (
                       <TableCell key={cat?._id}>
