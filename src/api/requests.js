@@ -45,13 +45,14 @@ export async function updateUserPassword({
   }
 }
 
-export async function getUploadedFileResults(data) {
+export async function getUploadedFileResults({ data, update }) {
   try {
     const result = await axios({
       method: "POST",
       url: "/api/user/upload-file",
       data: data,
     });
+    update();
     return result.data;
   } catch (error) {
     toast.error(
@@ -214,7 +215,7 @@ export async function getRecentUploads() {
 export async function updateUserOldPassword(data) {
   try {
     const res = await axios({
-      url: "/api/user/update-password",
+      url: "/api/user/profile-password",
       method: "POST",
       data,
     });
@@ -225,5 +226,27 @@ export async function updateUserOldPassword(data) {
         ? error?.response?.data?.message
         : "Something went wrong! Please, try again later"
     );
+  }
+}
+
+export async function getTotalStats() {
+  try {
+    const result = await axios.get("/api/admin/statistics", {
+      withCredentials: true,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getCategoriesList() {
+  try {
+    const result = await axios.get("/api/admin/categories", {
+      withCredentials: true,
+    });
+    return result.data;
+  } catch (error) {
+    console.log(error);
   }
 }

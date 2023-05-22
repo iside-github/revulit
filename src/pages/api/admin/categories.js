@@ -1,11 +1,11 @@
 import nc from 'next-connect';
 import Category from '../../../models/categories';
 import db from '../../../utils/db';
-import { checkUserRole } from '../../../utils/auth';
+import { isAuth } from '../../../utils/auth';
 
 const handler = nc();
 
-handler.use(checkUserRole('superadmin'));
+handler.use(isAuth);
 handler.get(async (req, res) => {
     try {
         await db.connect();

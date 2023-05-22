@@ -14,6 +14,8 @@ import { getSession } from "next-auth/react";
 import { Card } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompaniesList } from "redux-store/company/index.slice";
+import LoaderComponent from "components/dashboard/bindings/loader";
+import EmptyComponent from "components/dashboard/bindings/empty";
 
 const sortOptions = [
   {
@@ -95,7 +97,9 @@ const applySort = (customers, sort) => {
     return a[1] - b[1];
   });
 
-  return stabilizedThis?.map((el) => el[0]) ? stabilizedThis?.map((el) => el[0]) : [];
+  return stabilizedThis?.map((el) => el[0])
+    ? stabilizedThis?.map((el) => el[0])
+    : [];
 };
 
 const applyPagination = (customers, page, rowsPerPage) =>
@@ -152,6 +156,7 @@ const Page = () => {
   };
   const dispatch = useDispatch();
   const companiesList = useSelector((state) => state.company.list);
+  const isListLoading = useSelector((state) => state.company.isListLoading);
 
   useEffect(() => {
     dispatch(getCompaniesList());
@@ -202,16 +207,40 @@ const Page = () => {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <Card sx={{ px: 2, py: 1 }}>
-              <CompanyListTable
-                customers={paginatedCustomers}
-                customersCount={filteredCustomers?.length}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleRowsPerPageChange}
-                rowsPerPage={rowsPerPage}
-                page={page}
-              />
-            </Card>
+            {!isListLoading && paginatedCustomers?.length > 0 ? (
+              <Card sx={{ px: 2, py: 1 }}>
+                <CompanyListTable
+                  customers={paginatedCustomers}
+                  customersCount={filteredCustomers?.length}
+                  onPageChange={handlePageChange}
+                  onRowsPerPageChange={handleRowsPerPageChange}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                />
+              </Card>
+            ) : isListLoading ? (
+              <Card
+                sx={{
+                  minHeight: "70vh",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <LoaderComponent />
+              </Card>
+            ) : (
+              <Card
+                sx={{
+                  minHeight: "70vh",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <EmptyComponent text="You have not created a company yet" />
+              </Card>
+            )}
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Card sx={{ px: 2, py: 3 }}>

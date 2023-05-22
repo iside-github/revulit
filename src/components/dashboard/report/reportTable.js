@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
-import NextLink from "next/link";
-import numeral from "numeral";
 import PropTypes from "prop-types";
 import {
-  Avatar,
   Box,
   Button,
   Checkbox,
-  IconButton,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -17,9 +12,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { ArrowRight as ArrowRightIcon } from "../../../icons/arrow-right";
-import { PencilAlt as PencilAltIcon } from "../../../icons/pencil-alt";
-import { getInitials } from "../../../utils/get-initials";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
 
@@ -34,6 +26,7 @@ export const ReportsTable = (props) => {
     ...other
   } = props;
   const [selectedCustomers, setSelectedCustomers] = useState([]);
+  const [category, setCategory] = useState([]);
 
   // Reset selected customers when customers change
   useEffect(
@@ -52,20 +45,42 @@ export const ReportsTable = (props) => {
     );
   };
 
-  const handleSelectOneCustomer = (event, customerId) => {
-    if (!selectedCustomers.includes(customerId)) {
-      setSelectedCustomers((prevSelected) => [...prevSelected, customerId]);
-    } else {
-      setSelectedCustomers((prevSelected) =>
-        prevSelected.filter((id) => id !== customerId)
-      );
-    }
-  };
-
   const enableBulkActions = selectedCustomers.length > 0;
   const selectedSomeCustomers =
     selectedCustomers.length > 0 && selectedCustomers.length < customers.length;
   const selectedAllCustomers = selectedCustomers.length === customers.length;
+
+  function selectArrayWithLargestIndex(arrays) {
+    let largestIndex = -1;
+    let selectedArray = null;
+
+    for (let i = 0; i < arrays.length; i++) {
+      const currentArray = arrays[i];
+      const lastIndex = currentArray.length - 1;
+
+      if (lastIndex > largestIndex) {
+        largestIndex = lastIndex;
+        selectedArray = currentArray;
+      }
+    }
+
+    return selectedArray;
+  }
+
+  useEffect(() => {
+    const categories = customers.map((categ) => {
+      if (categ?.categories) {
+        return categ?.categories;
+      } else {
+        return [];
+      }
+    });
+
+    const categorySelected = selectArrayWithLargestIndex(
+      categories ? categories : []
+    );
+    setCategory(categorySelected ? categorySelected : []);
+  }, [customers]);
 
   return (
     <div {...other}>
@@ -106,12 +121,9 @@ export const ReportsTable = (props) => {
               <TableCell>User</TableCell>
               <TableCell>Upload time</TableCell>
               <TableCell>File name</TableCell>
-              <TableCell>Total articles</TableCell>
-              <TableCell align="right">None relevant</TableCell>
-              <TableCell align="right">ICSR</TableCell>
-              <TableCell align="right">Composite</TableCell>
-              <TableCell align="right">Manual Review</TableCell>
-              <TableCell align="right">Safety</TableCell>
+              {category?.map((cate, indx) => {
+                return <TableCell key={indx}>{cate?.category_title}</TableCell>;
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -165,27 +177,31 @@ export const ReportsTable = (props) => {
                         )
                       : ""}
                   </TableCell>
-                  <TableCell>{customer?.file_name}</TableCell>
                   <TableCell>
-                    <Typography color="primary.main" variant="subtitle2">
-                      {customer?.categories?.total}
+                    <Typography
+                      component="a"
+                      href={`/static/uploads/files/${customer?.file_src}`}
+                      target="_blank"
+                      sx={{ textDecoration: "underline" }}
+                    >
+                      {customer?.file_name}
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    {customer?.categories?.non_relevant}
-                  </TableCell>
-                  <TableCell align="right">
-                    {customer?.categories?.ICSR}
-                  </TableCell>
-                  <TableCell align="right">
-                    {customer?.categories?.composite}
-                  </TableCell>
-                  <TableCell align="right">
-                    {customer?.categories?.manual_review}
-                  </TableCell>
-                  <TableCell align="right">
-                    {customer?.categories?.safety}
-                  </TableCell>
+                  {customer?.categories?.map((cat) => {
+                    return (
+                      <TableCell key={cat?._id}>
+                        <Typography
+                          component="a"
+                          href={`/dashboard/html/${cat?.category_id}?report=${customer?._id}&&categoryName=${cat?.category_title}`}
+                          color="primary.main"
+                          variant="subtitle2"
+                          sx={{ textDecoration: "underline" }}
+                        >
+                          {cat?.category_count ? cat?.category_count : 0}
+                        </Typography>
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               );
             })}

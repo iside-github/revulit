@@ -252,7 +252,7 @@ export const DashboardSidebar = (props) => {
             <Typography color="neutral.500" variant="body2">
               {t("Check our documentation about how to use the platform")}
             </Typography>
-            <NextLink href="/" passHref>
+            <NextLink href="/dashboard/support" passHref>
               <Button
                 color="secondary"
                 component="a"
