@@ -18,7 +18,8 @@ import { gtm } from "../../../lib/gtm";
 import { getSession } from "next-auth/react";
 import { getCompanyReports } from "redux-store/report/slice";
 import { useDispatch, useSelector } from "react-redux";
-import download_table_as_csv from "utils/exporter";
+import LoaderComponent from "components/dashboard/bindings/loader";
+import EmptyComponent from "components/dashboard/bindings/empty";
 
 const sortOptions = [
   {
@@ -47,7 +48,7 @@ const applyFilters = (customers, filters) =>
 
       properties.forEach((property) => {
         if (
-          customer[property].toLowerCase().includes(filters.query.toLowerCase())
+          customer["user"][property].toLowerCase().includes(filters.query.toLowerCase())
         ) {
           queryMatched = true;
         }
@@ -116,8 +117,8 @@ const applyPagination = (customers, page, rowsPerPage) =>
 
 const ReportsPage = () => {
   const reports = useSelector((state) => state.report.list);
+  const isLoading = useSelector((state) => state.report.isLoading);
   const queryRef = useRef(null);
-  const [customers, setCustomers] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sort, setSort] = useState(sortOptions[0].value);
@@ -200,63 +201,87 @@ const ReportsPage = () => {
               </Grid>
             </Grid>
           </Box>
-          <Card>
-            <Box
-              sx={{
-                alignItems: "center",
-                display: "flex",
-                flexWrap: "wrap",
-                m: -1.5,
-                p: 3,
-              }}
-            >
+          {!isLoading && paginatedCustomers?.length ? (
+            <Card>
               <Box
-                component="form"
-                onSubmit={handleQueryChange}
                 sx={{
-                  flexGrow: 1,
-                  m: 1.5,
+                  alignItems: "center",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  m: -1.5,
+                  p: 3,
                 }}
               >
-                <TextField
-                  defaultValue=""
-                  fullWidth
-                  inputProps={{ ref: queryRef }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
+                <Box
+                  component="form"
+                  onSubmit={handleQueryChange}
+                  sx={{
+                    flexGrow: 1,
+                    m: 1.5,
                   }}
-                  placeholder="Search reoports by email"
-                />
+                >
+                  <TextField
+                    defaultValue=""
+                    fullWidth
+                    inputProps={{ ref: queryRef }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon fontSize="small" />
+                        </InputAdornment>
+                      ),
+                    }}
+                    placeholder="Search reoports by email"
+                  />
+                </Box>
+                <TextField
+                  label="Sort By"
+                  name="sort"
+                  onChange={handleSortChange}
+                  select
+                  SelectProps={{ native: true }}
+                  sx={{ m: 1.5 }}
+                  value={sort}
+                >
+                  {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
               </Box>
-              <TextField
-                label="Sort By"
-                name="sort"
-                onChange={handleSortChange}
-                select
-                SelectProps={{ native: true }}
-                sx={{ m: 1.5 }}
-                value={sort}
-              >
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Box>
-            <ReportsTable
-              customers={paginatedCustomers}
-              customersCount={filteredCustomers.length}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              rowsPerPage={rowsPerPage}
-              page={page}
-            />
-          </Card>
+              <ReportsTable
+                customers={paginatedCustomers}
+                customersCount={filteredCustomers.length}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                rowsPerPage={rowsPerPage}
+                page={page}
+              />
+            </Card>
+          ) : isLoading ? (
+            <Card
+              sx={{
+                minHeight: "70vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <LoaderComponent />
+            </Card>
+          ) : (
+            <Card
+              sx={{
+                minHeight: "70vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <EmptyComponent text="Company does not have reports yet" />
+            </Card>
+          )}
         </Container>
       </Box>
     </>

@@ -78,7 +78,8 @@ const Page = () => {
                   startIcon={<LaunchIcon />}
                   component="a"
                   href={`/api/user/download-reports/${router?.query?.report}?category=${router?.query?.id}`}
-                  download
+                  // download
+                  target="_blank"
                 >
                   Export to csv
                 </LoadingButton>

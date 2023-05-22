@@ -19,7 +19,11 @@ import { FileDropzone } from "components/file-dropzone";
 import { getSession } from "next-auth/react";
 import { uploadFile } from "redux-store/file/upload";
 import { useDispatch, useSelector } from "react-redux";
-import { getRecentlyUploadedReports } from "redux-store/report/slice";
+import {
+  getRecentlyUploadedReports,
+  getTotalStatistics,
+} from "redux-store/report/slice";
+import { getCategories } from "redux-store/category/index.slice";
 
 const Overview = () => {
   const fileData = useSelector((state) => state.file.data);
@@ -44,12 +48,18 @@ const Overview = () => {
 
   useEffect(() => {
     dispatch(getRecentlyUploadedReports());
+    dispatch(getTotalStatistics());
+    dispatch(getCategories());
   }, []);
+
+  const update = () => {
+    dispatch(getRecentlyUploadedReports());
+  };
 
   const handleUploadFile = () => {
     const data = new FormData();
     data.append("file", files[0]);
-    dispatch(uploadFile(data));
+    dispatch(uploadFile({ data, update }));
   };
 
   return (
@@ -61,7 +71,7 @@ const Overview = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 4,
         }}
       >
         <Container>
@@ -107,7 +117,10 @@ const Overview = () => {
             <Grid item xs={12}>
               <FileDropzone
                 accept={{
-                  "image/*": [],
+                  "text/csv": [],
+                  "text/xlsx": [],
+                  "text/xlsm": [],
+                  "text/xltx": [],
                 }}
                 files={files}
                 onDrop={handleDrop}
