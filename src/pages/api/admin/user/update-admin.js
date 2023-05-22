@@ -8,7 +8,7 @@ const handler = nc();
 handler.use(checkUserRole('superadmin'));
 handler.put(async (req, res) => {
     try {
-        const { users } = req.body;
+        const { users, isBlock } = req.body;
         await db.connect();
 
         users.forEach(async (id) => {

@@ -112,6 +112,9 @@ handler.get(async (req, res) => {
 
                 const fileStream = fs.createReadStream(filePath);
                 fileStream.pipe(res);
+                fs.unlink(filePath, (err) => {
+                    if (err) console.log(err);
+                });
             })
             .catch((err) => {
                 console.error('Error writing CSV file:', err);
