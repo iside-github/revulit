@@ -17,9 +17,15 @@ handler.get(async (req, res) => {
             select: 'name',
         });
         const categories = await Category.find();
-        const reports = await Reports.find({
+        var reports;
+        if (filter)
+            reports = await Reports.find({
+                company: admin.company._id,
+                createdAt: { $gt: filter },
+            }).select('categories');
+
+        reports = await Reports.find({
             company: admin.company._id,
-            createdAt: { $gt: filter },
         }).select('categories');
 
         let newObj = { total: 0 };
