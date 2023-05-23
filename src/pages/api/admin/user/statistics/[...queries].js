@@ -10,7 +10,7 @@ const handler = nc();
 handler.use(isAuth);
 handler.get(async (req, res) => {
     try {
-        const { filter } = req.query;
+        const { filter, personal } = req.query;
         await db.connect();
         const admin = await User.findById(req.user.user.user._id).populate({
             path: 'company',
@@ -18,15 +18,29 @@ handler.get(async (req, res) => {
         });
         const categories = await Category.find();
         var reports;
-        if (filter)
+        if (personal) {
+            if (filter)
+                reports = await Reports.find({
+                    company: admin.company._id,
+                    user: admin._id,
+                    createdAt: { $gt: filter },
+                }).select('categories');
+
             reports = await Reports.find({
                 company: admin.company._id,
-                createdAt: { $gt: filter },
+                user: admin._id,
             }).select('categories');
+        } else {
+            if (filter)
+                reports = await Reports.find({
+                    company: admin.company._id,
+                    createdAt: { $gt: filter },
+                }).select('categories');
 
-        reports = await Reports.find({
-            company: admin.company._id,
-        }).select('categories');
+            reports = await Reports.find({
+                company: admin.company._id,
+            }).select('categories');
+        }
 
         let newObj = { total: 0 };
         categories.forEach((category) => {
