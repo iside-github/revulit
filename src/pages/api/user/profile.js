@@ -20,7 +20,7 @@ const upload = multer({
                     '-' +
                     uniqueSuffix +
                     '.' +
-                    file['mimetype'].split('/')[1]
+                    file?.mimetype.split('/')[1]
             );
         },
     }),
@@ -64,13 +64,14 @@ handler.put(async (req, res) => {
             'image/jpeg',
             'image/jpg',
         ];
-        const file_extension = req.file.originalname.slice(
-            ((req.file.originalname.lastIndexOf('.') - 1) >>> 0) + 2
+        const file_extension = req.file?.originalname.slice(
+            ((req.file?.originalname.lastIndexOf('.') - 1) >>> 0) + 2
         );
 
         if (
             (req.file && !array_of_allowed_files.includes(file_extension)) ||
-            !array_of_allowed_file_types.includes(req.file.mimetype)
+            (req.file &&
+                !array_of_allowed_file_types.includes(req.file.mimetype))
         )
             return res.status(500).json({ message: 'Invalid file' });
 
@@ -91,7 +92,7 @@ handler.put(async (req, res) => {
             ? security_update
             : user.security_update;
         user.news_message = news_message ? news_message : user.news_message;
-        user.avatar = req.file ? req.file.filename : user.avatar;
+        user.avatar = req?.file ? req.file.filename : user.avatar;
         user.name = name ? name : user.name;
         await user.save();
         await db.disconnect();
