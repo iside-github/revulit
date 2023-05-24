@@ -1,10 +1,7 @@
 import numeral from "numeral";
 import {
   Box,
-  Card,
   CardContent,
-  CardHeader,
-  Divider,
   Table,
   TableBody,
   TableCell,
@@ -16,34 +13,59 @@ import { useTheme } from "@mui/material/styles";
 import { Chart } from "../../chart";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Stack } from "@mui/system";
-
-const data = {
-  series: [
-    {
-      color: "#FFB547",
-      data: 14859,
-      label: "ICSR",
-    },
-    {
-      color: "#7BC67E",
-      data: 35690,
-      label: "Composite",
-    },
-    {
-      color: "#7783DB",
-      data: 45120,
-      label: "Drugs",
-    },
-    {
-      color: "#9DA4DD",
-      data: 25486,
-      label: "Other",
-    },
-  ],
-};
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+const colorCodes = [
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+  "#4BC0C0",
+  "#9966FF",
+  "#FF9F40",
+  "#E7E9ED",
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+  "#4BC0C0",
+  "#9966FF",
+  "#FF9F40",
+  "#E7E9ED",
+  "#FF6384",
+];
 
 export const FinanceCostBreakdown = (props) => {
   const theme = useTheme();
+  const [data, setData] = useState({ series: [] });
+  const categories = useSelector((state) => state.category.list);
+  const stats = useSelector((state) => state.report.statistics);
+
+  const generateReportData = () => {
+    const filteredCategories = categories?.filter(
+      (item) => item?.category_id !== "total"
+    );
+    let dataObj = {};
+    const seriesList = [];
+
+    filteredCategories?.forEach((element, indx) => {
+      const arrayItem = {};
+      arrayItem["color"] = colorCodes[indx];
+      if (stats && element?.category_id && stats[element?.category_id]) {
+        arrayItem["data"] = stats[element?.category_id];
+      } else {
+        arrayItem["data"] = 0;
+      }
+      arrayItem["label"] = element?.category_title;
+      seriesList.push(arrayItem);
+    });
+
+    dataObj["series"] = seriesList;
+
+    setData(dataObj);
+  };
+
+  useEffect(() => {
+    generateReportData();
+  }, [stats, categories]);
 
   const chartOptions = {
     chart: {
@@ -75,17 +97,18 @@ export const FinanceCostBreakdown = (props) => {
   const chartSeries = data.series.map((item) => item.data);
 
   return (
-    <Card {...props}>
+    <Stack>
       <Stack
         direction="row"
         alignItems="center"
-        justifyContent="space-between"
-        pr={2}
+        justifyContent="flex-end"
+        p={2}
       >
-        <CardHeader title="Total statistics" />
-        <DatePicker />
+        <DatePicker
+          value={props.date}
+          onChange={(newValue) => props.setDate(newValue)}
+        />
       </Stack>
-      <Divider />
       <CardContent>
         <Chart
           height={440}
@@ -127,13 +150,13 @@ export const FinanceCostBreakdown = (props) => {
               </TableCell>
               <TableCell align="right">
                 <Typography color="textSecondary" variant="body2">
-                  20
+                  {item?.data?.toLocaleString()} articles
                 </Typography>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </Card>
+    </Stack>
   );
 };

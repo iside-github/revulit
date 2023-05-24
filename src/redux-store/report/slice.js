@@ -79,7 +79,7 @@ export const reportsReducer = createSlice({
     },
     [getTotalStatistics.fulfilled]: (state, { payload }) => {
       state.isStatsLoading = false;
-      state.statistics = payload;
+      state.statistics = payload?.statistics;
     },
     [getTotalStatistics.rejected]: (state) => {
       state.isStatsLoading = false;

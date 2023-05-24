@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
-  Button,
-  Checkbox,
   IconButton,
   Table,
   TableBody,
@@ -131,9 +129,9 @@ export const CustomerListTable = (props) => {
                   </TableCell>
                   <TableCell align="right">
                     <IconButton
-                      // onClick={() =>
-                      //   handleBlockUnblock(customer?.isBlock, customer?._id)
-                      // }
+                      onClick={() =>
+                        props.block(customer?.isBlock, customer?._id)
+                      }
                       sx={{ borderRadius: "50%" }}
                     >
                       {customer?.isBlock ? (
