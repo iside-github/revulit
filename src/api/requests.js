@@ -229,9 +229,9 @@ export async function updateUserOldPassword(data) {
   }
 }
 
-export async function getTotalStats() {
+export async function getTotalStats(query) {
   try {
-    const result = await axios.get("/api/admin/statistics", {
+    const result = await axios.get(`/api/admin/statistics?filter=${query}`, {
       withCredentials: true,
     });
     return result.data;

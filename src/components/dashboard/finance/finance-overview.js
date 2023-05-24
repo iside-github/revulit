@@ -43,6 +43,11 @@ export const FinanceOverview = (props) => {
       category: "non_relevant",
     },
   ];
+  const restCats = fileData?.categories;
+  const existCats = result.map((itd) => itd.category);
+  const filteredCats = restCats?.filter(
+    (item) => !existCats.includes(item?.category_id)
+  );
   return (
     <Grid container spacing={1}>
       {result.map((item) => (
@@ -93,7 +98,73 @@ export const FinanceOverview = (props) => {
                 textAlign="center"
                 color={item?.category === "total" ? "#ffffff" : "textSecondary"}
               >
-                {item.value}
+                {fileData?.categories?.find(
+                  (val) => val?.category_id === item?.category
+                )["category_count"]
+                  ? fileData?.categories?.find(
+                      (val) => val?.category_id === item?.category
+                    )["category_count"]
+                  : 0}
+              </Typography>
+              <Typography
+                color={item?.category === "total" ? "#ffffff" : "textSecondary"}
+                variant="body2"
+              >
+                Total articles
+              </Typography>
+            </div>
+          </Card>
+        </Grid>
+      ))}
+      {filteredCats?.map((item) => (
+        <Grid
+          item
+          md={3}
+          xs={12}
+          key={item.id}
+          onClick={
+            item?.category_count > 0
+              ? () =>
+                  router.push(
+                    `/dashboard/html/${item?.category_id}?report=${fileData?.id}&&categoryName=${item?.category_title}`
+                  )
+              : null
+          }
+        >
+          <Card
+            {...props}
+            sx={{
+              borderRight: (theme) => ({
+                md: `1px solid ${theme.palette.divider}`,
+              }),
+              borderBottom: (theme) => ({
+                md: "none",
+                xs: `1px solid ${theme.palette.divider}`,
+              }),
+              p: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              background:
+                item.category === "total" ? "#08cf65" : "paper.backround",
+            }}
+          >
+            <div>
+              <Typography
+                component="h6"
+                color={item?.category === "total" ? "#ffffff" : "textSecondary"}
+                variant="overline"
+                align="center"
+              >
+                {item?.category_title}
+              </Typography>
+              <Typography
+                variant="h5"
+                textAlign="center"
+                color={item?.category === "total" ? "#ffffff" : "textSecondary"}
+              >
+                {item?.category_count}
               </Typography>
               <Typography
                 color={item?.category === "total" ? "#ffffff" : "textSecondary"}

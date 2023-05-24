@@ -7,6 +7,7 @@ import userReducer from "./user/user.slice";
 import systemUsersReducer from "./users/user.slice";
 import reportsReducer from "./report/slice";
 import companyReducer from "./company/index.slice";
+import categoryReducer from "./category/index.slice";
 
 import authReducer from "./user/auth.slice";
 
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   users: systemUsersReducer,
   report: reportsReducer,
   company: companyReducer,
+  category: categoryReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

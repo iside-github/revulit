@@ -47,14 +47,13 @@ export const CompanyListTable = (props) => {
   const dispatch = useDispatch();
 
   const handleBlockUnblock = async (status, id) => {
+    const data = new FormData();
+    data.append("isBlock", !status);
     try {
       await axios({
         method: "POST",
         url: `/api/admin/company/update-company/${id}`,
-        data: {
-          isBlock: !status,
-          id,
-        },
+        data,
       });
       dispatch(getCompaniesList());
       toast.success("Action completed");

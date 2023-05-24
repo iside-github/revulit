@@ -3,11 +3,15 @@ import Head from "next/head";
 import {
   Box,
   Button,
+  Card,
   Container,
   Grid,
   Tooltip,
   Typography,
 } from "@mui/material";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import { DashboardLayout } from "components/dashboard/dashboard-layout";
 import { Download as DownloadIcon } from "icons/download";
 import { Reports as ReportsIcon } from "icons/reports";
@@ -24,11 +28,47 @@ import {
   getTotalStatistics,
 } from "redux-store/report/slice";
 import { getCategories } from "redux-store/category/index.slice";
+import CompanyOverCiew from "components/dashboard/finance/overview";
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box>{children}</Box>}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 
 const Overview = () => {
   const fileData = useSelector((state) => state.file.data);
   const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
+  const [date, setDate] = useState(undefined);
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const handleDrop = (newFiles) => {
     setFiles((prevFiles) => [...newFiles]);
@@ -48,9 +88,12 @@ const Overview = () => {
 
   useEffect(() => {
     dispatch(getRecentlyUploadedReports());
-    dispatch(getTotalStatistics());
     dispatch(getCategories());
   }, []);
+
+  useEffect(() => {
+    dispatch(getTotalStatistics(date?.toISOString()));
+  }, [date]);
 
   const update = () => {
     dispatch(getRecentlyUploadedReports());
@@ -134,7 +177,28 @@ const Overview = () => {
               <FinanceOverview />
             </Grid>
             <Grid item xs={12}>
-              <FinanceCostBreakdown />
+              <Card>
+                <Box sx={{ borderBottom: 1, borderColor: "divider", px: 2 }}>
+                  <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="basic tabs example"
+                  >
+                    <Tab label="User statistics" {...a11yProps(0)} />
+                    <Tab label="Company statistics" {...a11yProps(1)} />
+                    <Tab label="Company overview" {...a11yProps(2)} />
+                  </Tabs>
+                </Box>
+                <TabPanel value={value} index={0}>
+                  <FinanceCostBreakdown date={date} setDate={setDate} />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <FinanceCostBreakdown date={date} setDate={setDate} />
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                  <CompanyOverCiew date={date} setDate={setDate} />
+                </TabPanel>
+              </Card>
             </Grid>
             <Grid item xs={12}>
               <FinanceProfitableProducts />

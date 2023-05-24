@@ -20,7 +20,7 @@ export const categoryReducer = createSlice({
     },
     [getCategories.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      state.liist = payload?.categories;
+      state.list = payload?.categories;
     },
     [getCategories.rejected]: (state) => {
       state.isLoading = false;

@@ -19,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUsersList } from "redux-store/users/user.slice";
 import ShareIcon from "@mui/icons-material/Share";
 import InviteModal from "components/dashboard/customer/inviteModal";
+import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const sortOptions = [
   {
@@ -156,6 +158,28 @@ const CustomerList = () => {
     rowsPerPage
   );
 
+  const handleBlockUnblock = async (status, id) => {
+    try {
+      await axios({
+        method: "PUT",
+        url: `/api/admin/user/update`,
+        data: {
+          isBlock: !status,
+          users: [id],
+        },
+      });
+      dispatch(getUsersList());
+      toast.success("Action completed");
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error?.response?.data?.message
+          ? error?.response?.data?.message
+          : "Unexpected error. Try again later"
+      );
+    }
+  };
+
   return (
     <>
       <Head>
@@ -241,6 +265,7 @@ const CustomerList = () => {
               onRowsPerPageChange={handleRowsPerPageChange}
               rowsPerPage={rowsPerPage}
               page={page}
+              block={handleBlockUnblock}
             />
           </Card>
         </Container>
