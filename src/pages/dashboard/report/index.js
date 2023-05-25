@@ -21,24 +21,6 @@ import { useDispatch, useSelector } from "react-redux";
 import LoaderComponent from "components/dashboard/bindings/loader";
 import EmptyComponent from "components/dashboard/bindings/empty";
 
-const sortOptions = [
-  {
-    label: "A-Z",
-    value: "updatedAt|desc",
-  },
-  {
-    label: "Z-A",
-    value: "updatedAt|asc",
-  },
-  {
-    label: "Old to new",
-    value: "totalOrders|desc",
-  },
-  {
-    label: "New to old",
-    value: "totalOrders|asc",
-  },
-];
 
 const applyFilters = (customers, filters) =>
   customers.filter((customer) => {
@@ -121,7 +103,6 @@ const ReportsPage = () => {
   const queryRef = useRef(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [sort, setSort] = useState(sortOptions[0].value);
   const [filters, setFilters] = useState({
     query: "",
     hasAcceptedMarketing: undefined,
@@ -151,9 +132,6 @@ const ReportsPage = () => {
     }));
   };
 
-  const handleSortChange = (event) => {
-    setSort(event.target.value);
-  };
 
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
@@ -165,9 +143,8 @@ const ReportsPage = () => {
 
   // Usually query is done on backend with indexing solutions
   const filteredCustomers = applyFilters(reports, filters);
-  const sortedCustomers = applySort(filteredCustomers, sort);
   const paginatedCustomers = applyPagination(
-    sortedCustomers,
+    filteredCustomers,
     page,
     rowsPerPage
   );
@@ -201,7 +178,7 @@ const ReportsPage = () => {
               </Grid>
             </Grid>
           </Box>
-          {!isLoading && paginatedCustomers?.length ? (
+          {!isLoading && reports?.length ? (
             <Card>
               <Box
                 sx={{
@@ -234,21 +211,6 @@ const ReportsPage = () => {
                     placeholder="Search reoports by email"
                   />
                 </Box>
-                <TextField
-                  label="Sort By"
-                  name="sort"
-                  onChange={handleSortChange}
-                  select
-                  SelectProps={{ native: true }}
-                  sx={{ m: 1.5 }}
-                  value={sort}
-                >
-                  {sortOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
               </Box>
               <ReportsTable
                 customers={paginatedCustomers}

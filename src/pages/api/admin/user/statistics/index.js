@@ -18,8 +18,8 @@ handler.get(async (req, res) => {
     });
     const categories = await Category.find();
     var reports;
-    if (personal) {
-      if (filter)
+    if (personal==="true") {
+      if (filter&&filter!=="undefined")
         reports = await Reports.find({
           company: admin.company._id,
           user: admin._id,
@@ -31,7 +31,7 @@ handler.get(async (req, res) => {
         user: admin._id,
       }).select("categories");
     } else {
-      if (filter)
+      if (filter&&filter!=="undefined")
         reports = await Reports.find({
           company: admin.company._id,
           createdAt: { $gt: filter },

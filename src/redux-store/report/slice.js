@@ -4,17 +4,20 @@ import {
   getCategoryData,
   getRecentUploads,
   getTotalStats,
+  getOverView,
 } from "api/requests";
 
 const initialState = {
   list: [],
   recentList: [],
   statistics: [],
+  overview: [],
   isStatsLoading: false,
   isRecentLoading: false,
   category: "",
   isLoading: false,
   isCategoryLoading: false,
+  isOverviewLoading: false,
 };
 
 export const getCompanyReports = createAsyncThunk(
@@ -35,6 +38,11 @@ export const getRecentlyUploadedReports = createAsyncThunk(
 export const getTotalStatistics = createAsyncThunk(
   "get/totalStatistics",
   getTotalStats
+);
+
+export const getCompanyOverViewStats = createAsyncThunk(
+  "get/overViewStatistics",
+  getOverView
 );
 
 export const reportsReducer = createSlice({
@@ -83,6 +91,17 @@ export const reportsReducer = createSlice({
     },
     [getTotalStatistics.rejected]: (state) => {
       state.isStatsLoading = false;
+    },
+    //Overview statistics
+    [getCompanyOverViewStats.pending]: (state) => {
+      state.isOverviewLoading = true;
+    },
+    [getCompanyOverViewStats.fulfilled]: (state, { payload }) => {
+      state.isOverviewLoading = false;
+      state.overview = payload;
+    },
+    [getCompanyOverViewStats.rejected]: (state) => {
+      state.isOverviewLoading = false;
     },
   },
 });

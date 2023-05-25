@@ -12,7 +12,6 @@ const TextInput = ({ label, input, classes, meta, ...custom }) => {
       placeholder={label}
       {...input}
       {...custom}
-      alue={meta?.initial ? meta.initial : ""}
     />
   );
 };

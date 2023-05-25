@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Box,
-  Button,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -14,6 +12,7 @@ import {
 } from "@mui/material";
 import { Scrollbar } from "../../scrollbar";
 import { format } from "date-fns";
+import TableSortLabel from "@mui/material/TableSortLabel";
 
 export const ReportsTable = (props) => {
   const {
@@ -27,6 +26,14 @@ export const ReportsTable = (props) => {
   } = props;
   const [selectedCustomers, setSelectedCustomers] = useState([]);
   const [category, setCategory] = useState([]);
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("name");
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   // Reset selected customers when customers change
   useEffect(
@@ -39,16 +46,7 @@ export const ReportsTable = (props) => {
     [customers]
   );
 
-  const handleSelectAllCustomers = (event) => {
-    setSelectedCustomers(
-      event.target.checked ? customers.map((customer) => customer.id) : []
-    );
-  };
-
   const enableBulkActions = selectedCustomers.length > 0;
-  const selectedSomeCustomers =
-    selectedCustomers.length > 0 && selectedCustomers.length < customers.length;
-  const selectedAllCustomers = selectedCustomers.length === customers.length;
 
   function selectArrayWithLargestIndex(arrays) {
     let largestIndex = -1;
@@ -82,29 +80,12 @@ export const ReportsTable = (props) => {
     setCategory(categorySelected ? categorySelected : []);
   }, [customers]);
 
+  const createSortHandler = (property) => (event) => {
+    handleRequestSort(event, property);
+  };
+
   return (
     <div {...other}>
-      <Box
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
-          display: enableBulkActions ? "block" : "none",
-          px: 2,
-          py: 0.5,
-        }}
-      >
-        <Checkbox
-          checked={selectedAllCustomers}
-          indeterminate={selectedSomeCustomers}
-          onChange={handleSelectAllCustomers}
-        />
-        <Button size="small" sx={{ ml: 2 }}>
-          Delete
-        </Button>
-        <Button size="small" sx={{ ml: 2 }}>
-          Edit
-        </Button>
-      </Box>
       <Scrollbar>
         <Table sx={{ minWidth: 700 }}>
           <TableHead
@@ -118,9 +99,33 @@ export const ReportsTable = (props) => {
                   onChange={handleSelectAllCustomers}
                 />
               </TableCell> */}
-              <TableCell>User</TableCell>
-              <TableCell>Upload time</TableCell>
-              <TableCell>File name</TableCell>
+              <TableCell sortDirection={orderBy === "name" ? order : false}>
+                <TableSortLabel
+                  active={orderBy === "name"}
+                  direction={orderBy === "name" ? order : false}
+                  onClick={createSortHandler("name")}
+                >
+                  User
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={orderBy === "name" ? order : false}>
+                <TableSortLabel
+                  active={orderBy === "name"}
+                  direction={orderBy === "name" ? order : false}
+                  onClick={createSortHandler("name")}
+                >
+                  Uploaded time
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sortDirection={orderBy === "name" ? order : false}>
+                <TableSortLabel
+                  active={orderBy === "name"}
+                  direction={orderBy === "name" ? order : false}
+                  onClick={createSortHandler("name")}
+                >
+                  File name
+                </TableSortLabel>
+              </TableCell>
               {category?.map((cate, indx) => {
                 return <TableCell key={indx}>{cate?.category_title}</TableCell>;
               })}
