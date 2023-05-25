@@ -131,8 +131,8 @@ const CompanyOverCiew = ({ handleSubmit }) => {
   const handleDateFilter = (values) => {
     dispatch(
       getCompanyOverViewStats({
-        startDate: values?.startTime?.toISOString(),
-        endDate: values?.endTime?.toISOString(),
+        startTime: values?.startTime?.toISOString(),
+        endTime: values?.endTime?.toISOString(),
       })
     );
   };
