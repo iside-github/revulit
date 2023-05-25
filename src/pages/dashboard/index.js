@@ -6,6 +6,7 @@ import {
   Card,
   Container,
   Grid,
+  Stack,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -92,7 +93,9 @@ const Overview = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getTotalStatistics(date?.toISOString()));
+    dispatch(
+      getTotalStatistics({ filter: date?.toISOString(), personal: true })
+    );
   }, [date]);
 
   const update = () => {
@@ -178,6 +181,11 @@ const Overview = () => {
             </Grid>
             <Grid item xs={12}>
               <Card>
+                <Stack p={2}>
+                  <Typography color={"textSecondary"} variant="h5">
+                    Uploads statistics
+                  </Typography>
+                </Stack>
                 <Box sx={{ borderBottom: 1, borderColor: "divider", px: 2 }}>
                   <Tabs
                     value={value}
@@ -190,10 +198,20 @@ const Overview = () => {
                   </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                  <FinanceCostBreakdown date={date} setDate={setDate} />
+                  <FinanceCostBreakdown
+                    value={value}
+                    personal={true}
+                    date={date}
+                    setDate={setDate}
+                  />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                  <FinanceCostBreakdown date={date} setDate={setDate} />
+                  <FinanceCostBreakdown
+                    value={value}
+                    personal={false}
+                    date={date}
+                    setDate={setDate}
+                  />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                   <CompanyOverCiew date={date} setDate={setDate} />

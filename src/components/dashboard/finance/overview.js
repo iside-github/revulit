@@ -1,7 +1,15 @@
 import { Stack } from "@mui/system";
 import { Chart } from "../../chart";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Field, reduxForm } from "redux-form";
+import { LoadingButton } from "@mui/lab";
+import { Grid } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { getCompanyOverViewStats } from "redux-store/report/slice";
+import { useEffect } from "react";
+import { format } from "date-fns";
 
-const CompanyOverCiew = () => {
+const CompanyOverCiew = ({ handleSubmit }) => {
   var options = {
     series: [
       {
@@ -84,16 +92,147 @@ const CompanyOverCiew = () => {
     },
   };
 
-  return (
-    <Stack id="chart">
-      <Chart
-        height={350}
-        options={options}
-        series={options?.series}
-        type="bar"
+  const dispatch = useDispatch();
+  const isOverviewLoading = useSelector(
+    (state) => state.report.isOverviewLoading
+  );
+  const categories = useSelector((state) => state.category.list);
+  const overviewList = useSelector((state) => state.report.overview);
+
+  useEffect(() => {
+    dispatch(getCompanyOverViewStats());
+  }, []);
+
+  const getDataForGraph = () => {
+    let list = overviewList ? [...overviewList]?.reverse() : [];
+    const rArray = [];
+    categories?.forEach((cat) => {
+      const itemOBJ = {};
+      itemOBJ["name"] = cat?.category_title;
+      const itemValues = [];
+      list?.forEach((item) => {
+        itemValues.push(item?.statistics[cat?.category_id] ? item?.statistics[cat?.category_id] : 0)
+      });
+      itemOBJ["data"] = itemValues;
+      rArray.push(itemOBJ);
+    });
+    return rArray;
+  };
+
+  const getDays = () => {
+    const daysList = [];
+    let list = overviewList ? [...overviewList]?.reverse() : [];
+    list?.forEach((item) => {
+      daysList.push(format(new Date(item?.day), "dd"));
+    });
+    return daysList;
+  };
+
+  const handleDateFilter = (values) => {
+    dispatch(
+      getCompanyOverViewStats({
+        startDate: values?.startTime?.toISOString(),
+        endDate: values?.endTime?.toISOString(),
+      })
+    );
+  };
+
+  const CustomDatePicker = ({ label, input, classes, meta, ...custom }) => {
+    return (
+      <DatePicker
+        label={label}
+        placeholder={label}
+        {...input}
+        {...custom}
+        slotProps={{
+          textField: {
+            fullWidth: true,
+            size: "small",
+            helperText: meta.touched ? meta.error : null,
+            error: meta.touched ? meta.invalid : null,
+          },
+        }}
       />
+    );
+  };
+
+  return (
+    <Stack>
+      <Stack direction={"row"} p={2} justifyContent="flex-end" gap={2}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={5}>
+            <Field
+              component={CustomDatePicker}
+              label="Start time"
+              name="startTime"
+              size="small"
+            />
+          </Grid>
+          <Grid item xs={12} md={5}>
+            <Field
+              component={CustomDatePicker}
+              label="End time"
+              name="endTime"
+              size="small"
+            />
+          </Grid>
+          <Grid item xs={12} md={2}>
+            <LoadingButton
+              loading={isOverviewLoading}
+              onClick={handleSubmit(handleDateFilter)}
+              sx={{ width: "100%" }}
+              variant="contained"
+            >
+              Filter
+            </LoadingButton>
+          </Grid>
+        </Grid>
+      </Stack>
+      <div id="chart">
+        <Chart
+          type="bar"
+          height={560}
+          series={getDataForGraph()}
+          options={{
+            title: {
+              text: "",
+            },
+            chart: {
+              stacked: true,
+              type: "bar",
+            },
+            xaxis: {
+              title: { text: "Days" },
+              categories: getDays(),
+            },
+            yaxis: {
+              title: { text: "Articles count" },
+            },
+            legend: {
+              position: "top"
+            },
+            dataLabels: {
+              enabled: true
+            }
+          }}
+        />
+      </div>
     </Stack>
   );
 };
 
-export default CompanyOverCiew;
+function validate(values) {
+  let errors = {};
+  const requiredFields = ["startTime", "endTime"];
+  requiredFields.forEach((field) => {
+    if (!values[field]) {
+      errors[field] = "Field is required!";
+    }
+  });
+  return errors;
+}
+
+export default reduxForm({
+  form: "company_overview",
+  validate,
+})(CompanyOverCiew);

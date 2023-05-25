@@ -231,8 +231,24 @@ export async function updateUserOldPassword(data) {
 
 export async function getTotalStats(query) {
   try {
-    const result = await axios.get(`/api/admin/statistics?filter=${query}`, {
-      withCredentials: true,
+    const result = await axios.get(
+      `/api/admin/user/statistics?filter=${query?.filter}&&personal=${query?.personal}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getOverView(query) {
+  try {
+    const result = await axios({
+      url: "/api/admin/user/multi-statistics",
+      method: "GET",
+      params: query,
     });
     return result.data;
   } catch (error) {

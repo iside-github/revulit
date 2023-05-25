@@ -13,8 +13,9 @@ import { useTheme } from "@mui/material/styles";
 import { Chart } from "../../chart";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Stack } from "@mui/system";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { getTotalStatistics } from "redux-store/report/slice";
 const colorCodes = [
   "#FF6384",
   "#36A2EB",
@@ -34,6 +35,7 @@ const colorCodes = [
 ];
 
 export const FinanceCostBreakdown = (props) => {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const [data, setData] = useState({ series: [] });
   const categories = useSelector((state) => state.category.list);
@@ -94,6 +96,14 @@ export const FinanceCostBreakdown = (props) => {
     },
   };
 
+  useEffect(() => {
+    if (props?.personal !== "undefined") {
+      dispatch(
+        getTotalStatistics({ filter: undefined, personal: props.personal })
+      );
+    }
+  }, [props?.personal]);
+
   const chartSeries = data.series.map((item) => item.data);
 
   return (
@@ -105,8 +115,14 @@ export const FinanceCostBreakdown = (props) => {
         p={2}
       >
         <DatePicker
+          label="Select the time"
           value={props.date}
           onChange={(newValue) => props.setDate(newValue)}
+          slotProps={{
+            textField: {
+              size: "small",
+            },
+          }}
         />
       </Stack>
       <CardContent>
