@@ -28,11 +28,15 @@ handler.get(async (req, res) => {
         }
         await db.disconnect();
 
-        const data = days.map(async (day) => {
-            return {
-                day,
-                statistics: await getStatistics(day, admin.company._id),
-            };
+        const data = await new Promise((resolve) => {
+            const statistics = days.map(async (day) => {
+                return {
+                    day,
+                    statistics: await getStatistics(day, admin.company._id),
+                };
+            });
+
+            resolve(statistics);
         });
 
         Promise.all(data).then((values) => {
