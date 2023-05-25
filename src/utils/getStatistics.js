@@ -22,8 +22,7 @@ export const getStatistics = async (day, userId) => {
             $gte: startDate,
             $lt: endDate,
         },
-    }).select('-html');
-    console.log(reports);
+    }).select('categories');
     await db.disconnect();
 
     reports.forEach((report) => {

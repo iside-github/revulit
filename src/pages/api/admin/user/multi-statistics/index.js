@@ -13,33 +13,30 @@ handler.use(isAuth);
 handler.get(async (req, res) => {
     try {
         const { startTime, endTime } = req.query;
+
         await db.connect();
         const admin = await User.findById(req.user.user.user._id).populate({
             path: 'company',
             select: 'name',
         });
-        var reports, days;
+        var days;
 
         if (startTime && endTime) {
-            reports = await Reports.find({
-                company: admin.company._id,
-                createdAt: { $gt: startTime, $lt: endTime },
-            }).select('categories');
-
-            days = getDays(
-                reports[0].createdAt,
-                reports[reports.length - 1].createdAt
-            );
+            days = getDays(startTime, endTime);
         } else {
             days = getDatesBeforeToday(10);
         }
         await db.disconnect();
 
-        const data = days.map(async (day) => {
-            return {
-                day,
-                statistics: await getStatistics(day, admin.company._id),
-            };
+        const data = await new Promise((resolve) => {
+            const statistics = days.map(async (day) => {
+                return {
+                    day,
+                    statistics: await getStatistics(day, admin.company._id),
+                };
+            });
+
+            resolve(statistics);
         });
 
         Promise.all(data).then((values) => {
