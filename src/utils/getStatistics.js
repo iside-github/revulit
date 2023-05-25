@@ -23,7 +23,6 @@ export const getStatistics = async (day, userId) => {
             $lt: endDate,
         },
     }).select('-html');
-    console.log(reports);
     await db.disconnect();
 
     reports.forEach((report) => {
