@@ -193,8 +193,7 @@ const Overview = () => {
                     aria-label="basic tabs example"
                   >
                     <Tab label="User statistics" {...a11yProps(0)} />
-                    <Tab label="Company statistics" {...a11yProps(1)} />
-                    <Tab label="Company overview" {...a11yProps(2)} />
+                    <Tab label="Company overview" {...a11yProps(1)} />
                   </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
@@ -206,14 +205,6 @@ const Overview = () => {
                   />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                  <FinanceCostBreakdown
-                    value={value}
-                    personal={false}
-                    date={date}
-                    setDate={setDate}
-                  />
-                </TabPanel>
-                <TabPanel value={value} index={2}>
                   <CompanyOverCiew date={date} setDate={setDate} />
                 </TabPanel>
               </Card>

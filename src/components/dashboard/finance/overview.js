@@ -104,7 +104,7 @@ const CompanyOverCiew = ({ handleSubmit }) => {
   }, []);
 
   const getDataForGraph = () => {
-    let list = overviewList ? [...overviewList]?.reverse() : [];
+    let list = overviewList ? [...overviewList] : [];
     const rArray = [];
     categories?.forEach((cat) => {
       const itemOBJ = {};
@@ -121,7 +121,7 @@ const CompanyOverCiew = ({ handleSubmit }) => {
 
   const getDays = () => {
     const daysList = [];
-    let list = overviewList ? [...overviewList]?.reverse() : [];
+    let list = overviewList ? [...overviewList] : [];
     list?.forEach((item) => {
       daysList.push(format(new Date(item?.day), "dd"));
     });
@@ -195,7 +195,7 @@ const CompanyOverCiew = ({ handleSubmit }) => {
           series={getDataForGraph()}
           options={{
             title: {
-              text: "",
+              text: "By default last 10 days statistics are shown",
             },
             chart: {
               stacked: true,

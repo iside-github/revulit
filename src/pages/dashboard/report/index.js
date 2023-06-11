@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import {
+  Avatar,
   Box,
   Button,
   Card,
   Container,
+  Divider,
   Grid,
   InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
 import { DashboardLayout } from "../../../components/dashboard/dashboard-layout";
-import { ReportsTable } from "components/dashboard/report/reportTable";
 import { Download as DownloadIcon } from "../../../icons/download";
 import { Search as SearchIcon } from "../../../icons/search";
 import { gtm } from "../../../lib/gtm";
@@ -20,7 +21,11 @@ import { getCompanyReports } from "redux-store/report/slice";
 import { useDispatch, useSelector } from "react-redux";
 import LoaderComponent from "components/dashboard/bindings/loader";
 import EmptyComponent from "components/dashboard/bindings/empty";
-
+import Link from "next/link";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { getCategories } from "redux-store/category/index.slice";
+import { format } from "date-fns";
+import { Stack } from "@mui/system";
 
 const applyFilters = (customers, filters) =>
   customers.filter((customer) => {
@@ -30,7 +35,9 @@ const applyFilters = (customers, filters) =>
 
       properties.forEach((property) => {
         if (
-          customer["user"][property].toLowerCase().includes(filters.query.toLowerCase())
+          customer["user"][property]
+            .toLowerCase()
+            .includes(filters.query.toLowerCase())
         ) {
           queryMatched = true;
         }
@@ -94,15 +101,11 @@ const applySort = (customers, sort) => {
   return stabilizedThis.map((el) => el[0]);
 };
 
-const applyPagination = (customers, page, rowsPerPage) =>
-  customers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
 const ReportsPage = () => {
   const reports = useSelector((state) => state.report.list);
+  const catis = useSelector((state) => state.category.list);
   const isLoading = useSelector((state) => state.report.isLoading);
   const queryRef = useRef(null);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [filters, setFilters] = useState({
     query: "",
     hasAcceptedMarketing: undefined,
@@ -119,6 +122,7 @@ const ReportsPage = () => {
   useEffect(
     () => {
       dispatch(getCompanyReports());
+      dispatch(getCategories());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -132,22 +136,116 @@ const ReportsPage = () => {
     }));
   };
 
-
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-  };
-
   // Usually query is done on backend with indexing solutions
   const filteredCustomers = applyFilters(reports, filters);
-  const paginatedCustomers = applyPagination(
-    filteredCustomers,
-    page,
-    rowsPerPage
-  );
+
+  const generateColumns = () => {
+    const cols = [
+      {
+        field: "user",
+        headerName: "User",
+        width: 280,
+        renderCell: (cellValues) => {
+          console.log(cellValues);
+          return (
+            <Stack direction="row" alignItems="center" gap={2}>
+              <Avatar src="/static/avatar.png" />
+              <Stack>
+                <Typography color="textSecondary" variant="subtitle1">
+                  {cellValues?.formattedValue?.name}
+                </Typography>
+                <Typography color="textSecondary" variant="body2">
+                  {cellValues?.formattedValue?.email}
+                </Typography>
+              </Stack>
+            </Stack>
+          );
+        },
+      },
+      {
+        field: "createdAt",
+        headerName: "Upload time",
+        width: 170,
+      },
+      {
+        field: "file_name",
+        headerName: "File name",
+        width: 250,
+      },
+      {
+        field: "total",
+        headerName: "Total",
+        type: "number",
+        width: 120,
+        renderCell: (cellValues) => {
+          return (
+            <Typography
+              component="a"
+              href={`/dashboard/html/total?report=${cellValues?.id}&&categoryName=Total`}
+              color="primary.main"
+              variant="subtitle2"
+              sx={{ textDecoration: "underline" }}
+            >
+              {cellValues?.formattedValue ? cellValues?.formattedValue : 0}
+            </Typography>
+          );
+        },
+      },
+    ];
+    catis?.forEach((item) => {
+      cols.push({
+        field: item?.category_id,
+        headerName: item?.category_title,
+        type: "number",
+        width: 120,
+        renderCell: (cellValues) => {
+          return (
+            <Typography
+              component="a"
+              href={`/dashboard/html/${item?.category_id}?report=${cellValues?.id}&&categoryName=${item?.category_title}`}
+              color="primary.main"
+              variant="subtitle2"
+              sx={{ textDecoration: "underline" }}
+            >
+              {cellValues?.formattedValue ? cellValues?.formattedValue : 0}
+            </Typography>
+          );
+        },
+      });
+    });
+    return cols;
+  };
+
+  const generateRows = () => {
+    const rws = [];
+    let fsCusts = filteredCustomers ? [...filteredCustomers] : [];
+    fsCusts?.forEach((item) => {
+      const oBJ = {
+        id: item?._id,
+        user: item?.user,
+        createdAt: item?.createdAt
+          ? format(new Date(item?.createdAt), "dd-MMM, yyyy HH:mm")
+          : "",
+        file_name: item?.file_name,
+        total: item?.categories?.find((item) => item?.category_id === "total")
+          ?.category_count
+          ? item?.categories?.find((item) => item?.category_id === "total")
+              ?.category_count
+          : 0,
+      };
+      catis?.forEach((item2) => {
+        oBJ[item2?.category_id] = item?.categories?.find(
+          (item) => item?.category_id === item2?.category_id
+        )?.category_count
+          ? item?.categories?.find(
+              (item) => item?.category_id === item2?.category_id
+            )?.category_count
+          : 0;
+      });
+      rws.push(oBJ);
+    });
+    return rws;
+  };
 
   return (
     <>
@@ -168,13 +266,6 @@ const ReportsPage = () => {
                 <Typography variant="h4">Reports</Typography>
               </Grid>
               <Grid item>
-                <Button
-                  startIcon={<DownloadIcon fontSize="small" />}
-                  sx={{ m: 1 }}
-                  variant="contained"
-                >
-                  Export
-                </Button>
               </Grid>
             </Grid>
           </Box>
@@ -212,13 +303,15 @@ const ReportsPage = () => {
                   />
                 </Box>
               </Box>
-              <ReportsTable
-                customers={paginatedCustomers}
-                customersCount={filteredCustomers.length}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleRowsPerPageChange}
-                rowsPerPage={rowsPerPage}
-                page={page}
+              <Divider />
+              <DataGrid
+                slots={{
+                  toolbar: GridToolbar,
+                }}
+                rows={generateRows()}
+                columns={generateColumns()}
+                pageSize={10}
+                rowsPerPageOptions={[5, 6, 7, 10]}
               />
             </Card>
           ) : isLoading ? (

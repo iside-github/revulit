@@ -108,20 +108,20 @@ export const ReportsTable = (props) => {
                   User
                 </TableSortLabel>
               </TableCell>
-              <TableCell sortDirection={orderBy === "name" ? order : false}>
+              <TableCell sortDirection={orderBy === "name" ? order : ""}>
                 <TableSortLabel
-                  active={orderBy === "name"}
-                  direction={orderBy === "name" ? order : false}
-                  onClick={createSortHandler("name")}
+                  active={orderBy === "createdAt"}
+                  direction={orderBy === "createdAt" ? order : ""}
+                  onClick={createSortHandler("createdAt")}
                 >
                   Uploaded time
                 </TableSortLabel>
               </TableCell>
-              <TableCell sortDirection={orderBy === "name" ? order : false}>
+              <TableCell sortDirection={orderBy === "name" ? order : ""}>
                 <TableSortLabel
-                  active={orderBy === "name"}
-                  direction={orderBy === "name" ? order : false}
-                  onClick={createSortHandler("name")}
+                  active={orderBy === "file_name"}
+                  direction={orderBy === "file_name" ? order : ""}
+                  onClick={createSortHandler("file_name")}
                 >
                   File name
                 </TableSortLabel>
