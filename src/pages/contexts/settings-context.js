@@ -1,27 +1,27 @@
-import { createContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { createContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 const initialSettings = {
-  direction: 'ltr',
+  direction: "ltr",
   responsiveFontSizes: true,
-  theme: 'light'
+  theme: "light",
 };
 
 export const restoreSettings = () => {
   let settings = null;
 
   try {
-    const storedData = globalThis.localStorage.getItem('settings');
+    const storedData = globalThis.localStorage.getItem("settings");
 
     if (storedData) {
       settings = JSON.parse(storedData);
     } else {
       settings = {
-        direction: 'ltr',
+        direction: "ltr",
         responsiveFontSizes: true,
-        theme: globalThis.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
+        theme: globalThis.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light",
       };
     }
   } catch (err) {
@@ -34,12 +34,12 @@ export const restoreSettings = () => {
 };
 
 export const storeSettings = (settings) => {
-  globalThis.localStorage.setItem('settings', JSON.stringify(settings));
+  globalThis.localStorage.setItem("settings", JSON.stringify(settings));
 };
 
 export const SettingsContext = createContext({
   settings: initialSettings,
-  saveSettings: () => { }
+  saveSettings: () => {},
 });
 
 export const SettingsProvider = (props) => {
@@ -63,7 +63,7 @@ export const SettingsProvider = (props) => {
     <SettingsContext.Provider
       value={{
         settings,
-        saveSettings
+        saveSettings,
       }}
     >
       {children}
@@ -72,7 +72,11 @@ export const SettingsProvider = (props) => {
 };
 
 SettingsProvider.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export const SettingsConsumer = SettingsContext.Consumer;
+
+export default function SetsConsumer() {
+  return null;
+}
