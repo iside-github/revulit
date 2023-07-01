@@ -49,12 +49,12 @@ export default NextAuth({
                     throw new Error('Your profile is blocked');
                 const token = signToken(userData);
                 const { ipAddress, deviceName } = getDeviceInfo(req);
-                const session = new Session({
-                    ip_address: ipAddress,
-                    device: deviceName,
-                    user: userData._id,
-                });
-                await session.save();
+                // const session = new Session({
+                //     ip_address: ipAddress,
+                //     device: deviceName,
+                //     user: userData._id,
+                // });
+                // await session.save();
                 await db.disconnect();
 
                 // Return the user object along with the token
