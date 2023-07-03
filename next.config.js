@@ -30,6 +30,4 @@ const withTM = require('next-transpile-modules')([
   '@fullcalendar/timeline'
 ]);
 
-module.exports = { output: "standalone",
-                  withTM(config)
-                    };
+module.exports = withTM(config);
