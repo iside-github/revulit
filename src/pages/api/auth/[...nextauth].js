@@ -13,6 +13,7 @@ export default NextAuth({
     session: {
         strategy: 'jwt',
         maxAge: 30 * 24 * 60 * 60 * 60 * 60,
+        jwt: true,
     },
     jwt: {
         secret: process.env.JWT_SECRET_KEY,
@@ -27,6 +28,7 @@ export default NextAuth({
     },
     providers: [
         CredentialsProvider({
+            id: "email-login",
             name: 'Credentials',
             credentials: {
                 email: { label: 'email', type: 'text' },
