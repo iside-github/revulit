@@ -23,7 +23,7 @@ export const JWTLogin = (props) => {
       password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
-      const result = await signIn("credentials", {
+      const result = await signIn("email-login", {
         email: values.email,
         password: values.password,
         redirect: false,

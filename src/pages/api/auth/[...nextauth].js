@@ -10,9 +10,11 @@ import { getDeviceInfo } from '../../../utils/getDeviceInfo';
 import * as jwt from 'jsonwebtoken';
 
 export default NextAuth({
+    site: process.env.NEXTAUTH_URL,
     session: {
         strategy: 'jwt',
         maxAge: 30 * 24 * 60 * 60 * 60 * 60,
+        jwt: true,
     },
     jwt: {
         secret: process.env.JWT_SECRET_KEY,
@@ -27,6 +29,7 @@ export default NextAuth({
     },
     providers: [
         CredentialsProvider({
+            id: "email-login",
             name: 'Credentials',
             credentials: {
                 email: { label: 'email', type: 'text' },
@@ -35,7 +38,6 @@ export default NextAuth({
             async authorize(credentials, req) {
                 adminCreator();
                 await db.connect();
-                console.log(credentials);
                 const userData = await User.findOne({
                     email: credentials.email,
                 });
