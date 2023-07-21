@@ -4,10 +4,11 @@ import Files from '../../../models/files';
 import Reports from '../../../models/reports';
 import User from '../../../models/user';
 import { isAuth } from '../../../utils/auth';
-import { resText } from '../../../components/res';
 import { htmlResolver } from '../../../utils/htmlReader';
 import { categoryCreator } from '../../../utils/categoryCreator';
 import multer from 'multer';
+import axios from 'axios';
+import { createReadStream } from 'fs';
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -75,23 +76,38 @@ handler.post(async (req, res) => {
             user: user._id,
         });
         await file.save();
+        const formData = new FormData();
+        formData.append('file', createReadStream(req.file.path));
+
+        const response = await axios.post(
+            'https://97.74.95.51:8080',
+            formData,
+            {
+                headers: formData.getHeaders(),
+            }
+        );
+
+        console.log(response);
 
         const ct = await htmlResolver(resText);
 
-        const categories = categoryCreator(ct);
-        const repo = new Reports({
-            file_name: req.file.originalname,
-            file_src: req.file.filename,
-            html: resText,
-            user: user._id,
-            company: user.company,
-            categories,
-        });
-        await repo.save();
+        // const categories = categoryCreator(ct);
+        // const repo = new Reports({
+        //     file_name: req.file.originalname,
+        //     file_src: req.file.filename,
+        //     html: resText,
+        //     user: user._id,
+        //     company: user.company,
+        //     categories,
+        // });
+        // await repo.save();
 
         await db.disconnect();
 
-        res.status(200).send({ categories, id: repo._id });
+        // res.status(200).send({ categories, id: repo._id });
+        res.status(200).send({
+            message: 'dvdsgsjognrsogs',
+        });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
