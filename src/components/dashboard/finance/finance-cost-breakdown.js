@@ -77,14 +77,14 @@ export const FinanceCostBreakdown = (props) => {
         show: false,
       },
     },
-    colors: data.series.map((item) => item.color),
+    colors: data.series?.map((item) => item.color),
     dataLabels: {
       enabled: false,
     },
     fill: {
       opacity: 1,
     },
-    labels: data.series.map((item) => item.label),
+    labels: data.series?.map((item) => item.label),
     legend: {
       show: false,
     },
@@ -104,7 +104,7 @@ export const FinanceCostBreakdown = (props) => {
     }
   }, [props?.personal]);
 
-  const chartSeries = data.series.map((item) => item.data);
+  const chartSeries = data.series?.map((item) => item.data);
 
   return (
     <Stack>
@@ -141,7 +141,7 @@ export const FinanceCostBreakdown = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.series.map((item) => (
+          {data.series?.map((item) => (
             <TableRow key={item.label}>
               <TableCell>
                 <Box

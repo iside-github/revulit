@@ -66,7 +66,7 @@ export const ReportsTable = (props) => {
   }
 
   useEffect(() => {
-    const categories = customers.map((categ) => {
+    const categories = customers?.map((categ) => {
       if (categ?.categories) {
         return categ?.categories;
       } else {
@@ -126,13 +126,13 @@ export const ReportsTable = (props) => {
                   File name
                 </TableSortLabel>
               </TableCell>
-              {category?.map((cate, indx) => {
+              {category??.map((cate, indx) => {
                 return <TableCell key={indx}>{cate?.category_title}</TableCell>;
               })}
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((customer) => {
+            {customers?.map((customer) => {
               const isCustomerSelected = selectedCustomers.includes(
                 customer.id
               );
@@ -192,7 +192,7 @@ export const ReportsTable = (props) => {
                       {customer?.file_name}
                     </Typography>
                   </TableCell>
-                  {customer?.categories?.map((cat) => {
+                  {customer?.categories??.map((cat) => {
                     return (
                       <TableCell key={cat?._id}>
                         <Typography

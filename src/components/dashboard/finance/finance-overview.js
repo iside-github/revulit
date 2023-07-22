@@ -44,13 +44,13 @@ export const FinanceOverview = (props) => {
     },
   ];
   const restCats = fileData?.categories;
-  const existCats = result.map((itd) => itd.category);
+  const existCats = result?.map((itd) => itd.category);
   const filteredCats = restCats?.filter(
     (item) => !existCats.includes(item?.category_id)
   );
   return (
     <Grid container spacing={1}>
-      {result.map((item) => (
+      {result?.map((item) => (
         <Grid
           item
           md={3}
@@ -116,7 +116,7 @@ export const FinanceOverview = (props) => {
           </Card>
         </Grid>
       ))}
-      {filteredCats?.map((item) => (
+      {filteredCats??.map((item) => (
         <Grid
           item
           md={3}

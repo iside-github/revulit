@@ -199,7 +199,7 @@ export const DashboardSidebar = (props) => {
           />
           <Box sx={{ flexGrow: 1 }}>
             {user?.roles?.includes("superadmin")
-              ? sections2.map((section) => (
+              ? sections2?.map((section) => (
                   <DashboardSidebarSection
                     key={section.title}
                     path={router.asPath}
@@ -213,7 +213,7 @@ export const DashboardSidebar = (props) => {
                   />
                 ))
               : user?.roles?.includes("admin")
-              ? sections1.map((section) => (
+              ? sections1?.map((section) => (
                   <DashboardSidebarSection
                     key={section.title}
                     path={router.asPath}
@@ -226,7 +226,7 @@ export const DashboardSidebar = (props) => {
                     {...section}
                   />
                 ))
-              : sections.map((section) => (
+              : sections?.map((section) => (
                   <DashboardSidebarSection
                     key={section.title}
                     path={router.asPath}

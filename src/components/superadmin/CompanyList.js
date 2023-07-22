@@ -86,7 +86,7 @@ export const CompanyListTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.map((customer) => {
+              {customers?.map((customer) => {
                 return (
                   <TableRow hover key={customer.id}>
                     <TableCell>#{customer?.uid}</TableCell>

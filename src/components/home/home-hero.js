@@ -60,7 +60,7 @@ export const HomeHero = (props) => {
           <Typography color="textSecondary" variant="caption">
             Available For:
           </Typography>
-          {["Businesses", "Medicals", "Companies", "Labaratories"].map(
+          {["Businesses", "Medicals", "Companies", "Labaratories"]?.map(
             (item) => (
               <Box
                 key={item}

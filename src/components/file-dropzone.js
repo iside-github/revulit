@@ -116,7 +116,7 @@ export const FileDropzone = (props) => {
       {files.length > 0 && (
         <Box sx={{ mt: 2 }}>
           <List>
-            {files.map((file) => (
+            {files?.map((file) => (
               <ListItem
                 key={file.path}
                 sx={{

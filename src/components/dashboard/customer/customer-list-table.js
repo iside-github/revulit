@@ -42,7 +42,7 @@ export const CustomerListTable = (props) => {
 
   const handleSelectAllCustomers = (event) => {
     setSelectedCustomers(
-      event.target.checked ? customers.map((customer) => customer.id) : []
+      event.target.checked ? customers?.map((customer) => customer.id) : []
     );
   };
 
@@ -78,7 +78,7 @@ export const CustomerListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((customer) => {
+            {customers?.map((customer) => {
               const isCustomerSelected = selectedCustomers.includes(
                 customer.id
               );

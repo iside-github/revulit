@@ -96,7 +96,7 @@ export const Footer = (props) => (
             © 2021 Revliterature.
           </Typography>
         </Grid>
-        {sections.map((section, index) => (
+        {sections?.map((section, index) => (
           <Grid
             item
             key={section.title}
@@ -114,7 +114,7 @@ export const Footer = (props) => (
               {section.title}
             </Typography>
             <List disablePadding>
-              {section.links.map((link) => (
+              {section.links?.map((link) => (
                 <ListItem
                   disableGutters
                   key={link.title}

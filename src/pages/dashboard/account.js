@@ -48,7 +48,7 @@ const Account = () => {
             variant="scrollable"
             sx={{ mt: 3 }}
           >
-            {tabs.map((tab) => (
+            {tabs?.map((tab) => (
               <Tab key={tab.value} label={tab.label} value={tab.value} />
             ))}
           </Tabs>

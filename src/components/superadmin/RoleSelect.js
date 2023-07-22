@@ -62,7 +62,7 @@ export default function RoleSelectInput({
         renderValue={(selected) => selected.join(", ")}
         MenuProps={MenuProps}
       >
-        {roles.map((role) => (
+        {roles?.map((role) => (
           <MenuItem key={role.role} value={role.role}>
             <Checkbox checked={input.value.includes(role.role)} />
             <ListItemText primary={role.title} />

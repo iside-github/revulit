@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Box, Grid } from '@mui/material';
-import { socialApi } from '../../../__fake-api__/social-api';
-import { useMounted } from '../../../hooks/use-mounted';
-import { SocialPostAdd } from './social-post-add';
-import { SocialPostCard } from './social-post-card';
-import { SocialAbout } from './social-about';
+import { useCallback, useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { Box, Grid } from "@mui/material";
+import { socialApi } from "../../../__fake-api__/social-api";
+import { useMounted } from "../../../hooks/use-mounted";
+import { SocialPostAdd } from "./social-post-add";
+import { SocialPostCard } from "./social-post-card";
+import { SocialAbout } from "./social-about";
 
 export const SocialTimeline = (props) => {
   const isMounted = useMounted();
@@ -30,15 +30,8 @@ export const SocialTimeline = (props) => {
 
   return (
     <div {...other}>
-      <Grid
-        container
-        spacing={4}
-      >
-        <Grid
-          item
-          lg={4}
-          xs={12}
-        >
+      <Grid container spacing={4}>
+        <Grid item lg={4} xs={12}>
           <SocialAbout
             currentCity={profile.currentCity}
             currentJobCompany={profile.currentJobCompany}
@@ -51,17 +44,10 @@ export const SocialTimeline = (props) => {
             quote={profile.quote}
           />
         </Grid>
-        <Grid
-          item
-          lg={8}
-          xs={12}
-        >
+        <Grid item lg={8} xs={12}>
           <SocialPostAdd />
-          {posts.map((post) => (
-            <Box
-              key={post.id}
-              sx={{ mt: 3 }}
-            >
+          {posts?.map((post) => (
+            <Box key={post.id} sx={{ mt: 3 }}>
               <SocialPostCard
                 authorAvatar={post.author.avatar}
                 authorName={post.author.name}
@@ -81,5 +67,5 @@ export const SocialTimeline = (props) => {
 };
 
 SocialTimeline.propTypes = {
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };

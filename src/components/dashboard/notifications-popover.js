@@ -158,7 +158,7 @@ export const NotificationsPopover = (props) => {
 
   const handleMarkAllAsRead = () => {
     setNotifications((prevState) =>
-      prevState.map((notification) => ({
+      prevState?.map((notification) => ({
         ...notification,
         read: true,
       }))
@@ -217,7 +217,7 @@ export const NotificationsPopover = (props) => {
       ) : (
         <Scrollbar sx={{ maxHeight: 400 }}>
           <List disablePadding>
-            {notifications.map((notification) => (
+            {notifications?.map((notification) => (
               <ListItem
                 divider
                 key={notification.id}

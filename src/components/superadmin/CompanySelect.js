@@ -28,7 +28,7 @@ export default function CompanySelectInout({
         {...input}
         {...custom}
       >
-        {companiesList.map((com) => (
+        {companiesList?.map((com) => (
           <MenuItem key={com.uid} value={com._id}>
             {com.name}
           </MenuItem>

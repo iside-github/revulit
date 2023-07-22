@@ -90,7 +90,7 @@ const getComparator = (sortDir, sortBy) =>
 const applySort = (customers, sort) => {
   const [sortBy, sortDir] = sort.split("|");
   const comparator = getComparator(sortDir, sortBy);
-  const stabilizedThis = customers.map((el, index) => [el, index]);
+  const stabilizedThis = customers?.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
     const newOrder = comparator(a[0], b[0]);
@@ -102,7 +102,7 @@ const applySort = (customers, sort) => {
     return a[1] - b[1];
   });
 
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis?.map((el) => el[0]);
 };
 
 const applyPagination = (customers, page, rowsPerPage) =>
@@ -251,7 +251,7 @@ const CustomerList = () => {
                 sx={{ m: 1.5 }}
                 value={sort}
               >
-                {sortOptions.map((option) => (
+                {sortOptions?.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>

@@ -8,7 +8,10 @@ import { htmlResolver } from '../../../utils/htmlReader';
 import { categoryCreator } from '../../../utils/categoryCreator';
 import multer from 'multer';
 import axios from 'axios';
+import https from "https";
 const FormData = require('form-data');
+
+
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -78,12 +81,16 @@ handler.post(async (req, res) => {
         await file.save();
         const formData = new FormData();
         formData.append('files', req.file.path);
-
+        const agent = new https.Agent({
+            rejectUnauthorized: false
+        });
+        console.log(formData, "___________________>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         const response = await axios.post(
             'https://97.74.95.51:8080/revleterature/upload',
             formData,
             {
                 headers: { ...formData.getHeaders() },
+                httpsAgent: agent
             }
         );
 

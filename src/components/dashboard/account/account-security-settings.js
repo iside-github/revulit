@@ -115,7 +115,7 @@ const AccountSecuritySettings = ({ handleSubmit }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {history?.map((each) => (
+              {history??.map((each) => (
                 <TableRow>
                   <TableCell>
                     <Typography variant="subtitle2">
