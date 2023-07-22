@@ -116,7 +116,7 @@ export const FinanceOverview = (props) => {
           </Card>
         </Grid>
       ))}
-      {filteredCats??.map((item) => (
+      {filteredCats?.map((item) => (
         <Grid
           item
           md={3}

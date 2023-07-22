@@ -52,14 +52,14 @@ export const FinanceProfitableProducts = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>Transaction</TableCell>
-                {selectedReport??.map((rep) => {
+                {selectedReport?.map((rep) => {
                   return <TableCell>{rep?.category_title}</TableCell>;
                 })}
                 <TableCell align="right">Time</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {reports??.map((product) => (
+              {reports?.map((product) => (
                 <TableRow hover key={product.id}>
                   <TableCell>
                     <Box
@@ -116,7 +116,7 @@ export const FinanceProfitableProducts = (props) => {
                       </Box>
                     </Box>
                   </TableCell>
-                  {selectedReport??.map((rep) => {
+                  {selectedReport?.map((rep) => {
                     return (
                       <TableCell>
                         <Typography
