@@ -35,7 +35,7 @@ const isAuth = async (req, res, next) => {
                     return res
                         .status(401)
                         .json({ message: 'User profile was blocked' });
-                if (user.company.isBlock)
+                if (user.company?.isBlock)
                     return res
                         .status(401)
                         .json({ message: 'Company was blocked' });
