@@ -5,16 +5,14 @@ import User from '../../../models/user';
 import Session from '../../../models/sessions';
 import db from '../../../utils/db';
 import { signToken } from '../../../utils/auth';
-import { adminCreator } from '../../../utils/superAdminCreator';
-import { getDeviceInfo } from '../../../utils/getDeviceInfo';
+import useragent from 'express-useragent';
 import * as jwt from 'jsonwebtoken';
+import { adminCreator } from 'utils/superAdminCreator';
 
 export default NextAuth({
-    site: process.env.NEXTAUTH_URL,
     session: {
         strategy: 'jwt',
         maxAge: 30 * 24 * 60 * 60 * 60 * 60,
-        jwt: true,
     },
     jwt: {
         secret: process.env.JWT_SECRET_KEY,
@@ -29,14 +27,13 @@ export default NextAuth({
     },
     providers: [
         CredentialsProvider({
-            id: "email-login",
             name: 'Credentials',
             credentials: {
                 email: { label: 'email', type: 'text' },
                 password: { label: 'password', type: 'password' },
             },
             async authorize(credentials, req) {
-                adminCreator();
+                await adminCreator();
                 await db.connect();
                 const userData = await User.findOne({
                     email: credentials.email,
@@ -50,15 +47,22 @@ export default NextAuth({
                 if (userData.isBlock)
                     throw new Error('Your profile is blocked');
                 const token = signToken(userData);
-                // const { ipAddress, deviceName } = getDeviceInfo(req);
-                // const session = new Session({
-                //     ip_address: ipAddress,
-                //     device: deviceName,
-                //     user: userData._id,
-                // });
-                // await session.save();
+                const userAgent = useragent.parse(req.headers['user-agent']);
+                const ipAddress =
+                    req.headers['x-forwarded-for'] ||
+                    req.connection?.remoteAddress ||
+                    'localhost';
+                console.log(ipAddress);
+                const deviceName = userAgent.source ?? 'unknown';
+                const session = new Session({
+                    ip_address: ipAddress,
+                    device: deviceName,
+                    user: userData._id,
+                });
+                await session.save();
                 await db.disconnect();
 
+                console.log(token);
                 // Return the user object along with the token
                 return {
                     user: {
