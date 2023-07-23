@@ -32,7 +32,7 @@ export const CustomerListTable = (props) => {
   // Reset selected customers when customers change
   useEffect(
     () => {
-      if (selectedCustomers.length) {
+      if (selectedCustomers?.length) {
         setSelectedCustomers([]);
       }
     },
@@ -56,10 +56,11 @@ export const CustomerListTable = (props) => {
     }
   };
 
-  const enableBulkActions = selectedCustomers.length > 0;
+  const enableBulkActions = selectedCustomers?.length > 0;
   const selectedSomeCustomers =
-    selectedCustomers.length > 0 && selectedCustomers.length < customers.length;
-  const selectedAllCustomers = selectedCustomers.length === customers.length;
+    selectedCustomers?.length > 0 &&
+    selectedCustomers?.length < customers?.length;
+  const selectedAllCustomers = selectedCustomers?.length === customers?.length;
 
   return (
     <div {...other}>

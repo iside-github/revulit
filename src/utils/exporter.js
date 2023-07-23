@@ -2,7 +2,7 @@ export default function download_table_as_csv(
   table_id = "dataframe",
   separator = ",",
   fname = "filename",
-  filtertype="filter"
+  filtertype = "filter"
 ) {
   // Select rows from table_id
   const toRemove = document.querySelectorAll(".to_remove");
@@ -10,10 +10,10 @@ export default function download_table_as_csv(
   var rows = document.querySelectorAll("table.dataframe" + " tr");
   // Construct csv
   var csv = [];
-  for (var i = 0; i < rows.length; i++) {
+  for (var i = 0; i < rows?.length; i++) {
     var row = [],
       cols = rows[i].querySelectorAll("td, th");
-    for (var j = 0; j < cols.length; j++) {
+    for (var j = 0; j < cols?.length; j++) {
       // Clean innertext to remove multiple spaces and jumpline (break csv)
       var data = cols[j].innerText
         .replace(/(\r\n|\n|\r)/gm, "")
@@ -29,7 +29,8 @@ export default function download_table_as_csv(
   // Download it
   var filename =
     "export_" + table_id + "_" + new Date().toLocaleDateString() + ".csv";
-  var filenma = fname + "-" + filtertype + "-" + new Date().toLocaleDateString() + ".csv";
+  var filenma =
+    fname + "-" + filtertype + "-" + new Date().toLocaleDateString() + ".csv";
   var link = document.createElement("a");
   link.style.display = "none";
   link.setAttribute("target", "_blank");

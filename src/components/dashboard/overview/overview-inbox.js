@@ -63,7 +63,7 @@ export const OverviewInbox = (props) => (
     <Divider />
     <List disablePadding>
       {messages?.map((message, index) => (
-        <ListItem divider={index + 1 < messages.length} key={message.id}>
+        <ListItem divider={index + 1 < messages?.length} key={message.id}>
           <ListItemAvatar>
             <Avatar src={message.senderAvatar} />
           </ListItemAvatar>

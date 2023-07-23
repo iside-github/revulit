@@ -23,9 +23,9 @@ export const FinanceProfitableProducts = (props) => {
     let largestIndex = -1;
     let selectedArray = null;
 
-    for (let i = 0; i < arrays.length; i++) {
+    for (let i = 0; i < arrays?.length; i++) {
       const currentArray = arrays[i];
-      const lastIndex = currentArray.length - 1;
+      const lastIndex = currentArray?.length - 1;
 
       if (lastIndex > largestIndex) {
         largestIndex = lastIndex;
@@ -141,7 +141,7 @@ export const FinanceProfitableProducts = (props) => {
               ))}
             </TableBody>
           </Table>
-        ) : !loading&&reports.length===0 ? (
+        ) : !loading && reports?.length === 0 ? (
           <EmptyComponent text="You have not uploaded any files yet" />
         ) : (
           <LoaderComponent />

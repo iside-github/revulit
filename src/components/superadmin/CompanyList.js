@@ -35,7 +35,7 @@ export const CompanyListTable = (props) => {
   // Reset selected customers when customers change
   useEffect(
     () => {
-      if (selectedCustomers.length) {
+      if (selectedCustomers?.length) {
         setSelectedCustomers([]);
       }
     },
@@ -43,7 +43,7 @@ export const CompanyListTable = (props) => {
     [customers]
   );
 
-  const enableBulkActions = selectedCustomers.length > 0;
+  const enableBulkActions = selectedCustomers?.length > 0;
   const dispatch = useDispatch();
 
   const handleBlockUnblock = async (status, id) => {

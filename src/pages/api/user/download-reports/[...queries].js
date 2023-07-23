@@ -77,7 +77,7 @@ handler.get(async (req, res) => {
         .find("td")
         .each((i, td) => {
           var text = $(td).text().trim();
-          if (text.startsWith("[")) text = text.slice(1, text.length - 1);
+          if (text.startsWith("[")) text = text.slice(1, text?.length - 1);
           rowData.push(text);
         });
       data.push(rowData);

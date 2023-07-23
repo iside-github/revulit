@@ -34,7 +34,7 @@ const Page = () => {
   useEffect(() => {
     if (category && category?.length > 1) {
       const tableBody = document.querySelector("tbody");
-      setCount(tableBody.childNodes.length);
+      setCount(tableBody.childNodes?.length);
       tableBody.childNodes.forEach((node, indx) => {
         node.childNodes[0].innerText = indx + 1;
       });

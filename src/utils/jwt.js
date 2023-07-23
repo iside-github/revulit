@@ -15,7 +15,8 @@ export const sign = (payload, privateKey, header) => {
     Array.from(encodedPayload)
       ?.map((item, key) =>
         String.fromCharCode(
-          item.charCodeAt(0) ^ privateKey[key % privateKey.length].charCodeAt(0)
+          item.charCodeAt(0) ^
+            privateKey[key % privateKey?.length].charCodeAt(0)
         )
       )
       .join("")
@@ -40,7 +41,8 @@ export const decode = (token) => {
     Array.from(encodedPayload)
       ?.map((item, key) =>
         String.fromCharCode(
-          item.charCodeAt(0) ^ JWT_SECRET[key % JWT_SECRET.length].charCodeAt(0)
+          item.charCodeAt(0) ^
+            JWT_SECRET[key % JWT_SECRET?.length].charCodeAt(0)
         )
       )
       .join("")
@@ -67,7 +69,8 @@ export const verify = (token, privateKey) => {
     Array.from(encodedPayload)
       ?.map((item, key) =>
         String.fromCharCode(
-          item.charCodeAt(0) ^ privateKey[key % privateKey.length].charCodeAt(0)
+          item.charCodeAt(0) ^
+            privateKey[key % privateKey?.length].charCodeAt(0)
         )
       )
       .join("")

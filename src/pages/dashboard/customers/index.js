@@ -260,7 +260,7 @@ const CustomerList = () => {
             </Box>
             <CustomerListTable
               customers={paginatedCustomers}
-              customersCount={filteredCustomers.length}
+              customersCount={filteredCustomers?.length}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               rowsPerPage={rowsPerPage}

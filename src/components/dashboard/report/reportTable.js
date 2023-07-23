@@ -38,7 +38,7 @@ export const ReportsTable = (props) => {
   // Reset selected customers when customers change
   useEffect(
     () => {
-      if (selectedCustomers.length) {
+      if (selectedCustomers?.length) {
         setSelectedCustomers([]);
       }
     },
@@ -46,15 +46,15 @@ export const ReportsTable = (props) => {
     [customers]
   );
 
-  const enableBulkActions = selectedCustomers.length > 0;
+  const enableBulkActions = selectedCustomers?.length > 0;
 
   function selectArrayWithLargestIndex(arrays) {
     let largestIndex = -1;
     let selectedArray = null;
 
-    for (let i = 0; i < arrays.length; i++) {
+    for (let i = 0; i < arrays?.length; i++) {
       const currentArray = arrays[i];
-      const lastIndex = currentArray.length - 1;
+      const lastIndex = currentArray?.length - 1;
 
       if (lastIndex > largestIndex) {
         largestIndex = lastIndex;

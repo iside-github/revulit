@@ -173,7 +173,7 @@ export const ProjectListFilters = (props) => {
       });
 
       // Nothing changed
-      if (values.length === valuesFound.length) {
+      if (values?.length === valuesFound?.length) {
         return newFilterItems;
       }
 
@@ -216,7 +216,7 @@ export const ProjectListFilters = (props) => {
       });
 
       // Nothing changed
-      if (values.length === valuesFound.length) {
+      if (values?.length === valuesFound?.length) {
         return newFilterItems;
       }
 
@@ -247,7 +247,7 @@ export const ProjectListFilters = (props) => {
       const newFilterItems = prevState.filter(
         (filterItem) => filterItem.field !== "inStock"
       );
-      const latestValue = values[values.length - 1];
+      const latestValue = values[values?.length - 1];
 
       switch (latestValue) {
         case "available":
@@ -298,7 +298,7 @@ export const ProjectListFilters = (props) => {
       ?.map((filterItems) => filterItems.value);
 
     // Since we do not display the "all" as chip, we add it to the multi-select as a selected value
-    if (values.length === 0) {
+    if (values?.length === 0) {
       values.unshift("all");
     }
 
@@ -332,7 +332,7 @@ export const ProjectListFilters = (props) => {
         </Box>
       </Box>
       <Divider />
-      {filterItems.length > 0 ? (
+      {filterItems?.length > 0 ? (
         <Box
           sx={{
             alignItems: "center",

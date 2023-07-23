@@ -84,7 +84,7 @@ export const CustomerInvoices = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={invoices.length}
+        count={invoices?.length}
         onPageChange={() => {}}
         onRowsPerPageChange={() => {}}
         page={0}

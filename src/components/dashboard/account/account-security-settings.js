@@ -155,7 +155,7 @@ function validate(values) {
       "Confirm password doesn't match with new password";
   }
 
-  if (values["password"] && values["password"].length < 8) {
+  if (values["password"] && values["password"]?.length < 8) {
     errors["password"] = "Password should ne at least 8 length long";
   }
 

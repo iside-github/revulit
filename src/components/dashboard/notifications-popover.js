@@ -208,7 +208,7 @@ export const NotificationsPopover = (props) => {
           </IconButton>
         </Tooltip>
       </Box>
-      {notifications.length === 0 ? (
+      {notifications?.length === 0 ? (
         <Box sx={{ p: 2 }}>
           <Typography variant="subtitle2">
             There are no notifications

@@ -69,16 +69,18 @@ handler.post(async (req, res) => {
       });
     await db.connect();
     const formData = new FormData();
-    formData.append("files", req.file.path);
+      formData.append("file", req.file.path, "klsajhdkashdjkashd");
+      console.log(formData, "_____________________________________--------------->>>>>>>>>>>>>>>>>FORM");
     const agent = new https.Agent({
       rejectUnauthorized: false,
     });
     const response = await axios.post(
-      "https://97.74.95.51:8080/revleterature/upload",
+      "http://97.74.95.51:8088/revleterature/upload",
       formData,
       {
         headers: { ...formData.getHeaders() },
         httpsAgent: agent,
+        timeout: 240000,
       }
     );
 
@@ -112,7 +114,7 @@ handler.post(async (req, res) => {
 
     res.status(200).send({ categories, id: repo._id });
   } catch (error) {
-    console.log(error.response);
+    console.log(error);
     res.status(400).json({ message: error.message });
   }
 });

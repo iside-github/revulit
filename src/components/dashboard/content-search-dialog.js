@@ -152,7 +152,7 @@ export const ContentSearchDialog = (props) => {
                           {result.description}
                         </Typography>
                       </Box>
-                      {index !== results[type].length - 1 && <Divider />}
+                      {index !== results[type]?.length - 1 && <Divider />}
                     </Fragment>
                   ))}
                 </Box>
