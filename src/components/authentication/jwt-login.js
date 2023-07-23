@@ -26,6 +26,7 @@ export const JWTLogin = (props) => {
       const result = await signIn("credentials", {
         email: values.email,
         password: values.password,
+        redirect: false,
       });
       if (!result.error) {
         const returnUrl = router.query.returnUrl || "/dashboard";

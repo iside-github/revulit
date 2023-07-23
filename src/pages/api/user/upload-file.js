@@ -80,7 +80,7 @@ handler.post(async (req, res) => {
         formData.append('files', req.file.path);
 
         const response = await axios.post(
-            'https://97.74.95.51:8080/revleterature/upload',
+            'http://97.74.95.51:8080/revleterature/upload',
             formData,
             {
                 headers: { ...formData.getHeaders() },
