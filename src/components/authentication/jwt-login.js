@@ -23,10 +23,9 @@ export const JWTLogin = (props) => {
       password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
-      const result = await signIn("email-login", {
+      const result = await signIn("credentials", {
         email: values.email,
         password: values.password,
-        redirect: false,
       });
       if (!result.error) {
         const returnUrl = router.query.returnUrl || "/dashboard";
