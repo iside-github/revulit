@@ -126,7 +126,7 @@ export const ReportsTable = (props) => {
                   File name
                 </TableSortLabel>
               </TableCell>
-              {category??.map((cate, indx) => {
+              {category?.map((cate, indx) => {
                 return <TableCell key={indx}>{cate?.category_title}</TableCell>;
               })}
             </TableRow>
@@ -192,7 +192,7 @@ export const ReportsTable = (props) => {
                       {customer?.file_name}
                     </Typography>
                   </TableCell>
-                  {customer?.categories??.map((cat) => {
+                  {customer?.categories?.map((cat) => {
                     return (
                       <TableCell key={cat?._id}>
                         <Typography
