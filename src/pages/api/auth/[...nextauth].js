@@ -14,7 +14,7 @@ export default NextAuth({
         strategy: 'jwt',
         maxAge: 30 * 24 * 60 * 60 * 60 * 60,
     },
-    jwt: {
+    jwt: { 
         secret: process.env.JWT_SECRET_KEY,
         encode: async ({ secret, token }) => {
             return jwt.sign({ ...token, userId: token.id }, secret, {
