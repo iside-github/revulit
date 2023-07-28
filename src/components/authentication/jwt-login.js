@@ -2,12 +2,13 @@ import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Box, Button, FormHelperText, TextField } from "@mui/material";
-import { useMounted } from "../../hooks/use-mounted";
 import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
+import { loginUser } from "redux-store/user/auth.slice";
+import { useDispatch } from "react-redux";
 
 export const JWTLogin = (props) => {
-  const isMounted = useMounted();
+  const dispatch = useDispatch();
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -23,21 +24,24 @@ export const JWTLogin = (props) => {
       password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
-      const result = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        redirect: false,
-      });
-      if (!result.error) {
-        const returnUrl = router.query.returnUrl || "/dashboard";
-        router.push(returnUrl).catch(console.error);
-      }
+      dispatch(loginUser({ email: values.email, password: values.password }));
 
-      if (result.error) {
-        helpers.setStatus({ success: false });
-        toast.error(result.error);
-        helpers.setSubmitting(false);
-      }
+
+      // const result = await signIn("credentials", {
+      //   email: values.email,
+      //   password: values.password,
+      //   redirect: false,
+      // });
+      // if (!result.error) {
+      //   const returnUrl = router.query.returnUrl || "/dashboard";
+      //   router.push(returnUrl).catch(console.error);
+      // }
+
+      // if (result.error) {
+      //   helpers.setStatus({ success: false });
+      //   toast.error(result.error);
+      //   helpers.setSubmitting(false);
+      // }
     },
   });
 

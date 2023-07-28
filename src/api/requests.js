@@ -3,7 +3,9 @@ import toast from "react-hot-toast";
 
 export async function sendPasswordRecoveryEmail({ email, router, helpers }) {
   try {
-    await axios.post("/api/user/send-email", { email });
+    await axios.post(`${process.env.NEXT_PUBLIC_API}/api/user/send-email`, {
+      email,
+    });
 
     router.push("/authentication/recovery-success");
   } catch (error) {
@@ -27,7 +29,7 @@ export async function updateUserPassword({
   try {
     await axios({
       method: "POST",
-      url: "/api/user/update-password",
+      url: `${process.env.NEXT_PUBLIC_API}/api/user/update-password`,
       headers: { auth },
       data: { new_password },
     });
@@ -49,7 +51,7 @@ export async function getUploadedFileResults({ data, update }) {
   try {
     const result = await axios({
       method: "POST",
-      url: "/api/user/upload-file",
+      url: `${process.env.NEXT_PUBLIC_API}/api/user/upload-file`,
       data: data,
     });
     update();
@@ -65,9 +67,12 @@ export async function getUploadedFileResults({ data, update }) {
 
 export async function getUserProfile() {
   try {
-    const result = await axios.get("/api/user/profile", {
-      withCredentials: true,
-    });
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_API}/api/user/profile`,
+      {
+        withCredentials: true,
+      }
+    );
     return result.data;
   } catch (error) {
     console.log(error);
@@ -78,9 +83,12 @@ export async function editUserProfile() {}
 
 export async function getUsersPfofiles() {
   try {
-    const result = await axios.get("/api/admin/user/all-users", {
-      withCredentials: true,
-    });
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_API}/api/admin/user/all-users`,
+      {
+        withCredentials: true,
+      }
+    );
     return result.data;
   } catch (error) {
     console.log(error);
@@ -89,9 +97,12 @@ export async function getUsersPfofiles() {
 
 export async function getAllCompanyReports() {
   try {
-    const result = await axios.get("/api/user/reports", {
-      withCredentials: true,
-    });
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_API}/api/user/reports`,
+      {
+        withCredentials: true,
+      }
+    );
     return result.data;
   } catch (error) {
     console.log(error);
@@ -101,7 +112,7 @@ export async function getAllCompanyReports() {
 export async function getCategoryData({ id, category }) {
   try {
     const result = await axios.get(
-      `/api/user/filtered-reports/${id}?category=${category}`,
+      `${process.env.NEXT_PUBLIC_API}/api/user/filtered-reports/${id}?category=${category}`,
       {
         withCredentials: true,
       }
@@ -115,7 +126,7 @@ export async function getCategoryData({ id, category }) {
 export async function inviteCompanyUser({ data, handleClose, resetForm }) {
   try {
     const res = await axios({
-      url: "/api/user/add-user",
+      url: `${process.env.NEXT_PUBLIC_API}/api/user/add-user`,
       method: "POST",
       data,
     });
@@ -135,7 +146,7 @@ export async function confirmAccount({ new_password, router, helpers, auth }) {
   try {
     await axios({
       method: "POST",
-      url: "/api/user/confirmation",
+      url: `${process.env.NEXT_PUBLIC_API}/api/user/confirmation`,
       headers: { auth },
       data: { password: new_password },
     });
@@ -155,9 +166,12 @@ export async function confirmAccount({ new_password, router, helpers, auth }) {
 
 export async function getCompaniesListAll() {
   try {
-    const result = await axios.get("/api/admin/company/all", {
-      withCredentials: true,
-    });
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_API}/api/admin/company/all`,
+      {
+        withCredentials: true,
+      }
+    );
     return result.data;
   } catch (error) {
     console.log(error);
@@ -167,7 +181,7 @@ export async function getCompaniesListAll() {
 export async function adminCreateCompany({ data, update }) {
   try {
     const res = await axios({
-      url: "/api/admin/company/create-company",
+      url: `${process.env.NEXT_PUBLIC_API}/api/admin/company/create-company`,
       method: "POST",
       data,
     });
@@ -185,7 +199,7 @@ export async function adminCreateCompany({ data, update }) {
 export async function adminCreateUser({ data, update }) {
   try {
     const res = await axios({
-      url: "/api/admin/user/create-admin",
+      url: `${process.env.NEXT_PUBLIC_API}/api/admin/user/create-admin`,
       method: "POST",
       data,
     });
@@ -203,9 +217,12 @@ export async function adminCreateUser({ data, update }) {
 
 export async function getRecentUploads() {
   try {
-    const result = await axios.get("/api/user/last-uploads", {
-      withCredentials: true,
-    });
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_API}/api/user/last-uploads`,
+      {
+        withCredentials: true,
+      }
+    );
     return result.data;
   } catch (error) {
     console.log(error);
@@ -215,7 +232,7 @@ export async function getRecentUploads() {
 export async function updateUserOldPassword(data) {
   try {
     const res = await axios({
-      url: "/api/user/profile-password",
+      url: `${process.env.NEXT_PUBLIC_API}/api/user/profile-password`,
       method: "POST",
       data,
     });
@@ -232,7 +249,7 @@ export async function updateUserOldPassword(data) {
 export async function getTotalStats(query) {
   try {
     const result = await axios.get(
-      `/api/admin/user/statistics?filter=${query?.filter}&&personal=${query?.personal}`,
+      `${process.env.NEXT_PUBLIC_API}/api/admin/user/statistics?filter=${query?.filter}&&personal=${query?.personal}`,
       {
         withCredentials: true,
       }
@@ -246,7 +263,7 @@ export async function getTotalStats(query) {
 export async function getOverView(query) {
   try {
     const result = await axios({
-      url: "/api/admin/user/multi-statistics",
+      url: `${process.env.NEXT_PUBLIC_API}/api/admin/user/multi-statistics`,
       method: "GET",
       params: query,
     });
@@ -258,11 +275,27 @@ export async function getOverView(query) {
 
 export async function getCategoriesList() {
   try {
-    const result = await axios.get("/api/admin/categories", {
-      withCredentials: true,
-    });
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_API}/api/admin/categories`,
+      {
+        withCredentials: true,
+      }
+    );
     return result.data;
   } catch (error) {
     console.log(error);
   }
 }
+
+export const useEmailAndPassowrdLogin = async (data) => {
+  try {
+    const res = await axios({
+      url: `${process.env.NEXT_PUBLIC_API}/api/auth/login`,
+      method: "POST",
+      data,
+    });
+    console.log(res);
+  } catch (error) {
+    console.log(error);
+  }
+};

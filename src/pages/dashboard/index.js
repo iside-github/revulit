@@ -21,7 +21,6 @@ import { FinanceOverview } from "components/dashboard/finance/finance-overview";
 import { FinanceCostBreakdown } from "components/dashboard/finance/finance-cost-breakdown";
 import { FinanceProfitableProducts } from "components/dashboard/finance/finance-profitable-products";
 import { FileDropzone } from "components/file-dropzone";
-import { getSession } from "next-auth/react";
 import { uploadFile } from "redux-store/file/upload";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -30,8 +29,7 @@ import {
 } from "redux-store/report/slice";
 import { getCategories } from "redux-store/category/index.slice";
 import CompanyOverCiew from "components/dashboard/finance/overview";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "pages/api/auth/[...nextauth]";
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
