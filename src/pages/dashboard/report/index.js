@@ -346,16 +346,3 @@ ReportsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default ReportsPage;
 
-export const getServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/authentication/login?returnUrl=/dashboard",
-      },
-    };
-  }
-  return {
-    props: { session },
-  };
-};
