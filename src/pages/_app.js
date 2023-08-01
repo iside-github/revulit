@@ -22,7 +22,6 @@ import { gtm } from "../lib/gtm";
 import { store, persistor } from "redux-store/store";
 import { createTheme } from "../theme";
 import { createEmotionCache } from "../utils/create-emotion-cache";
-import { SessionProvider } from "next-auth/react";
 import "styles/index.css";
 
 Router.events.on("routeChangeStart", nProgress.start);
@@ -41,41 +40,38 @@ const App = (props) => {
   }, []);
 
   return (
-    <SessionProvider session={pageProps.session}>
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <title>Revliterature</title>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Head>
-        <ReduxProvider store={store}>
-          <PersistGate persistor={persistor}>
-            <SettingsProvider>
-              <SettingsConsumer>
-                {({ settings }) => (
-                  <ThemeProvider
-                    theme={createTheme({
-                      direction: settings.direction,
-                      responsiveFontSizes: settings.responsiveFontSizes,
-                      mode: settings.theme,
-                    })}
-                  >
-                    <RTL direction={settings.direction}>
-                      <CssBaseline />
-                      <Toaster position="top-center" />
-                      <SettingsButton />
-                      <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        {getLayout(<Component {...pageProps} />)
-                        }
-                      </LocalizationProvider>
-                    </RTL>
-                  </ThemeProvider>
-                )}
-              </SettingsConsumer>
-            </SettingsProvider>
-          </PersistGate>
-        </ReduxProvider>
-      </CacheProvider>
-    </SessionProvider>
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <title>Revliterature</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <ReduxProvider store={store}>
+        <PersistGate persistor={persistor}>
+          <SettingsProvider>
+            <SettingsConsumer>
+              {({ settings }) => (
+                <ThemeProvider
+                  theme={createTheme({
+                    direction: settings.direction,
+                    responsiveFontSizes: settings.responsiveFontSizes,
+                    mode: settings.theme,
+                  })}
+                >
+                  <RTL direction={settings.direction}>
+                    <CssBaseline />
+                    <Toaster position="top-center" />
+                    <SettingsButton />
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      {getLayout(<Component {...pageProps} />)}
+                    </LocalizationProvider>
+                  </RTL>
+                </ThemeProvider>
+              )}
+            </SettingsConsumer>
+          </SettingsProvider>
+        </PersistGate>
+      </ReduxProvider>
+    </CacheProvider>
   );
 };
 
