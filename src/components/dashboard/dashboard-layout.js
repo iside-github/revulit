@@ -7,7 +7,7 @@ import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { getUser } from "redux-store/user/user.slice";
 import { useEffect } from "react";
-
+import { useRouter } from "next/router";
 
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   display: "flex",
@@ -23,9 +23,16 @@ export const DashboardLayout = (props) => {
   const dispatch = useDispatch();
   const { children } = props;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const token = localStorage.getItem("token");
+  const router = useRouter();
 
   useEffect(() => {
-    dispatch(getUser());
+    if (token) {
+      dispatch(getUser());
+    }
+    if (!token) {
+      router.push("/");
+    }
   }, []);
 
   return (

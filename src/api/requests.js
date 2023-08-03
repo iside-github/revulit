@@ -1,6 +1,5 @@
-import axios from 'axios';
-import toast from 'react-hot-toast';
-
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export async function sendPasswordRecoveryEmail({ email, router, helpers }) {
   const accessToken = window.localStorage.getItem("token");
@@ -9,24 +8,24 @@ export async function sendPasswordRecoveryEmail({ email, router, helpers }) {
       email,
     });
 
-        router.push('/authentication/recovery-success');
-    } catch (error) {
-        helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: error.message });
-        helpers.setSubmitting(false);
-        toast.error(
-            error?.response?.data?.message
-                ? error?.response?.data?.message
-                : 'Something went wrong! Please, try again later'
-        );
-    }
+    router.push("/authentication/recovery-success");
+  } catch (error) {
+    helpers.setStatus({ success: false });
+    helpers.setErrors({ submit: error.message });
+    helpers.setSubmitting(false);
+    toast.error(
+      error?.response?.data?.message
+        ? error?.response?.data?.message
+        : "Something went wrong! Please, try again later"
+    );
+  }
 }
 
 export async function updateUserPassword({
-    new_password,
-    router,
-    helpers,
-    auth,
+  new_password,
+  router,
+  helpers,
+  auth,
 }) {
   const accessToken = window.localStorage.getItem("token");
   try {
@@ -37,17 +36,17 @@ export async function updateUserPassword({
       data: { new_password },
     });
 
-        router.push('/authentication/reset-success');
-    } catch (error) {
-        helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: error.message });
-        helpers.setSubmitting(false);
-        toast.error(
-            error?.response?.data?.message
-                ? error?.response?.data?.message
-                : 'Something went wrong! Please, try again later'
-        );
-    }
+    router.push("/authentication/reset-success");
+  } catch (error) {
+    helpers.setStatus({ success: false });
+    helpers.setErrors({ submit: error.message });
+    helpers.setSubmitting(false);
+    toast.error(
+      error?.response?.data?.message
+        ? error?.response?.data?.message
+        : "Something went wrong! Please, try again later"
+    );
+  }
 }
 
 export async function getUploadedFileResults({ data, update }) {
@@ -168,17 +167,17 @@ export async function confirmAccount({ new_password, router, helpers, auth }) {
       headers: { auth: accessToken },
     });
 
-        router.push('/authentication/conformation-success');
-    } catch (error) {
-        helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: error.message });
-        helpers.setSubmitting(false);
-        toast.error(
-            error?.response?.data?.message
-                ? error?.response?.data?.message
-                : 'Something went wrong! Please, try again later'
-        );
-    }
+    router.push("/authentication/conformation-success");
+  } catch (error) {
+    helpers.setStatus({ success: false });
+    helpers.setErrors({ submit: error.message });
+    helpers.setSubmitting(false);
+    toast.error(
+      error?.response?.data?.message
+        ? error?.response?.data?.message
+        : "Something went wrong! Please, try again later"
+    );
+  }
 }
 
 export async function getCompaniesListAll() {
@@ -320,15 +319,16 @@ export async function getCategoriesList() {
   }
 }
 
-export const useEmailAndPassowrdLogin = async (data) => {
+export const useEmailAndPassowrdLogin = async ({ data, router }) => {
   try {
     const res = await axios({
       url: `${process.env.NEXT_PUBLIC_API}/api/auth/login`,
       method: "POST",
       data,
     });
-    localStorage.setItem("token", res?.data?.token?.token)
+    localStorage.setItem("token", res?.data?.token?.token);
+    router.push("/dashboard");
   } catch (error) {
-    console.log(error);
+    toast.error(error?.response?.data?.message);
   }
 };

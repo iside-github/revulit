@@ -1,7 +1,5 @@
 import NextLink from "next/link";
-import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-import toast from "react-hot-toast";
 import {
   Avatar,
   Box,
@@ -13,26 +11,17 @@ import {
   Typography,
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Cog as CogIcon } from "../../icons/cog";
 import { UserCircle as UserCircleIcon } from "../../icons/user-circle";
-import { signOut } from "next-auth/react";
 import { useSelector } from "react-redux";
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
-  const router = useRouter();
 
   const user = useSelector((state) => state.user?.data?.user);
 
   const handleLogout = async () => {
-    try {
-      onClose?.();
-      await signOut();
-      router.push("/").catch(console.error);
-    } catch (err) {
-      console.error(err);
-      toast.error("Unable to logout.");
-    }
+    localStorage.clear();
+    window.location.reload();
   };
 
   return (

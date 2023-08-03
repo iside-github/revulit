@@ -7,7 +7,7 @@ export const GuestGuard = (props) => {
   const { children } = props;
   const router = useRouter();
   const [checked, setChecked] = useState(false);
-  const disableGuard = router.query.disableGuard;
+  const disableGuard = localStorage.getItem("token");
 
   useEffect(
     () => {
@@ -16,7 +16,7 @@ export const GuestGuard = (props) => {
       }
 
       // You should remove the "disableGuard" check, because it's meant to be used only in the demo.
-      if (disableGuard !== "true") {
+      if (disableGuard) {
         router.push("/dashboard").catch(console.error);
       } else {
         setChecked(true);

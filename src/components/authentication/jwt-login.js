@@ -1,15 +1,15 @@
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Box, Button, FormHelperText, TextField } from "@mui/material";
-import { signIn } from "next-auth/react";
-import { toast } from "react-hot-toast";
+import { Box,  FormHelperText, TextField } from "@mui/material";
 import { loginUser } from "redux-store/user/auth.slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { LoadingButton } from "@mui/lab";
 
 export const JWTLogin = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const isLoginLoading = useSelector((state) => state.auth.isLoginLoading);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -24,8 +24,9 @@ export const JWTLogin = (props) => {
       password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
-      dispatch(loginUser({ email: values.email, password: values.password }));
-
+      dispatch(
+        loginUser({data: { email: values.email, password: values.password }, router})
+      );
 
       // const result = await signIn("credentials", {
       //   email: values.email,
@@ -78,15 +79,16 @@ export const JWTLogin = (props) => {
         </Box>
       )}
       <Box sx={{ mt: 2 }}>
-        <Button
+        <LoadingButton
           disabled={formik.isSubmitting}
+          loading={isLoginLoading}
           fullWidth
           size="large"
           type="submit"
           variant="contained"
         >
           Log In
-        </Button>
+        </LoadingButton>
       </Box>
     </form>
   );
